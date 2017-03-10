@@ -45,7 +45,7 @@
            });  
            Ext.define('roleModel', {
                extend : 'Ext.data.Model',
-               fields : [ "id", "username", "password", "realname", "tel", "address", "company", "sex", "age", "qq", "email" ],
+               fields : [ "id", "no", "user.id", "user.username", "user.realname", "totalMoney" ],
                idProperty : 'id'
            });
            store = Ext.create('Ext.data.Store', {
@@ -55,7 +55,7 @@
            autoLoad : true,
            proxy : {
                type : 'ajax',
-               url : '/user/getUserList',
+               url : '/order/getOrderList',
                actionMethods:{
                    create: "POST", read: "POST", update: "POST", destroy: "POST"
                },
@@ -78,76 +78,25 @@
                    minWidth:90,
                    align : 'center'
                }, {
-                   text : "username",
-                   dataIndex : 'username',
+                   text : "no",
+                   dataIndex : 'no',
                    minWidth:150,
                    align : 'left'
                }, {
-                   text : "password",
-                   dataIndex : 'password',
+                   text : "username",
+                   dataIndex : 'user.username',
                    minWidth: 150,
                    align : 'left'
                }, {
                    text : "realname",
-                   dataIndex : 'realname',
+                   dataIndex : 'user.realname',
                    minWidth: 90,
                    align : 'center'
                }, {
-                   text : "tel",
-                   dataIndex : 'tel',
+                   text : "totalMoney",
+                   dataIndex : 'totalMoney',
                    minWidth: 90,
-                   align : 'center',
-                   renderer : function(value){
-                       return value;
-                   }
-               }, {
-                   text : "address",
-                   dataIndex : 'address',
-                   minWidth: 90,
-                   align : 'center',
-                   renderer : function(value){
-                       return value;
-                   }
-               }, {
-                   text : "company",
-                   dataIndex : 'company',
-                   minWidth: 90,
-                   align : 'center',
-                   renderer : function(value){
-                       return value;
-                   }
-               }, {
-                   text : "sex",
-                   dataIndex : 'sex',
-                   minWidth: 90,
-                   align : 'center',
-                   renderer : function(value){
-                       return value;
-                   }
-               }, {
-                   text : "age",
-                   dataIndex : 'age',
-                   minWidth: 90,
-                   align : 'center',
-                   renderer : function(value){
-                       return value;
-                   }
-               }, {
-                   text : "qq",
-                   dataIndex : 'qq',
-                   minWidth: 90,
-                   align : 'center',
-                   renderer : function(value){
-                       return value;
-                   }
-               }, {
-                   text : "email",
-                   dataIndex : 'email',
-                   minWidth: 90,
-                   align : 'center',
-                   renderer : function(value){
-                       return value;
-                   }
+                   align : 'center'
                }],
                listeners : {
                    'itemclick' : function(view, record, item, index, e) {
@@ -197,7 +146,7 @@
                                labelWidth:60,
                                labelAlign:'right',
                            },
-                           columnWidth: .5,
+                           columnWidth: 1,
                            style:'border-width:0 0 0 0',
                            frame:true,
                            layout:'form',
@@ -208,49 +157,14 @@
                                    readOnly:true,
                                    hidden:true
                                }, {
-                                   fieldLabel :"username",
-                                   name : "username",
+                                   fieldLabel :"no",
+                                   name : "no",
                                    allowBlank : false
                                }, {
-                                   fieldLabel : "password",
-                                   name : 'password',
-                               }, {
-                                   fieldLabel : 'realname',
-                                   name : 'realname',
-                               }, {
-                                   fieldLabel : 'tel',
-                                   name : 'tel',
-                               }, {
-                                   fieldLabel : 'qq',
-                                   name : 'qq',
+                                   fieldLabel : "totalMoney",
+                                   name : 'totalMoney',
                                }
                            ]
-                       },{
-                           defaults :{
-                               labelWidth:60,
-                               labelAlign:'right',
-                           },
-                           layout:'form',
-                           columnWidth: .5,
-                           frame:true,
-                           style:'border-width:0 0 0 0',
-                           defaultType:'textfield',
-                           items:[{
-                               fieldLabel : 'address',
-                               name : 'address',
-                           }, {
-                               fieldLabel : 'company',
-                               name : 'company',
-                           }, {
-                               fieldLabel : 'sex',
-                               name : 'sex',
-                           }, {
-                               fieldLabel : 'age',
-                               name : 'age',
-                           }, {
-                               fieldLabel : 'email',
-                               name : 'email',
-                           }]
                        }]
                } /*, {
                    labelWidth: 60,
@@ -280,7 +194,7 @@
 //                            }
                             var o = form.getValues();
                             $.ajax({
-                                    url : '/user/addOrUpdateUser',
+                                    url : '/order/addOrUpdateOrder',
                                     type : "post",
                                     contentType: "application/json",
                                     data : JSON.stringify(o),
@@ -317,7 +231,7 @@
        }
        function sp_add() {
            form.getForm().reset();
-           win.setTitle("Add User");
+           win.setTitle("Add Order");
            win.show();
        }
        function sp_update() {
@@ -326,7 +240,7 @@
            if(selection){
                selectedStoreIndex = store.indexOf(selection);
                form.loadRecord(selection);
-               win.setTitle("Update User");
+               win.setTitle("Update Order");
                win.show();
            }else{
                Ext.Msg.alert("提示", "请选择用户");
@@ -339,7 +253,7 @@
                id = selection.data.id;
                Ext.Msg.confirm("提示", "确认删除吗？", function(res) {
                    if(res=="yes") {
-                       $.post('/user/deleteUser', [ {
+                       $.post('/order/deleteOrder', [ {
                            name : 'id',
                            value : id
                        } ], function(result) {

@@ -1,37 +1,195 @@
-<?xml version="1.0" encoding="ASCII"?>
-<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_nmPfMASwEeedgsSF2kX2GA" elementId="org.eclipse.e4.legacy.ide.application" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_nmPfMQSwEeedgsSF2kX2GA" bindingContexts="_nmQv5QSwEeedgsSF2kX2GA">
-  <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workbench>&#xD;&#xA;&lt;mruList>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UserDaoTest.java&quot; tooltip=&quot;jty-service/src/test/java/com/jty/user/dao/UserDaoTest.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-service/src/test/java/com/jty/user/dao/UserDaoTest.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UserDaoImpl.java&quot; tooltip=&quot;jty-service/src/main/java/com/jty/user/dao/impl/UserDaoImpl.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-service/src/main/java/com/jty/user/dao/impl/UserDaoImpl.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UserServiceImpl.java&quot; tooltip=&quot;jty-service/src/main/java/com/jty/user/service/impl/UserServiceImpl.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-service/src/main/java/com/jty/user/service/impl/UserServiceImpl.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jst.jsp.core.jspsource.source&quot; name=&quot;i18nList.jsp&quot; tooltip=&quot;jty-center/src/main/webapp/WEB-INF/pages/pc/user/i18nList.jsp&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-center/src/main/webapp/WEB-INF/pages/pc/user/i18nList.jsp&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UserController.java&quot; tooltip=&quot;jty-center/src/main/java/com/jty/user/action/UserController.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-center/src/main/java/com/jty/user/action/UserController.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.jdt.ui.ClassFileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.ClassFileEditor&quot; name=&quot;Session.class&quot; tooltip=&quot;org.hibernate.Session&quot;>&#xD;&#xA;&lt;persistable org.eclipse.jdt.ui.ClassFileIdentifier=&quot;=ssh/D:\/maven_repo\/org\/hibernate\/hibernate-core\/3.6.9.Final\/hibernate-core-3.6.9.Final.jar&amp;lt;org.hibernate(Session.class&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UserDaoImpl.java&quot; tooltip=&quot;ssh/src/main/java/com/cr/i18n/dao/impl/UserDaoImpl.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ssh/src/main/java/com/cr/i18n/dao/impl/UserDaoImpl.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;UserSer.java&quot; tooltip=&quot;jty-beans/src/main/java/com/jty/user/service/UserSer.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-beans/src/main/java/com/jty/user/service/UserSer.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jst.jsp.core.jspsource.source&quot; name=&quot;userList.jsp&quot; tooltip=&quot;jty-center/src/main/webapp/WEB-INF/pages/pc/user/userList.jsp&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-center/src/main/webapp/WEB-INF/pages/pc/user/userList.jsp&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.wst.jsdt.ui.CompilationUnitEditor&quot; name=&quot;register.js&quot; tooltip=&quot;jty-center/src/main/webapp/resources/js/user/register.js&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-center/src/main/webapp/resources/js/user/register.js&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jst.jsp.core.jspsource.source&quot; name=&quot;login.jsp&quot; tooltip=&quot;jty-center/src/main/webapp/WEB-INF/pages/pc/user/login.jsp&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-center/src/main/webapp/WEB-INF/pages/pc/user/login.jsp&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jst.jsp.core.jspsource.source&quot; name=&quot;index.jsp&quot; tooltip=&quot;jty-center/src/main/webapp/WEB-INF/pages/pc/dubbo/index.jsp&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-center/src/main/webapp/WEB-INF/pages/pc/dubbo/index.jsp&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;User.java&quot; tooltip=&quot;ssh/src/main/java/com/cr/web/bean/User.java&quot;>&#xD;&#xA;&lt;persistable path=&quot;/ssh/src/main/java/com/cr/web/bean/User.java&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart&quot; name=&quot;dubbo-server.xml&quot; tooltip=&quot;jty-service/src/main/resources/dubbo-server.xml&quot;>&#xD;&#xA;&lt;persistable path=&quot;/jty-service/src/main/resources/dubbo-server.xml&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.jdt.ui.ClassFileEditorInputFactory&quot; id=&quot;org.eclipse.jdt.ui.ClassFileEditor&quot; name=&quot;AbstractApplicationContext.class&quot; tooltip=&quot;org.springframework.context.support.AbstractApplicationContext&quot;>&#xD;&#xA;&lt;persistable org.eclipse.jdt.ui.ClassFileIdentifier=&quot;=crfw/D:\/maven_repo\/org\/springframework\/spring-context\/3.1.0.RELEASE\/spring-context-3.1.0.RELEASE.jar&amp;lt;org.springframework.context.support(AbstractApplicationContext.class&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;/mruList>&#xD;&#xA;&lt;/workbench>"/>
-  <tags>ModelMigrationProcessor.001</tags>
-  <tags>activeSchemeId:org.eclipse.ui.defaultAcceleratorConfiguration</tags>
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_nmPfMQSwEeedgsSF2kX2GA" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_nmPfMgSwEeedgsSF2kX2GA" label="%trimmedwindow.label.eclipseSDK" x="61" y="204" width="1331" height="720">
-    <persistedState key="coolBarVisible" value="true"/>
-    <persistedState key="perspectiveBarVisible" value="true"/>
-    <persistedState key="isRestored" value="true"/>
-    <persistedState key="workingSets" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workingSets/>"/>
-    <persistedState key="aggregateWorkingSetId" value="Aggregate for window 1487035952287"/>
-    <persistedState key="show_in_time" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;show_in_time>&#xD;&#xA;&lt;id IMemento.internal.id=&quot;org.eclipse.team.ui.GenericHistoryView&quot;/>&#xD;&#xA;&lt;/show_in_time>"/>
-    <tags>topLevel</tags>
-    <tags>shellMaximized</tags>
-    <children xsi:type="basic:PartSashContainer" xmi:id="_nmPfMgSwEeedgsSF2kX2GA" selectedElement="_nmQGQASwEeedgsSF2kX2GA" horizontal="true">
-      <children xsi:type="advanced:PerspectiveStack" xmi:id="_nmQGQASwEeedgsSF2kX2GA" elementId="org.eclipse.ui.ide.perspectivestack<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://code.alibabatech.com/schema/dubbo
-        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
-    <!-- 提供方应用信息，用于计算依赖关系 -->
-    <dubbo:application name="dubbo-client" />
-    <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <dubbo:registry address="multicast://224.5.6.7:1234" />
- <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
-    <dubbo:reference id="userSer" interface="com.jty.user.service.UserSer" />
-    <dubbo:reference id="dubboSer" interface="com.jty.dubbo.DubboService" />
-<!--  <dubbo:registry address="localhost:4548" /> -->
-<!--     <dubbo:registry address="127.0.0.1:3307" /> -->
-    <!-- 扫描注解包路径，多个包用逗号分隔，不填pacakge表示扫描当前ApplicationContext中所有的类 -->
-<!--     <dubbo:annotation package="com.cr.dubbo.service" /> -->
-    
-</beans>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+package com.jty.web.util;
+
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
+/**
+ */
+public class RequestSessionUtil {
+    private static final String WECHAT_OAUTH_RESULT = "code";
+    private static Logger logger = Logger.getLogger(RequestSessionUtil.class);
+
+    /**
+     * 从访问中获取所有的参数
+     * @param req
+     * @return LinkedHashMap
+     */
+    @SuppressWarnings({ "rawtypes" })
+    public static LinkedHashMap<String, Object> getRequestParamData(HttpServletRequest request) {
+        LinkedHashMap<String, Object> data = new LinkedHashMap<String, Object>();
+        Enumeration e = request.getParameterNames();
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            data.put(key, request.getParameter(key));
+        }
+        return data;
+    }
+    /**
+     * 从访问中获取OauthCode的信息
+     * @param request
+     * @return String
+     */
+    public static String getOauthResult(HttpServletRequest request) {
+        String oauthResult = null;
+        try {
+            oauthResult = (String) request.getSession().getAttribute(WECHAT_OAUTH_RESULT);
+        } catch (Exception e) {
+            logger.error("get oauthresult from session error!");
+        }
+        return oauthResult;
+    }
+
+    /**
+     * 将oauth认证值存入Session中
+     * @param request
+     * @param oauthResult
+     */
+    public static void setOauthResult(HttpServletRequest request, String oauthResult) {
+        request.getSession().setAttribute(WECHAT_OAUTH_RESULT, oauthResult);
+    }
+
+    /**
+     * 判断是否为手机客户端
+     */
+    /** Wap网关Via头信息中特有的描述信息 */
+    private static String mobileGateWayHeaders[] = new String[] { "ZXWAP",// 中兴提供的wap网关的via信息，例如：Via=ZXWAP
+                                                                          // GateWayZTE
+                                                                          // Technologies，
+            "chinamobile.com",// 中国移动的诺基亚wap网关，例如：Via=WTP/1.1
+                              // GDSZ-PB-GW003-WAP07.gd.chinamobile.com (Nokia
+                              // WAP Gateway 4.1 CD1/ECD13_D/4.1.04)
+            "monternet.com",// 移动梦网的网关，例如：Via=WTP/1.1
+                            // BJBJ-PS-WAP1-GW08.bj1.monternet.com. (Nokia WAP
+                            // Gateway 4.1 CD1/ECD13_E/4.1.05)
+            "infoX",// 华为提供的wap网关，例如：Via=HTTP/1.1 GDGZ-PS-GW011-WAP2 (infoX-WISG
+                    // Huawei Technologies)，或Via=infoX WAP Gateway V300R001
+                    // Huawei Technologies
+            "XMS 724Solutions HTG",// 国外电信运营商的wap网关，不知道是哪一家
+            "wap.lizongbo.com",// 自己测试时模拟的头信息
+            "Bytemobile",// 貌似是一个给移动互联网提供解决方案提高网络运行效率的，例如：Via=1.1 Bytemobile OSN
+                         // WebProxy/5.1
+    };
+    /** 电脑上的IE或Firefox浏览器等的User-Agent关键词 */
+    private static String[] pcHeaders = new String[] { "Windows 98", "Windows ME", "Windows 2000", "Windows XP", "Windows NT", "Ubuntu" };
+    /** 手机浏览器的User-Agent里的关键词 */
+    private static String[] mobileUserAgents = new String[] { "Nokia",// 诺基亚，有山寨机也写这个的，总还算是手机，Mozilla/5.0
+                                                                      // (Nokia5800
+                                                                      // XpressMusic)UC
+                                                                      // AppleWebkit(like
+                                                                      // Gecko)
+                                                                      // Safari/530
+            "SAMSUNG",// 三星手机
+                      // SAMSUNG-GT-B7722/1.0+SHP/VPP/R5+Dolfin/1.5+Nextreaming+SMM-MMS/1.2.0+profile/MIDP-2.1+configuration/CLDC-1.1
+            "MIDP-2",// j2me2.0，Mozilla/5.0 (SymbianOS/9.3; U; Series60/3.2
+                     // NokiaE75-1 /110.48.125 Profile/MIDP-2.1
+                     // Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML like
+                     // Gecko) Safari/413
+            "CLDC1.1",// M600/MIDP2.0/CLDC1.1/Screen-240X320
+            "SymbianOS",// 塞班系统的，
+            "MAUI",// MTK山寨机默认ua
+            "UNTRUSTED/1.0",// 疑似山寨机的ua，基本可以确定还是手机
+            "Windows CE",// Windows CE，Mozilla/4.0 (compatible; MSIE 6.0;
+                         // Windows CE; IEMobile 7.11)
+            "iPhone",// iPhone是否也转wap？不管它，先区分出来再说。Mozilla/5.0 (iPhone; U; CPU
+                     // iPhone OS 4_1 like Mac OS X; zh-cn) AppleWebKit/532.9
+                     // (KHTML like Gecko) Mobile/8B117
+            "iPad",// iPad的ua，Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X;
+                   // zh-cn) AppleWebKit/531.21.10 (KHTML like Gecko)
+                   // Version/4.0.4 Mobile/7B367 Safari/531.21.10
+            "Android",// Android是否也转wap？Mozilla/5.0 (Linux; U; Android
+                      // 2.1-update1; zh-cn; XT800 Build/TITA_M2_16.22.7)
+                      // AppleWebKit/530.17 (KHTML like Gecko) Version/4.0
+                      // Mobile Safari/530.17
+            "BlackBerry",// BlackBerry8310/2.7.0.106-4.5.0.182
+            "UCWEB",// ucweb是否只给wap页面？ Nokia5800
+                    // XpressMusic/UCWEB7.5.0.66/50/999
+            "ucweb",// 小写的ucweb貌似是uc的代理服务器Mozilla/6.0 (compatible; MSIE 6.0;)
+                    // Opera ucweb-squid
+            "BREW",// 很奇怪的ua，例如：REW-Applet/0x20068888 (BREW/3.1.5.20; DeviceId:
+                   // 40105; Lang: zhcn) ucweb-squid
+            "J2ME",// 很奇怪的ua，只有J2ME四个字母
+            "YULONG",// 宇龙手机，YULONG-CoolpadN68/10.14 IPANEL/2.0 CTC/1.0
+            "YuLong",// 还是宇龙
+            "COOLPAD",// 宇龙酷派YL-COOLPADS100/08.10.S100 POLARIS/2.9 CTC/1.0
+            "TIANYU",// 天语手机TIANYU-KTOUCH/V209/MIDP2.0/CLDC1.1/Screen-240X320
+            "TY-",// 天语，TY-F6229/701116_6215_V0230 JUPITOR/2.2 CTC/1.0
+            "K-Touch",// 还是天语K-Touch_N2200_CMCC/TBG110022_1223_V0801 MTK/6223
+                      // Release/30.07.2008 Browser/WAP2.0
+            "Haier",// 海尔手机，Haier-HG-M217_CMCC/3.0 Release/12.1.2007
+                    // Browser/WAP2.0
+            "DOPOD",// 多普达手机
+            "Lenovo",// 联想手机，Lenovo-P650WG/S100 LMP/LML Release/2010.02.22
+                     // Profile/MIDP2.0 Configuration/CLDC1.1
+            "LENOVO",// 联想手机，比如：LENOVO-P780/176A
+            "HUAQIN",// 华勤手机
+            "AIGO-",// 爱国者居然也出过手机，AIGO-800C/2.04 TMSS-BROWSER/1.0.0 CTC/1.0
+            "CTC/1.0",// 含义不明
+            "CTC/2.0",// 含义不明
+            "CMCC",// 移动定制手机，K-Touch_N2200_CMCC/TBG110022_1223_V0801 MTK/6223
+                   // Release/30.07.2008 Browser/WAP2.0
+            "DAXIAN",// 大显手机DAXIAN X180 UP.Browser/6.2.3.2(GUI) MMP/2.0
+            "MOT-",// 摩托罗拉，MOT-MOTOROKRE6/1.0 LinuxOS/2.4.20 Release/8.4.2006
+                   // Browser/Opera8.00 Profile/MIDP2.0 Configuration/CLDC1.1
+                   // Software/R533_G_11.10.54R
+            "SonyEricsson",// 索爱手机，SonyEricssonP990i/R100 Mozilla/4.0
+                           // (compatible; MSIE 6.0; Symbian OS; 405) Opera 8.65
+                           // [zh-CN]
+            "GIONEE",// 金立手机
+            "HTC",// HTC手机
+            "ZTE",// 中兴手机，ZTE-A211/P109A2V1.0.0/WAP2.0 Profile
+            "HUAWEI",// 华为手机，
+            "webOS",// palm手机，Mozilla/5.0 (webOS/1.4.5; U; zh-CN)
+                    // AppleWebKit/532.2 (KHTML like Gecko) Version/1.0
+                    // Safari/532.2 Pre/1.0
+            "GoBrowser",// 3g GoBrowser.User-Agent=Nokia5230/GoBrowser/2.0.290
+                        // Safari
+            "IEMobile",// Windows CE手机自带浏览器，
+            "WAP2.0"// 支持wap 2.0的
+    };
+
+    /**
+     * 根据当前请求的特征，判断该请求是否来自手机终端，主要检测特殊的头信息，以及user-Agent这个header
+     * @param request http请求
+     * @return 如果命中手机特征规则，则返回对应的特征字符串
+     */
+    public static boolean isMobileDevice(HttpServletRequest request) {
+        boolean pcFlag = false;
+        boolean mobileFlag = false;
+        String via = request.getHeader("Via");
+        String userAgent = request.getHeader("user-agent");
+        for (int i = 0; via != null && !via.trim().equals("") && i < mobileGateWayHeaders.length; i++) {
+            if (via.contains(mobileGateWayHeaders[i])) {
+                mobileFlag = true;
+                break;
+            }
+        }
+        for (int i = 0; !mobileFlag && userAgent != null && !userAgent.trim().equals("") && i < mobileUserAgents.length; i++) {
+            if (userAgent.contains(mobileUserAgents[i])) {
+                mobileFlag = true;
+                break;
+            }
+        }
+        for (int i = 0; userAgent != null && !userAgent.trim().equals("") && i < pcHeaders.length; i++) {
+            if (userAgent.contains(pcHeaders[i])) {
+                pcFlag = true;
+            }
+        }
+        if (mobileFlag == true && mobileFlag != pcFlag) {
+            return true;
+        }
+        return false;
+    }
+
+    public static String getDevicePath(HttpServletRequest request) {
+        boolean mobileDevice = isMobileDevice(request);
+        if(mobileDevice) {
+            return "mobile";
+        }else{
+            return "pc";
+        }
+    }
+}

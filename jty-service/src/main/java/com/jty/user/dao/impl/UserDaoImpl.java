@@ -46,15 +46,15 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User getUser(Map<String, Object> param) throws Exception {
-        String hsql = "from User where ";
+        String hsql = "from User where 1=1 ";
         if (param.get("id") != null) {
-            hsql += " and id =: id";
+            hsql += " and id =:id";
         }
         if (param.get("username") != null) {
-            hsql += " and username =: username";
+            hsql += " and username =:username";
         }
         if (param.get("password") != null) {
-            hsql += " and password =: password";
+            hsql += " and password =:password";
         }
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
         if (param.get("id") != null) {
@@ -110,7 +110,7 @@ public class UserDaoImpl implements UserDao {
      * @see com.cr.i18n.dao.impl.UserDao#getUserListCnt(java.util.Map)
      */
     @Override
-    public int getUserListCnt(Map<String, Object> param) throws Exception {
+    public Integer getUserListCnt(Map<String, Object> param) throws Exception {
         String hsql = "select count(*) from User";
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
         Integer count = Integer.parseInt(query.uniqueResult().toString());

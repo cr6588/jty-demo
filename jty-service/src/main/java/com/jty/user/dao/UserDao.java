@@ -18,6 +18,6 @@ public interface UserDao {
 
     void deleteUser(Long id) throws Exception;
 
-    int getUserListCnt(Map<String, Object> param) throws Exception;
+    Integer getUserListCnt(Map<String, Object> param) throws Exception;
 
 }

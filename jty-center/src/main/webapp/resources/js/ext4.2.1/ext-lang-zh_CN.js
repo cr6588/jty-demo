@@ -245,22 +245,51 @@ Ext.define("Ext.locale.zh_CN.form.field.HtmlEditor", {
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             createlink: {
-        <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd 
-    http://code.alibabatech.com/schema/dubbo
-    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
- 
-    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
-    <dubbo:application name="dubbo-server"  />
-    <!--     timeout="5000"：设置远程调用服务的超时时间为5000毫秒 -->
-    <!-- threadpool="fixed"：线程模型为固定大小的线程池，启动时建立线程，不关闭，一直持有 -->
-    <!-- threads="500"：线程数为500 -->
-    <!-- accepts="1000"：限制服务器端的接受的连接的最大值为1000 -->
-    <dubbo:provider timeout="5000" threadpool="fixed" threads="10" accepts="10" />
+                title: '转成超级链接',
+                text: '将所选文本转换成超级链接',
+                cls: Ext.baseCSSPrefix + 'html-editor-tip'
+            },
+            sourceedit: {
+                title: '代码视图',
+                text: '以代码的形式展现文本',
+                cls: Ext.baseCSSPrefix + 'html-editor-tip'
+            }
+        }
+    });
+});
+
+Ext.define("Ext.locale.zh_CN.grid.header.Container", {
+    override: "Ext.grid.header.Container",
+    sortAscText: "正序",
+    //update
+    sortDescText: "倒序",
+    //update
+    lockText: "锁定列",
+    //update
+    unlockText: "解除锁定",
+    //update
+    columnsText: "列"
+});
+
+Ext.define("Ext.locale.zh_CN.grid.PropertyColumnModel", {
+    override: "Ext.grid.PropertyColumnModel",
+    nameText: "名称",
+    valueText: "值",
+    dateFormat: "y年m月d日"
+});
+
+Ext.define("Ext.locale.zh_CN.window.MessageBox", {
+    override: "Ext.window.MessageBox",
+    buttonText: {
+        ok: "确定",
+        cancel: "取消",
+        yes: "是",
+        no: "否"
+    }    
+});
+
+// This is needed until we can refactor all of the locales into individual files
+Ext.define("Ext.locale.zh_CN.Component", {	
+    override: "Ext.Component"
+});
+

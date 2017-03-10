@@ -1,0 +1,39 @@
+package com.jty.order.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import com.jty.order.bean.Goods;
+import com.jty.order.bean.Order;
+import com.jty.order.bean.OrderGoods;
+import com.jty.web.bean.PagerInfo;
+
+public interface OrderDao {
+
+    List<Order> getOrderList(Map<String, Object> param, PagerInfo pager) throws Exception;
+
+    Order getOrder(Map<String, Object> param) throws Exception;
+
+    void addOrder(Order order) throws Exception;
+
+    void updateOrder(Order Order) throws Exception;
+
+    void deleteOrder(Long id) throws Exception;
+
+    Integer getOrderListCnt(Map<String, Object> param) throws Exception;
+
+    void addOrderGoods(OrderGoods orderGoods) throws Exception;
+
+    void updateOrderGoods(OrderGoods orderGoods) throws Exception;
+
+    void deleteOrderGoods(Long id) throws Exception;
+
+    List<OrderGoods> getOrderGoodsByOrderId(Long orderId) throws Exception;
+
+    void addGoods(Goods goods) throws Exception;
+
+    void updateGoods(Goods goods) throws Exception;
+
+    void deleteGoods(Long id) throws Exception;
+
+}

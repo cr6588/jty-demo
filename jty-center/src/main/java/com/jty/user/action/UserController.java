@@ -105,7 +105,7 @@ public class UserController {
 
     @RequestMapping(value = "/loginCheck", method = RequestMethod.POST)
     @ResponseBody
-    public RequestResult<Boolean> loginCheck(@RequestBody User User) {
+    public RequestResult<Boolean> loginCheck(@RequestBody User User, HttpServletRequest request) {
         RequestResult<Boolean> result = new RequestResult<Boolean>();
         try {
             Map<String, Object> param = new HashMap<String, Object>();
@@ -117,7 +117,22 @@ public class UserController {
                 result.setMessage("username or password error!");
             } else {
                 result.setBody(true);
+                request.getSession().setAttribute("userId", user.getId());
             }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            result.setCode(100);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/loginOut", method = RequestMethod.POST)
+    @ResponseBody
+    public RequestResult<Boolean> loginOut(HttpServletRequest request) {
+        RequestResult<Boolean> result = new RequestResult<Boolean>();
+        try {
+            request.getSession().invalidate();
         } catch (Exception e) {
             logger.error(e.getMessage());
             result.setCode(100);

@@ -201,33 +201,30 @@
 					a = HH(a, b, c, d, x[k+9],  S31, 0xD9D4D039);
 					d = HH(d, a, b, c, x[k+12], S32, 0xE6DB99E5);
 					c = HH(c, d, a, b, x[k+15], S33, 0x1FA27CF8);
-					b = HH(b, c, d, a, x[k+2], system.logPath = d:/jty-demo/jty-service
-
-#default 
-default.appender = org.apache.log4j.DailyRollingFileAppender 
-default.layout = org.apache.log4j.PatternLayout
-default.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c.%M(%L)): - %m%n
-default.append = true 
-default.DatePattern='.'yyyy-MM-dd 
-
-log4j.rootLogger = info,stdout
-
-#Console 
-log4j.appender.stdout = org.apache.log4j.ConsoleAppender
-log4j.appender.stdout.layout=${default.layout}
-log4j.appender.stdout.layout.ConversionPattern = ${default.layout.ConversionPattern}
-
-log4j.appender.org.springframework = info
-log4j.appender.com.jty = info
-log4j.appender.org.hibernate = OFF
- 
-
- 
-#common 
-log4j.appender.common = ${default.appender}
-log4j.appender.common.Threshold=ERROR
-log4j.appender.common.file = ${system.logPath}/common.log
-log4j.appender.common.layout = ${default.layout}
-log4j.appender.common.layout.ConversionPattern = ${default.layout.ConversionPattern} 
-log4j.appender.common.append = ${default.append} 
-                                                                                 
+					b = HH(b, c, d, a, x[k+2],  S34, 0xC4AC5665);
+					a = II(a, b, c, d, x[k+0],  S41, 0xF4292244);
+					d = II(d, a, b, c, x[k+7],  S42, 0x432AFF97);
+					c = II(c, d, a, b, x[k+14], S43, 0xAB9423A7);
+					b = II(b, c, d, a, x[k+5],  S44, 0xFC93A039);
+					a = II(a, b, c, d, x[k+12], S41, 0x655B59C3);
+					d = II(d, a, b, c, x[k+3],  S42, 0x8F0CCC92);
+					c = II(c, d, a, b, x[k+10], S43, 0xFFEFF47D);
+					b = II(b, c, d, a, x[k+1],  S44, 0x85845DD1);
+					a = II(a, b, c, d, x[k+8],  S41, 0x6FA87E4F);
+					d = II(d, a, b, c, x[k+15], S42, 0xFE2CE6E0);
+					c = II(c, d, a, b, x[k+6],  S43, 0xA3014314);
+					b = II(b, c, d, a, x[k+13], S44, 0x4E0811A1);
+					a = II(a, b, c, d, x[k+4],  S41, 0xF7537E82);
+					d = II(d, a, b, c, x[k+11], S42, 0xBD3AF235);
+					c = II(c, d, a, b, x[k+2],  S43, 0x2AD7D2BB);
+					b = II(b, c, d, a, x[k+9],  S44, 0xEB86D391);
+					a = addUnsigned(a, AA);
+					b = addUnsigned(b, BB);
+					c = addUnsigned(c, CC);
+					d = addUnsigned(d, DD);
+				}
+				var tempValue = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
+				return tempValue.toLowerCase();
+			}
+		});
+	})(jQuery);
