@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
 import com.jty.order.service.OrderSer;
 import com.jty.web.annotation.PagerResolver;
@@ -106,4 +107,68 @@ public class OrderController {
         return result;
     }
 
+    @RequestMapping(value = "/addOrUpdateGoods", method = RequestMethod.POST)
+    @ResponseBody
+    public RequestResult<String> addOrUpdateGoods(@RequestBody Goods Goods) {
+        RequestResult<String> result = new RequestResult<String>();
+        try {
+            if (Goods.getId() == null || Goods.getId() == 0) {
+                this.orderSer.addGoods(Goods);
+            } else {
+                this.orderSer.updateGoods(Goods);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            result.setCode(100);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/deleteGoods", method = RequestMethod.POST)
+    @ResponseBody
+    public RequestResult<String> deleteGoods(@RequestParam("id") Long id) {
+        RequestResult<String> result = new RequestResult<String>();
+        try {
+            this.orderSer.deleteGoods(id);
+            result.setCode(0);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            result.setCode(100);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/getGoods", method = RequestMethod.POST)
+    @ResponseBody
+    public RequestResult<Goods> getGoods(HttpServletRequest request) {
+        RequestResult<Goods> result = new RequestResult<Goods>();
+        Map<String, Object> params = RequestSessionUtil.getRequestParamData(request);
+        try {
+            result.setBody(this.orderSer.getGoods(params));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            result.setCode(100);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/getGoodsList", method = RequestMethod.POST)
+    @ResponseBody
+    public PagerStruct<Goods> getGoodsList(@RequestParam(value = "keyWord", required = false) String keyWord,
+                                         @PagerResolver PagerInfo pagerParam) {
+        PagerStruct<Goods> result = new PagerStruct<Goods>();
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("keyWord", keyWord);
+        try {
+            result.setRows(this.orderSer.getGoodsList(params, pagerParam));
+            result.setTotal(this.orderSer.getGoodsListCnt(params));
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+        return result;
+    }
 }

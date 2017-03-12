@@ -10,7 +10,7 @@
 <script src="/resources/js/ext4.2.1/ext-lang-zh_CN.js" type="text/javascript" ></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="/resources/js/jquery/jquery-1.10.2.js"></script>
-<title>xxxx系统</title>
+<title>首页</title>
 </head>
 <body>
 <div id="main"></div>
@@ -57,12 +57,14 @@ Ext.onReady(function () { //所有都加上此处代码确保ExtJs加载完成
         root: {
             expanded: true,
             children: [
-                { text: 'detention', leaf: true },
-                { text: 'homework', expanded: true, children: [
-                    { text: 'book report', leaf: true },
-                    { text: 'algebra', leaf: true}
-                ] },
-                { text: 'buy lottery tickets', leaf: true }
+            	{ text: '用户列表', leaf: true, dataUrl:"/user/userList"},
+                { text: '订单列表', leaf: true, dataUrl:"/order/orderList"},
+                { text: '商品列表', leaf: true, dataUrl:"/order/goodsList"}
+//                 { text: 'homework', expanded: true, children: [
+//                     { text: 'book report', leaf: true },
+//                     { text: 'algebra', leaf: true}
+//                 ] },
+//                 { text: 'buy lottery tickets', leaf: true }
             ]
         }
     });
@@ -71,14 +73,26 @@ Ext.onReady(function () { //所有都加上此处代码确保ExtJs加载完成
 //         title: 'Simple Tree',
 //         width: 200,
 //         height: 200,
+		rootVisible: false,//根目录隐藏
         store: store,
+        listeners:{
+            itemclick:function(v, r) {
+                if (r.raw.dataUrl) {
+                    //获取节点的data的值
+//                     alert(r.raw.dataUrl);
+//                     tab.add({autoHeight:true, title:r.raw.text, closable : true, html:"<iframe src=\"" + r.raw.dataUrl + "\" style=\"width:100%;height:100%;border:none;\"></iframe>"});
+                	document.getElementById('target').src = r.raw.dataUrl;
+//                 	tab.getActiveTab().setTitle(r.raw.text);
+                }
+            }
+        },
     });
     var viewport = Ext.create('Ext.Viewport', {
             layout : 'border',
             items : [ {
                 region : 'north',
                 height : 100,
-                html : '<h1>XXXX系统</h1>',
+                html : '<h1>境通云Demo系统</h1>',
                 title : 'north',
                 collapsible : true,
                 split : true
@@ -103,7 +117,9 @@ Ext.onReady(function () { //所有都加上此处代码确保ExtJs加载完成
                 region : 'center',
                 collapsible : true,
                 border : true,
-                html:'<div id="tbar"></div>'
+                autoHeight:true,
+//                 html:'<div id="tbar"></div>'
+                html:"<iframe id='target' src=\"/user/userList\" style=\"width:100%;height:100%;border:none;\"></iframe>"
             }, {
                 region : 'south',
                 html : 'south',
@@ -113,51 +129,68 @@ Ext.onReady(function () { //所有都加上此处代码确保ExtJs加载完成
                 height : 40,
             } ]
     });
-    var tb = new Ext.Toolbar();
-        tb.render('tbar');
-        //为工具添加四个按钮
-        tb.add({
-            text : '新建',
-            handler : function() {
-                Ext.Msg.alert('提示', '新建');
-            }
-        }, '-', {
-            text : '修改',
-            handler : function() {
-                Ext.Msg.alert('提示', '新建');
-            }
-        }, '-', {
-            text : '删除',
-            handler : function() {
-                Ext.Msg.alert('提示', '新建');
-            }
-        }, '-', {
-            text : '显示',
-            handler : function() {
-                Ext.Msg.alert('提示', '新建');
-            }
-        }, '-', {
-            text : '新建',
-            handler : function() {
-                Ext.Msg.alert('提示', '新建');
-            }
-        }, '-', {
-            text : '日期',
-            menu : Ext.create('Ext.menu.DatePicker', {
-                handler : function(dp, date) {
-                    Ext.Msg.alert('Date Selected', 'You selected ' + Ext.Date.format(date, 'M j, Y'));
-                }
-            })
-        }, '-', {
-            text : '颜色',
-            menu : Ext.create('Ext.menu.ColorPicker', {
-                handler : function(cm, color) {
-                    if (typeof color == 'string') {
-                        Ext.Msg.alert('选择颜色', '选择的颜色是' + color);
-                    }
-                }
-            })
-        });
+    var i=0;
+    var tab=new Ext.TabPanel({
+// 		    renderTo:"tbar",
+		//     width:500,
+// 		    height:700,
+// 			autoHeight:true,
+// 		    enableTabScroll:true,
+// 		    activeTab:0,
+// 		    bbar:[{text:"添加",handler:function(){
+// 		           tab.add({title:"新面板"+i++,closable : true}
+// 		           );}
+// 		    	}],
+		    items:[
+		            {autoHeight:true, title:"用户列表", closable : true, html:"<iframe id='target' src=\"/user/userList\" style=\"width:100%;height:100%;border:none;\"></iframe>"}
+	            ]
+  		});
+
+//     var tb = new Ext.Toolbar();
+//         tb.render('tbar');
+//         //为工具添加四个按钮
+//         tb.add({
+//             text : '新建',
+//             handler : function() {
+//                 Ext.Msg.alert('提示', '新建');
+//             }
+//         }, '-', {
+//             text : '修改',
+//             handler : function() {
+//                 Ext.Msg.alert('提示', '新建');
+//             }
+//         }, '-', {
+//             text : '删除',
+//             handler : function() {
+//                 Ext.Msg.alert('提示', '新建');
+//             }
+//         }, '-', {
+//             text : '显示',
+//             handler : function() {
+//                 Ext.Msg.alert('提示', '新建');
+//             }
+//         }, '-', {
+//             text : '新建',
+//             handler : function() {
+//                 Ext.Msg.alert('提示', '新建');
+//             }
+//         }, '-', {
+//             text : '日期',
+//             menu : Ext.create('Ext.menu.DatePicker', {
+//                 handler : function(dp, date) {
+//                     Ext.Msg.alert('Date Selected', 'You selected ' + Ext.Date.format(date, 'M j, Y'));
+//                 }
+//             })
+//         }, '-', {
+//             text : '颜色',
+//             menu : Ext.create('Ext.menu.ColorPicker', {
+//                 handler : function(cm, color) {
+//                     if (typeof color == 'string') {
+//                         Ext.Msg.alert('选择颜色', '选择的颜色是' + color);
+//                     }
+//                 }
+//             })
+//         });
     });
     //     $(function() {
 

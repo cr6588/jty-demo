@@ -49,11 +49,6 @@
             <version>1.6.4</version>
         </dependency>
         <dependency>
-            <groupId>com.baidu</groupId>
-            <artifactId>ueditor</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
@@ -94,24 +89,9 @@
             <version>1.4.3</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge</groupId>
-            <artifactId>pinyin4j</artifactId>
-            <version>2.5.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
             <version>0.1.50</version>
-        </dependency>
-        <dependency>
-            <groupId>org.xbill</groupId>
-            <artifactId>dns</artifactId>
-            <version>2.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.jexcelapi</groupId>
-            <artifactId>jxl</artifactId>
-            <version>2.6.3_noLog4j</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -122,11 +102,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.0.13</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>net.sf.ezmorph</groupId>
@@ -147,16 +122,6 @@
             <groupId>asm</groupId>
             <artifactId>asm</artifactId>
             <version>3.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.phprpc</groupId>
-            <artifactId>phprpc</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>tebie.applib</groupId>
-            <artifactId>apiclient</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.tuckey</groupId>
@@ -190,7 +155,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.9</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -332,12 +297,6 @@
             <groupId>javax.jms</groupId>
             <artifactId>javax.jms-api</artifactId>
             <version>2.0</version>
-        </dependency>
-        <!-- QQ登录SDK -->
-        <dependency>
-            <groupId>com.tencent</groupId>
-            <artifactId>qq-login-sdk</artifactId>
-            <version>V2.0.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
