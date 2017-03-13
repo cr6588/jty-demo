@@ -2,6 +2,7 @@ package com.jty.order.dao;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import com.jty.web.bean.PagerInfo;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-db.xml", "classpath:spring-aop.xml" })
 @Transactional
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 public class OrderDaoTest {
 
     @Autowired
@@ -77,6 +78,51 @@ public class OrderDaoTest {
             BigDecimal lastPageTime = new BigDecimal(totalTime).divide(new BigDecimal(3), 2, RoundingMode.HALF_UP);
             System.out.println("三次查询总耗时：" + totalTime + ",平均值：" + lastPageTime.toString());
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void updOrderTest() {
+        Order in1 = new Order();
+        in1.setId(8l);
+        in1.setNo("test1_update");
+        in1.setTotalMoney(11.2d);
+        User u1 = new User();
+        u1.setId(1l);
+        u1.setUsername("user1");
+        in1.setUser(u1);
+        try {
+            orderDao.updateOrder(in1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void addOrderTest() {
+        Order in1 = new Order();
+        in1.setNo("test1");
+        in1.setTotalMoney(11.2d);
+        User u1 = new User();
+        u1.setId(1l);
+        u1.setUsername("user1");
+        in1.setUser(u1);
+        try {
+            orderDao.addOrder(in1);
+            Date d = new Date();
+            System.out.println(d);
+            for(int i = 0; i < 10000; i++) {
+                in1 = new Order();
+                in1.setNo("test1");
+                in1.setTotalMoney(11.2d);
+                in1.setUser(u1);
+                orderDao.addOrder(in1);
+            }
+            Date end = new Date();
+            System.out.println(end);
+            System.out.println(end.getTime() - d.getTime());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

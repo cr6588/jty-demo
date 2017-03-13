@@ -25,6 +25,27 @@
             <artifactId>jty-beans</artifactId>
             <version>0.0.1</version>
         </dependency>
+        <!-- 引入sharding-jdbc核心模块 -->
+        <dependency>
+            <groupId>com.dangdang</groupId>
+            <artifactId>sharding-jdbc-core</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dangdang</groupId>
+            <artifactId>sharding-jdbc-config-common</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+        <dependency>  
+            <groupId>com.dangdang</groupId>  
+            <artifactId>sharding-jdbc-config-spring</artifactId>  
+            <version>1.4.1</version>  
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.26</version>
+        </dependency>
     </dependencies>
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>

@@ -9,11 +9,13 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.dangdang.ddframe.rdb.sharding.api.HintManager;
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
 import com.jty.order.bean.OrderGoods;
 import com.jty.order.dao.OrderDao;
 import com.jty.web.bean.PagerInfo;
+import com.jty.web.util.UidUtil;
 
 /**
  * Home object for domain model class Order.
@@ -26,6 +28,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	private UidUtil orderIdUtil = new UidUtil();
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -87,6 +90,8 @@ public class OrderDaoImpl implements OrderDao {
 	 */
 	@Override
 	public void addOrder(Order order) throws Exception {
+	    //TODO 后期改成配置
+	    order.setId(orderIdUtil.getUid("localhost:3306", "dev", "dev"));
 		sessionFactory.getCurrentSession().save(order);
 	}
 
