@@ -11,9 +11,17 @@
 <!--        <script src="/resources/js/ext4.2.1/ext-modern-all.js" type="text/javascript" ></script> -->
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>国际化列表</title>
+<style type="text/css">
+html,body{height:100%; width:100%; overflow:hidden; margin:0;
+padding:0;}
+.main {
+width:100%;
+height:100%;
+}
+</style>
 </head>
 <body>
-       <div id="data-grid"></div>
+       <div id="data-grid" class="main"></div>
        <script type="text/javascript">
        var store, grid, win, form, selectedStoreIndex;
        Ext.onReady(function() {
@@ -70,7 +78,8 @@
            grid = Ext.create('Ext.grid.Panel', {
                store : store,
                multiSelect : false,
-               height : 510,
+//                height : 510,
+				autoHeight:true,
                layout : 'fit',
                columns : [ {
                    text : 'id',
@@ -162,11 +171,13 @@
                bbar : [ {
                    xtype : 'pagingtoolbar',
                    store : store,
+//                    style : "position:fixed;bottom:0;",
                    displayMsg : '显示 {0} - {1} 条，共计 {2} 条',
                    emptyMsg : '没有数据',
                    beforePageText : '当前页',
                    afterPageText : '共{0}页',
-                   displayInfo : true
+                   displayInfo : true,
+//                    region : "south"
                } ],
                renderTo : 'data-grid'
            });

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
 import com.jty.order.dao.OrderDao;
 import com.jty.order.service.OrderSer;
@@ -36,6 +37,30 @@ public class OrderServiceImpl implements OrderSer {
     }
 
     public Integer getOrderListCnt(Map<String, Object> params) throws Exception {
-        return orderDao.getOrderListCnt(params);
+        return orderDao.getGoodsListCnt(params);
+    }
+
+    public List<Goods> getGoodsList(Map<String, Object> param, PagerInfo pager) throws Exception {
+        return orderDao.getGoodsList(param, pager);
+    }
+
+    public Goods getGoods(Map<String, Object> param) throws Exception {
+        return orderDao.getGoods(param);
+    }
+
+    public void addGoods(Goods goods) throws Exception {
+        orderDao.addGoods(goods);
+    }
+
+    public void updateGoods(Goods goods) throws Exception {
+        orderDao.updateGoods(goods);
+    }
+
+    public void deleteGoods(Long id) throws Exception {
+        orderDao.deleteGoods(id);
+    }
+
+    public Integer getGoodsListCnt(Map<String, Object> params) throws Exception {
+        return orderDao.getGoodsListCnt(params);
     }
 }

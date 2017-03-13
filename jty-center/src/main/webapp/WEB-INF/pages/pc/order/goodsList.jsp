@@ -45,7 +45,7 @@
            });  
            Ext.define('roleModel', {
                extend : 'Ext.data.Model',
-               fields : [ "id", "name", "SKU", "price" ],
+               fields : [ "id", "name", "sku", "price" ],
                idProperty : 'id'
            });
            store = Ext.create('Ext.data.Store', {
@@ -84,7 +84,7 @@
                    align : 'left'
                }, {
                    text : "SKU",
-                   dataIndex : 'SKU',
+                   dataIndex : 'sku',
                    minWidth: 150,
                    align : 'left'
                }, {
@@ -157,7 +157,7 @@
                                    allowBlank : false
                                }, {
                                    fieldLabel : "SKU",
-                                   name : 'SKU',
+                                   name : 'sku',
                                }, {
                                    fieldLabel : "price",
                                    name : 'price',
@@ -233,6 +233,7 @@
            win.show();
        }
        function sp_update() {
+    	   form.getForm().reset();
            var no = null;
            var selection = grid.getView().getSelectionModel().getSelection()[0];
            if(selection){
