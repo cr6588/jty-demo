@@ -57,7 +57,7 @@ height:100%;
                idProperty : 'id'
            });
            store = Ext.create('Ext.data.Store', {
-           pageSize : 20,
+           pageSize : 1,
            model : 'roleModel',
            remoteSort : false,
            autoLoad : true,
@@ -78,8 +78,8 @@ height:100%;
            grid = Ext.create('Ext.grid.Panel', {
                store : store,
                multiSelect : false,
-//                height : 510,
-				autoHeight:true,
+               height : 774,
+// 				autoHeight:true,
                layout : 'fit',
                columns : [ {
                    text : 'id',
