@@ -49,7 +49,7 @@
                idProperty : 'id'
            });
            store = Ext.create('Ext.data.Store', {
-           pageSize : 20,
+           pageSize : 10,
            model : 'roleModel',
            remoteSort : false,
            autoLoad : true,

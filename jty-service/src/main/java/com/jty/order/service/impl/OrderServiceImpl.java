@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderSer {
     }
 
     public Integer getOrderListCnt(Map<String, Object> params) throws Exception {
-        return orderDao.getGoodsListCnt(params);
+        return orderDao.getOrderListCnt(params);
     }
 
     public List<Goods> getGoodsList(Map<String, Object> param, PagerInfo pager) throws Exception {
