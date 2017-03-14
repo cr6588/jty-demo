@@ -7,8 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -67,7 +65,7 @@ public class Order implements Serializable {
         this.no = no;
     }
 
-    @ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @ForeignKey( name = "none" )
     public User getUser() {
@@ -87,8 +85,7 @@ public class Order implements Serializable {
         this.totalMoney = totalMoney;
     }
 
-    // 先设置多对多的关联，之后必须生成一个中间表，使用JoinTable注解
-    @OneToMany(targetEntity=OrderGoods.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity=OrderGoods.class, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
     @ForeignKey( name = "none" )
     public List<OrderGoods> getOrderGoods() {

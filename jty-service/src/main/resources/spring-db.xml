@@ -128,7 +128,7 @@
         <rdb:sharding-rule data-sources="db_jty_order">
             <rdb:table-rules>
                 <rdb:table-rule logic-table="t_order" actual-tables="t_order_${0..3}" table-strategy="orderTableStrategy" />
-                <rdb:table-rule logic-table="orderGoods" actual-tables="order_goods_${0..3}" table-strategy="orderGoodsTableStrategy" />
+                <rdb:table-rule logic-table="order_goods" actual-tables="order_goods_${0..3}" table-strategy="orderGoodsTableStrategy" />
             </rdb:table-rules>
             <rdb:default-database-strategy sharding-columns="none" algorithm-class="com.dangdang.ddframe.rdb.sharding.api.strategy.database.NoneDatabaseShardingAlgorithm" />
         </rdb:sharding-rule>

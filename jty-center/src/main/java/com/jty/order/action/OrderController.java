@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
 import com.jty.order.service.OrderSer;
+import com.jty.user.bean.User;
 import com.jty.web.annotation.PagerResolver;
 import com.jty.web.bean.PagerInfo;
 import com.jty.web.bean.PagerStruct;
@@ -42,11 +43,18 @@ public class OrderController {
         return new ModelAndView(path, RequestSessionUtil.getRequestParamData(request));
     }
 
+
+    public User getCurUser() {
+        User user = new User();
+        user.setId(1l);
+        return user;
+    }
     @RequestMapping(value = "/addOrUpdateOrder", method = RequestMethod.POST)
     @ResponseBody
     public RequestResult<String> addOrUpdateOrder(@RequestBody Order Order) {
         RequestResult<String> result = new RequestResult<String>();
         try {
+            Order.setUser(getCurUser());
             if (Order.getId() == null || Order.getId() == 0) {
                 this.orderSer.addOrder(Order);
             } else {

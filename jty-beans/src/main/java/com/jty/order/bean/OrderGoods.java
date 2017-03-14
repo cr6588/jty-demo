@@ -2,7 +2,6 @@ package com.jty.order.bean;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,7 +51,7 @@ public class OrderGoods implements Serializable {
         this.orderId = orderId;
     }
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = Goods.class, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, targetEntity = Goods.class)
     @JoinColumn(name = "goods_id")
     @ForeignKey( name = "none" )
     public Goods getGoods() {
