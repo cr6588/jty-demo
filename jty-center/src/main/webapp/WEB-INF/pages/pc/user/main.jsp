@@ -92,7 +92,7 @@ Ext.onReady(function () { //所有都加上此处代码确保ExtJs加载完成
             items : [ {
                 region : 'north',
                 height : 100,
-                html : '<h1>境通云Demo系统</h1>',
+                html : '<h1>Demo</h1>',
                 title : 'north',
                 collapsible : true,
                 split : true

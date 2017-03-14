@@ -24,9 +24,11 @@ public interface OrderDao {
 
     void addOrderGoods(OrderGoods orderGoods) throws Exception;
 
+    void addOrderGoodsList(List<OrderGoods> orderGoodsList) throws Exception;
+
     void updateOrderGoods(OrderGoods orderGoods) throws Exception;
 
-    void deleteOrderGoods(Long id) throws Exception;
+    void deleteOrderGoods(Long orderId) throws Exception;
 
     List<OrderGoods> getOrderGoodsByOrderId(Long orderId) throws Exception;
 

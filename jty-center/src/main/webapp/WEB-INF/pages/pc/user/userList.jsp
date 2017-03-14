@@ -12,8 +12,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>国际化列表</title>
 <style type="text/css">
-html,body{height:100%; width:100%; overflow:hidden; margin:0;
-padding:0;}
+/* html,body{height:100%; width:100%; overflow:hidden; margin:0; */
+/* padding:0;} */
 .main {
 width:100%;
 height:100%;
@@ -21,7 +21,7 @@ height:100%;
 </style>
 </head>
 <body>
-       <div id="data-grid" class="main"></div>
+       <div id="data-grid"></div>
        <script type="text/javascript">
        var store, grid, win, form, selectedStoreIndex;
        Ext.onReady(function() {
@@ -57,7 +57,7 @@ height:100%;
                idProperty : 'id'
            });
            store = Ext.create('Ext.data.Store', {
-           pageSize : 1,
+           pageSize : 10,
            model : 'roleModel',
            remoteSort : false,
            autoLoad : true,
@@ -78,7 +78,7 @@ height:100%;
            grid = Ext.create('Ext.grid.Panel', {
                store : store,
                multiSelect : false,
-               height : 774,
+               height : 510,
 // 				autoHeight:true,
                layout : 'fit',
                columns : [ {

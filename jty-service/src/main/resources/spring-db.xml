@@ -48,6 +48,10 @@
                 <prop key="hibernate.format_sql">false</prop>
                 <prop key="hibernate.generate_statistics">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">none</prop>
+                <!--//每50条语句提交一次    -->
+                <prop key="hibernate.jdbc.batch_size">50</prop>
+                <!--关闭二级缓存    -->
+                <prop key="hiberante.cache.use_second_level_cache">false</prop>
             </props>
         </property>
         <!-- <property name="mappingLocations"> -->

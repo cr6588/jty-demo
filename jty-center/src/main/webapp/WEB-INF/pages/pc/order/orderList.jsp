@@ -10,10 +10,14 @@
        <script src="/resources/js/ext4.2.1/ext-lang-zh_CN.js" type="text/javascript" ></script>
 <!--        <script src="/resources/js/ext4.2.1/ext-modern-all.js" type="text/javascript" ></script> -->
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>国际化列表</title>
+<title>订单列表</title>
 </head>
 <body>
        <div id="data-grid"></div>
+       <div id="goods-grid"></div>
+       <div id="goodsForm"></div>
+       <script type="text/javascript" src="/resources/js/order/editOrderGoods.js"></script>
+       <script type="text/javascript" src="/resources/js/order/searchGoodsList.js"></script>
        <script type="text/javascript">
        var store, grid, win, form, selectedStoreIndex;
        Ext.onReady(function() {
@@ -70,7 +74,7 @@
            grid = Ext.create('Ext.grid.Panel', {
                store : store,
                multiSelect : false,
-               height : 510,
+//                height : 510,
                layout : 'fit',
                columns : [ {
                    text : 'id',
@@ -163,7 +167,8 @@
                                }, {
                                    fieldLabel : "totalMoney",
                                    name : 'totalMoney',
-                               }
+                                   allowBlank : false
+                               }, orderGoodsGrid
                            ]
                        }]
                } /*, {
@@ -193,6 +198,18 @@
 //                                store.insert(store.getCount(), form.getValues());
 //                            }
                             var o = form.getValues();
+                            var orderGoodsArray = [];
+                            orderGoodsStore.each(function (record) {
+                                var tempGoods = {
+                                    id:record.data["goods.id"]
+                                }
+                                var tempOrderGoods = {
+                                    num : record.data.num,
+                                    goods : tempGoods
+                                }
+                                orderGoodsArray.push(tempOrderGoods);
+                            });
+                            o.orderGoods = orderGoodsArray;
                             $.ajax({
                                     url : '/order/addOrUpdateOrder',
                                     type : "post",
@@ -241,6 +258,15 @@
                selectedStoreIndex = store.indexOf(selection);
                form.loadRecord(selection);
                win.setTitle("Update Order");
+               $.post("/order/getOrder", {id:selection.data.id}, function (res) {
+                   if(res.code == 0) {
+                       var orderGoods = res.body.orderGoods;
+                       orderGoodsStore.clearData();
+                       for(var og in orderGoods) {
+                           orderGoodsStore.add(og);
+                       }
+                   }
+               })
                win.show();
            }else{
                Ext.Msg.alert("提示", "请选择用户");

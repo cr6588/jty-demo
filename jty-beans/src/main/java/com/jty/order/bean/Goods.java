@@ -20,6 +20,7 @@ public class Goods implements Serializable {
     private String name;
     private String SKU;
     private Double price;
+    private Long userId;
 
     public Goods() {
 
@@ -61,6 +62,15 @@ public class Goods implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Column(name = "user_id")
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
 }
