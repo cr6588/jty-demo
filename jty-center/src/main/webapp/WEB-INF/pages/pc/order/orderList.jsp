@@ -247,11 +247,13 @@
            store.reload();
        }
        function sp_add() {
+           orderGoodsStore.removeAll();
            form.getForm().reset();
            win.setTitle("Add Order");
            win.show();
        }
        function sp_update() {
+           orderGoodsStore.removeAll();
            var no = null;
            var selection = grid.getView().getSelectionModel().getSelection()[0];
            if(selection){
@@ -261,7 +263,6 @@
                $.post("/order/getOrder", {id:selection.data.id}, function (res) {
                    if(res.code == 0) {
                        var orderGoods = res.body.orderGoods;
-                       orderGoodsStore.clearData();
                        for(var og in orderGoods) {
                            orderGoodsStore.add(og);
                        }

@@ -2,6 +2,7 @@ package com.jty.order.dao;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -107,20 +108,29 @@ public class OrderDaoTest {
         u1.setId(1l);
         u1.setUsername("user1");
         in1.setUser(u1);
+        List<OrderGoods> ogs =new ArrayList<>();
+        OrderGoods og = new OrderGoods();
+        Goods g = new Goods();
+        g.setId(1l);
+//        og.setId(1l);
+        og.setGoods(g);
+        ogs.add(og);
+        in1.setOrderGoods(ogs);
         try {
+            orderDao.updateGoods(g);
             orderDao.addOrder(in1);
-            Date d = new Date();
-            System.out.println(d);
-            for(int i = 0; i < 10000; i++) {
-                in1 = new Order();
-                in1.setNo("test1");
-                in1.setTotalMoney(11.2d);
-                in1.setUser(u1);
-                orderDao.addOrder(in1);
-            }
-            Date end = new Date();
-            System.out.println(end);
-            System.out.println(end.getTime() - d.getTime());
+//            Date d = new Date();
+//            System.out.println(d);
+//            for(int i = 0; i < 10000; i++) {
+//                in1 = new Order();
+//                in1.setNo("test1");
+//                in1.setTotalMoney(11.2d);
+//                in1.setUser(u1);
+//                orderDao.addOrder(in1);
+//            }
+//            Date end = new Date();
+//            System.out.println(end);
+//            System.out.println(end.getTime() - d.getTime());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
