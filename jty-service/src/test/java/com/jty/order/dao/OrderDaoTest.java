@@ -26,7 +26,7 @@ import com.jty.web.bean.PagerInfo;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-db.xml", "classpath:spring-aop.xml" })
 @Transactional
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) //defaultRollback = false,addOrderTest 会报错
 public class OrderDaoTest {
 
     @Autowired
@@ -110,15 +110,23 @@ public class OrderDaoTest {
         in1.setUser(u1);
         List<OrderGoods> ogs =new ArrayList<>();
         OrderGoods og = new OrderGoods();
-        Goods g = new Goods();
-        g.setId(1l);
-//        og.setId(1l);
-        og.setGoods(g);
-        ogs.add(og);
-        in1.setOrderGoods(ogs);
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", "1");
         try {
-            orderDao.updateGoods(g);
+//            Goods g = orderDao.getGoods(param);
+            Goods g = new Goods();
+            g.setId(1l);
+            g.setUserId(1l);
+//        og.setId(1l);
+//            defaultRollback = false 会报错
+            og.setGoods(g);
+            ogs.add(og);
+            in1.setOrderGoods(ogs);
             orderDao.addOrder(in1);
+//            og.setOrderId(in1.getId());
+            //orderDao.addOrderGoods(og);
+            Assert.assertEquals(1 , (long)orderDao.getOrderListCnt(null));
+            Assert.assertEquals(1, (long)orderDao.getOrderGoodsListCnt(null));
 //            Date d = new Date();
 //            System.out.println(d);
 //            for(int i = 0; i < 10000; i++) {
@@ -158,7 +166,7 @@ public class OrderDaoTest {
             Goods g = new Goods();
             g.setName("goods");
             OrderGoods og = new OrderGoods();
-            og.setOrderId(in1.getId());
+//            og.setOrderId(in1.getId());
             og.setGoods(g);
             orderDao.addGoods(g);
             orderDao.addOrderGoods(og);

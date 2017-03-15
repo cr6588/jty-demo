@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
 import com.jty.order.service.OrderSer;
+import com.jty.user.action.UserController;
 import com.jty.user.bean.User;
 import com.jty.web.annotation.PagerResolver;
 import com.jty.web.bean.PagerInfo;
@@ -36,25 +37,27 @@ public class OrderController {
 
     @RequestMapping(value = "/{pageName}", method = RequestMethod.GET)
     public ModelAndView viewAdminManagePages(HttpServletRequest request, @PathVariable("pageName") String pageName) throws Exception {
-//        if(request.getSession().getAttribute("userId") == null ) {
-//            return new ModelAndView("redirect:/user/login");
-//        }
+        if(request.getSession().getAttribute(UserController.CUR_USER) == null ) {
+            return new ModelAndView("redirect:/user/login");
+        }
         String path = RequestSessionUtil.getDevicePath(request) + "/order/" + pageName;
         return new ModelAndView(path, RequestSessionUtil.getRequestParamData(request));
     }
 
 
-    public User getCurUser() {
-        User user = new User();
-        user.setId(1l);
-        return user;
+    public User getCurUser(HttpServletRequest request) {
+        Object o = request.getSession().getAttribute(UserController.CUR_USER);
+        if(o == null) {
+            return null;
+        }
+        return (User) o;
     }
     @RequestMapping(value = "/addOrUpdateOrder", method = RequestMethod.POST)
     @ResponseBody
-    public RequestResult<String> addOrUpdateOrder(@RequestBody Order Order) {
+    public RequestResult<String> addOrUpdateOrder(HttpServletRequest request, @RequestBody Order Order) {
         RequestResult<String> result = new RequestResult<String>();
         try {
-            Order.setUser(getCurUser());
+            Order.setUser(getCurUser(request));
             if (Order.getId() == null || Order.getId() == 0) {
                 this.orderSer.addOrder(Order);
             } else {
@@ -117,9 +120,10 @@ public class OrderController {
 
     @RequestMapping(value = "/addOrUpdateGoods", method = RequestMethod.POST)
     @ResponseBody
-    public RequestResult<String> addOrUpdateGoods(@RequestBody Goods Goods) {
+    public RequestResult<String> addOrUpdateGoods(HttpServletRequest request, @RequestBody Goods Goods) {
         RequestResult<String> result = new RequestResult<String>();
         try {
+            Goods.setUserId(getCurUser(request).getId());
             if (Goods.getId() == null || Goods.getId() == 0) {
                 this.orderSer.addGoods(Goods);
             } else {

@@ -9,7 +9,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.dangdang.ddframe.rdb.sharding.api.HintManager;
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
 import com.jty.order.bean.OrderGoods;
@@ -27,7 +26,8 @@ public class OrderDaoImpl implements OrderDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private UidUtil orderIdUtil = new UidUtil();
+    private UidUtil orderIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "order_id_sequence");
+    private UidUtil goodsIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "goods_id_sequence");;
 
     /*
      * (non-Javadoc)
@@ -88,7 +88,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public void addOrder(Order order) throws Exception {
         // TODO 后期改成配置
-        order.setId(orderIdUtil.getUid("localhost:3306", "dev", "dev"));
+        order.setId(orderIdUtil.getUid());
         sessionFactory.getCurrentSession().save(order);
     }
 
@@ -130,11 +130,16 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void addOrderGoodsList(List<OrderGoods> orderGoodsList) throws Exception {
+    public void addOrderGoodsList(Order order) throws Exception {
+        if(order == null) {
+            return;
+        }
+        List<OrderGoods> orderGoodsList = order.getOrderGoods();
         if(orderGoodsList == null) {
             return;
         }
         for (OrderGoods orderGoods : orderGoodsList) {
+            orderGoods.setOrder(order);
             sessionFactory.getCurrentSession().save(orderGoods);
         }
     }
@@ -146,22 +151,31 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void deleteOrderGoods(Long orderId) throws Exception {
-        Query query = sessionFactory.getCurrentSession().createQuery("delete OrderGoods where orderId = ?");
+        Query query = sessionFactory.getCurrentSession().createQuery("delete OrderGoods where order.id = ?");
         query.setLong(0, orderId);
         query.executeUpdate();
     }
 
     @Override
     public List<OrderGoods> getOrderGoodsByOrderId(Long orderId) throws Exception {
-        String hsql = "from OrderGoods where orderId =:orderId order by id desc";
+        String hsql = "from OrderGoods where  order.id =: order.id order by id desc";
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
-        query.setLong("orderId", orderId);
+        query.setLong("order.id", orderId);
         List<OrderGoods> orderGoods = query.list();
         return orderGoods;
     }
 
     @Override
+    public Integer getOrderGoodsListCnt(Map<String, Object> param) throws Exception {
+        String hsql = "select count(*) from OrderGoods";
+        Query query = sessionFactory.getCurrentSession().createQuery(hsql);
+        Integer count = Integer.parseInt(query.uniqueResult().toString());
+        return count;
+    }
+
+    @Override
     public void addGoods(Goods goods) throws Exception {
+        goods.setId(goodsIdUtil.getUid());
         sessionFactory.getCurrentSession().save(goods);
     }
 
@@ -172,7 +186,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void deleteGoods(Long id) throws Exception {
-        Query query = sessionFactory.getCurrentSession().createQuery("delete Order where id = ?");
+        Query query = sessionFactory.getCurrentSession().createQuery("delete Goods where id = ?");
         query.setLong(0, id);
         query.executeUpdate();
     }
@@ -197,7 +211,7 @@ public class OrderDaoImpl implements OrderDao {
         }
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
         if (param.get("id") != null) {
-            query.setLong("id", (long) param.get("id"));
+            query.setLong("id", Long.parseLong(param.get("id").toString()));
         }
         @SuppressWarnings("unchecked")
         List<Goods> goodsList = query.list();

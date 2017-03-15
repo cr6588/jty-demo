@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,7 +24,7 @@ public class OrderGoods implements Serializable {
      */
     private static final long serialVersionUID = -2144533441512959006L;
     private Long id;
-    private Long orderId;
+    private Order order;
     private Goods goods;
     private Integer num;
 
@@ -42,18 +43,22 @@ public class OrderGoods implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "order_id")
-    public Long getOrderId() {
-        return orderId;
+//    @ManyToOne
+//    @JoinColumn(name = "order_id")
+    @ManyToOne(fetch=FetchType.EAGER,targetEntity=Order.class)
+    @JoinColumn(name="order_id")
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     @OneToOne(fetch = FetchType.EAGER, targetEntity = Goods.class)
     @JoinColumn(name = "goods_id")
     @ForeignKey( name = "none" )
+    
     public Goods getGoods() {
         return goods;
     }

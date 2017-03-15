@@ -24,13 +24,15 @@ public interface OrderDao {
 
     void addOrderGoods(OrderGoods orderGoods) throws Exception;
 
-    void addOrderGoodsList(List<OrderGoods> orderGoodsList) throws Exception;
+    void addOrderGoodsList(Order order) throws Exception;
 
     void updateOrderGoods(OrderGoods orderGoods) throws Exception;
 
     void deleteOrderGoods(Long orderId) throws Exception;
 
     List<OrderGoods> getOrderGoodsByOrderId(Long orderId) throws Exception;
+
+    Integer getOrderGoodsListCnt(Map<String, Object> param) throws Exception;
 
     List<Goods> getGoodsList(Map<String, Object> param, PagerInfo pager) throws Exception;
 

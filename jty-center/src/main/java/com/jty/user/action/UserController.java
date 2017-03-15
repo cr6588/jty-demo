@@ -27,6 +27,8 @@ import com.jty.web.util.RequestSessionUtil;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+    public static final String CUR_USER = "curUser";
+
     Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
@@ -34,6 +36,9 @@ public class UserController {
 
     @RequestMapping(value = "/{pageName}", method = RequestMethod.GET)
     public ModelAndView viewAdminManagePages(HttpServletRequest request, @PathVariable("pageName") String pageName) throws Exception {
+        if(request.getSession().getAttribute(CUR_USER) == null) {
+            return new ModelAndView("/pc/user/login");
+        }
         String path = RequestSessionUtil.getDevicePath(request) + "/user/" + pageName;
         return new ModelAndView(path, RequestSessionUtil.getRequestParamData(request));
     }
@@ -117,7 +122,7 @@ public class UserController {
                 result.setMessage("username or password error!");
             } else {
                 result.setBody(true);
-                request.getSession().setAttribute("userId", user.getId());
+                request.getSession().setAttribute(CUR_USER, user);
             }
         } catch (Exception e) {
             logger.error(e.getMessage());

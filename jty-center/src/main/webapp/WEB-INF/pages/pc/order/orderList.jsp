@@ -76,11 +76,15 @@
                multiSelect : false,
 //                height : 510,
                layout : 'fit',
+               clicksToEdit:1,
                columns : [ {
                    text : 'id',
                    dataIndex : 'id',
                    minWidth:90,
-                   align : 'center'
+                   align : 'center',
+                   editor: {
+                       allowBlank:false
+                   }
                }, {
                    text : "no",
                    dataIndex : 'no',
@@ -198,13 +202,14 @@
 //                                store.insert(store.getCount(), form.getValues());
 //                            }
                             var o = form.getValues();
+                            delete o.num;
                             var orderGoodsArray = [];
                             orderGoodsStore.each(function (record) {
                                 var tempGoods = {
                                     id:record.data["goods.id"]
                                 }
                                 var tempOrderGoods = {
-                                    num : record.data.num,
+                                    num : Number(record.data.num),
                                     goods : tempGoods
                                 }
                                 orderGoodsArray.push(tempOrderGoods);
@@ -263,11 +268,19 @@
                $.post("/order/getOrder", {id:selection.data.id}, function (res) {
                    if(res.code == 0) {
                        var orderGoods = res.body.orderGoods;
-                       for(var og in orderGoods) {
-                           orderGoodsStore.add(og);
-                       }
+                       for(var i = 0; i < orderGoods.length; i++) {
+                           var og = orderGoods[i];
+                           var tempOrderGoods = {
+                                   id:og.id,
+                                   num: og.num,
+                                   "goods.id": og.goods.id,
+                                   "goods.name" : og.goods.name,
+                                   "goods.price" : og.goods.price,
+                           }
+                           orderGoodsStore.add(tempOrderGoods);
+                        }
                    }
-               })
+               });
                win.show();
            }else{
                Ext.Msg.alert("提示", "请选择用户");

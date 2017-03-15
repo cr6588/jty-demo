@@ -26,13 +26,13 @@ public class OrderServiceImpl implements OrderSer {
 
     public void addOrder(Order order) throws Exception {
         orderDao.addOrder(order);
-        orderDao.addOrderGoodsList(order.getOrderGoods());
+        orderDao.addOrderGoodsList(order);
     }
 
     public void updateOrder(Order order) throws Exception {
         orderDao.updateOrder(order);
         orderDao.deleteOrderGoods(order.getId());
-        orderDao.addOrderGoodsList(order.getOrderGoods());
+        orderDao.addOrderGoodsList(order);
     }
 
     public void deleteOrder(Long id) throws Exception {

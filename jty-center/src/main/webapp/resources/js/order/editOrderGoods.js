@@ -29,7 +29,11 @@ var orderGoodsStore, orderGoodsGrid,isDeletedContact = [], goodsWin, goodsForm,s
             store : orderGoodsStore,
             multiSelect : false,
             layout : 'fit',
-            clicksToEdit:1,
+            plugins: [
+                Ext.create('Ext.grid.plugin.CellEditing', {
+                    clicksToEdit: 1
+                })
+            ],
             columns : [{
                 text : "id",
                 dataIndex : 'id',

@@ -10,10 +10,52 @@ import java.util.List;
 
 public class UidUtil implements Runnable {
 
+    public static final String DATABASENAME = "DATABASENAME";
     private static final String URL = "URL";
     private static final String MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static String JDBC_URL = "jdbc:mysql://URL/jty_order?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8";
+    private static String JDBC_URL = "jdbc:mysql://URL/DATABASENAME?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8";
+    private String url;
+    private String username;
+    private String password;
     private String databaseName;
+    private String tableName;
+
+    public UidUtil() {
+        
+    }
+
+    public UidUtil(String url, String username, String password, String databaseName, String tableName) {
+        super();
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.databaseName = databaseName;
+        this.tableName = tableName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getDatabaseName() {
         return databaseName;
@@ -23,14 +65,22 @@ public class UidUtil implements Runnable {
         this.databaseName = databaseName;
     }
 
-    public Long getUid(String url, String username, String password) throws Exception {
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public Long getUid() throws Exception {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
             Class.forName(MYSQL_JDBC_DRIVER);
-            con = DriverManager.getConnection(JDBC_URL.replace(URL, url), username, password);
-            String sql = "REPLACE INTO uid_sequence (stub) VALUES ('a');";
+            con = DriverManager.getConnection(JDBC_URL.replace(URL, url).replace(DATABASENAME, databaseName), username, password);
+            String sql = "REPLACE INTO " + tableName + " (stub) VALUES ('a');";
             pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
@@ -64,7 +114,8 @@ public class UidUtil implements Runnable {
         // System.out.println("ss");
         Long uid;
         try {
-            uid = getUid("localhost:3306", "dev", "dev");
+            UidUtil uidUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "order_id_sequence");
+            uid = getUid();
             System.out.println("uid : " + uid);
         } catch (Exception e) {
             e.printStackTrace();
