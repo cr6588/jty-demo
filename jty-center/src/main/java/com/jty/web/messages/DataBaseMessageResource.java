@@ -19,10 +19,6 @@ import com.jty.web.service.I18nSer;
 public class DataBaseMessageResource extends AbstractMessageSource implements BeanClassLoaderAware {
     @Autowired
     private I18nSer systemMangeSer;
-//    @Autowired
-//    private DataBaseMessageResource dataBaseMessageResource;
-//    @Autowired
-//    private Me dataBaseMessageResource;
 
     protected final static String I18N_SPLIT_CODE = "_";
 

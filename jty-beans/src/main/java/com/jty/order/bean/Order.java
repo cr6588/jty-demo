@@ -86,8 +86,8 @@ public class Order implements Serializable {
     }
 
 //    @OneToMany(mappedBy="order",targetEntity=OrderGoods.class,fetch=FetchType.LAZY)
-    @OneToMany(mappedBy = "order", targetEntity=OrderGoods.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-//    @JoinColumn(name = "order_id")
+    @OneToMany(targetEntity=OrderGoods.class, cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id")
     @ForeignKey( name = "none" )
     public List<OrderGoods> getOrderGoods() {
         return orderGoods;

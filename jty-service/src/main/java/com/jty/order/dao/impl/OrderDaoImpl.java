@@ -139,7 +139,7 @@ public class OrderDaoImpl implements OrderDao {
             return;
         }
         for (OrderGoods orderGoods : orderGoodsList) {
-            orderGoods.setOrder(order);
+            orderGoods.setOrderId(order.getId());
             sessionFactory.getCurrentSession().save(orderGoods);
         }
     }
@@ -181,7 +181,16 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void updateGoods(Goods goods) throws Exception {
-        sessionFactory.getCurrentSession().update(goods);
+        /**
+         * 因为share-jdbc分片键为user_id所以where带了user_id的条件
+         */
+        Query query = sessionFactory.getCurrentSession().createQuery("update Goods set name = ?, SKU = ?, price = ? where id = ? and user_id = ?");
+        query.setString(0, goods.getName());
+        query.setString(1, goods.getSKU());
+        query.setDouble(2, goods.getPrice());
+        query.setLong(3, goods.getId());
+        query.setLong(4, goods.getUserId());
+        query.executeUpdate();
     }
 
     @Override

@@ -41,8 +41,6 @@ public class I18nController {
     private SessionLocaleResolver localeResolver;
 	@Autowired
 	private I18nSer i18nSer;
-	 @Autowired
-	 private DataBaseMessageResource dataBaseMessageResource;
 
     @RequestMapping(value = "/{pageName}", method = RequestMethod.GET)
     public ModelAndView viewAdminManagePages(HttpServletRequest request, @PathVariable("pageName") String pageName) throws Exception {

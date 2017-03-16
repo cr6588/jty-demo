@@ -48,6 +48,10 @@
         <appender-ref ref="Console" />
     </logger>
 
+    <logger name="com.mchange">
+        <level value="info"/>
+        <appender-ref ref="Console" />
+    </logger>
     <!-- root logger -->
     <root>
         <level value="debug" />
