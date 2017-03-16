@@ -70,7 +70,7 @@ public class UserDaoImpl implements UserDao {
         @SuppressWarnings("unchecked")
         List<User> Users = query.list();
         User User = null;
-        if (Users != null) {
+        if (Users != null && Users.size() != 0) {
             User = Users.get(0);
         }
         return User;

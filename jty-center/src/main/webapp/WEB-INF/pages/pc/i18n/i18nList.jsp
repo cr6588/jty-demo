@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,17 @@
 </head>
 <body>
        <div id="data-grid"></div>
+       <spring:message code="language"></spring:message>
+       <select id="language" onchange="changeLanguage()">
+            <option value="zh">中文</option>
+            <option value="en">English</option>
+       </select>
        <script type="text/javascript">
+       function changeLanguage() {
+           $.post("/i18n/changeLanguage", {locale:$("#language").val()}, function (res) {
+               location.reload();
+           })
+       }
        var store, grid;
        Ext.onReady(function() {
            Ext.define('roleModel', {

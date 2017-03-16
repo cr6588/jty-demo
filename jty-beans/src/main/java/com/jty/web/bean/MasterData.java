@@ -6,27 +6,27 @@ import java.util.Date;
 public class MasterData implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected Long no;
-    protected String id;
+    protected Long id;
+    protected String no;
     protected Boolean active = true;
     protected Boolean isDelete = false;
     protected Date createDate;
     protected Date updateDate;
 
-    public Long getNo() {
-        return no;
-    }
-
-    public void setNo(Long no) {
-        this.no = no;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
     }
 
     public Boolean getActive() {

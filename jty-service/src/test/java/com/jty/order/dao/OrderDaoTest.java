@@ -103,6 +103,7 @@ public class OrderDaoTest {
     @Test
     public void addOrderTest() {
         Order in1 = new Order();
+        in1.setId(1l);
         in1.setNo("test1");
         in1.setTotalMoney(11.2d);
         User u1 = new User();
@@ -123,11 +124,12 @@ public class OrderDaoTest {
             og.setGoods(g);
             ogs.add(og);
             in1.setOrderGoods(ogs);
-            orderDao.addOrder(in1);
+//            orderDao.addOrder(in1);
+            orderDao.updateOrder(in1);
 //            og.setOrderId(in1.getId());
             //orderDao.addOrderGoods(og);
-            Assert.assertEquals(1 , (long)orderDao.getOrderListCnt(null));
-            Assert.assertEquals(1, (long)orderDao.getOrderGoodsListCnt(null));
+//            Assert.assertEquals(1 , (long)orderDao.getOrderListCnt(null));
+//            Assert.assertEquals(1, (long)orderDao.getOrderGoodsListCnt(null));
 //            Date d = new Date();
 //            System.out.println(d);
 //            for(int i = 0; i < 10000; i++) {
@@ -219,6 +221,22 @@ public class OrderDaoTest {
             orderDao.getOrderList(paramMap, pager);
             
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void addGoodsTest() {
+        Goods goods = new Goods();
+//        goods.setId(4l);
+        goods.setName("3");
+        goods.setSKU("1");
+        goods.setPrice(3d);
+        goods.setUserId(4l);
+        try {
+            orderDao.addGoods(goods);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
