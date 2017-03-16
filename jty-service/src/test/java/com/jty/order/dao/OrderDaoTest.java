@@ -26,7 +26,7 @@ import com.jty.web.bean.PagerInfo;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-db.xml", "classpath:spring-aop.xml" })
 @Transactional
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) //defaultRollback = false,addOrderTest 会报错
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false) //defaultRollback = false,addOrderTest 会报错
 public class OrderDaoTest {
 
     @Autowired
@@ -99,6 +99,7 @@ public class OrderDaoTest {
             e.printStackTrace();
         }
     }
+
     @Test
     public void addOrderTest() {
         Order in1 = new Order();
@@ -218,6 +219,22 @@ public class OrderDaoTest {
             orderDao.getOrderList(paramMap, pager);
             
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void updGoodsTest() {
+        Goods goods = new Goods();
+        goods.setId(4l);
+        goods.setName("3");
+        goods.setSKU("1");
+        goods.setPrice(3d);
+        goods.setUserId(4l);
+        try {
+            orderDao.updateGoods(goods);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
