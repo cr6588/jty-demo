@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jty.order.dao.OrderDao">
+    <!--  order -->
+    <resultMap id="orderMap" type="order">
+        <id column="id" property="id" />
+        <result column="no" property="no" />
+        <result column="user_id" property="user.id" />
+        <result column="total_money" property="totalMoney" />
+    </resultMap>
+    <sql id="order_Column_List">
+        id,
+        no,
+        user_id,
+        total_money
+    </sql>
+
+    <insert id="addOrder" parameterType="order" keyProperty="id">
+        insert into t_order (
+            id,
+            no,
+            user_id,
+            total_money
+        ) values (
+            #{id},
+            #{no},
+            #{user.id},
+            #{totalMoney}
+        )
+    </insert>
+
+    <update id="updateOrder" parameterType="order" >
+        update t_order 
+        set no = #{no},
+            user_id = #{user.id},
+            total_money = #{totalMoney}
+        where id = #{id} and user_id = #{user.id}
+    </update>
+    <delete id="deleteOrder" parameterType="long">
+        delete from t_order 
+        where id = #{id}
+    </delete>
+
+    <sql id="orderSelectCondition">
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="getOrder" parameterType="map" resultMap="orderMap">
+        select 
+            <include refid="order_Column_List" />
+        from t_order
+        <include refid="orderSelectCondition" />
+    </select>
+
+    <select id="getOrderList" parameterType="map" resultMap="orderMap">
+        select 
+            <include refid="order_Column_List" />
+        from t_order
+        <include refid="orderSelectCondition" />
+    </select>
+
+    <select id="getOrderListCnt" parameterType="map" resultType="int">
+        select count(*) from t_order
+        <include refid="orderSelectCondition" />
+    </select>
+
+    <!--  orderGoods -->
+    <resultMap id="orderGoodsMap" type="orderGoods">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="goods_id" property="goods.id" />
+        <result column="num" property="num" />
+    </resultMap>
+    <sql id="order_Goods_Column_List">
+        id,
+        order_id,
+        goods_id,
+        num
+    </sql>
+
+    <insert id="addOrderGoods" parameterType="orderGoods" useGeneratedKeys="true" keyProperty="id">
+        insert into order_goods (
+            order_id,
+            goods_id,
+            num
+        ) values (
+            #{orderId},
+            #{goodsId},
+            #{num}
+        )
+    </insert>
+
+    <insert id="addOrderGoodsList" parameterType="order">
+        <![CDATA[
+            insert into order_goods (order_id, goods_id,num)
+            values
+        ]]>
+        <foreach collection="orderGoods" item="oG" separator=",">
+            (#{id}, #{oG.goods.id}, #{oG.num})
+        </foreach>
+    </insert>
+
+    <update id="updateOrderGoods" parameterType="orderGoods" >
+        update order_goods 
+        set order_id = #{orderId},
+            goods_id = #{user.Id},
+            num = #{num}
+        where id = #{id} and goods_id = #{goods.id}
+    </update>
+    <delete id="deleteOrderGoods" parameterType="long">
+        delete from order_goods 
+        where id = #{id}
+    </delete>
+
+    <sql id="orderGoodsSelectCondition">
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and order_id = #{orderId}
+            </if>
+        </where>
+    </sql>
+
+<!--     <select id="getOrderGoods" parameterType="map" resultMap="orderGoodsMap"> -->
+<!--         select  -->
+<!--             <include refid="order_Goods_Column_List" /> -->
+<!--         from order_goods -->
+<!--         <include refid="orderGoodsSelectCondition" /> -->
+<!--     </select> -->
+
+    <select id="getOrderGoodsByOrderId" parameterType="long" resultMap="orderGoodsMap">
+        select 
+            <include refid="order_Goods_Column_List" />
+        from order_goods where order_id = #{orderId}
+<!--         <include refid="orderGoodsSelectCondition" /> -->
+    </select>
+
+    <select id="getOrderGoodsCnt" parameterType="map" resultType="int">
+        select count(*) from order_goods
+        <include refid="orderGoodsSelectCondition" />
+    </select>
+
+    <!--  goods -->
+    <resultMap id="goodsMap" type="goods">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="SKU" property="SKU" />
+        <result column="price" property="price" />
+        <result column="user_id" property="userId" />
+    </resultMap>
+    <sql id="goods_Column_List">
+        id,
+        name,
+        SKU,
+        price,
+        user_id
+    </sql>
+
+    <insert id="addGoods" parameterType="goods" keyProperty="id">
+        insert into goods (
+            id,
+            name,
+            SKU,
+            price,
+            user_id
+        ) values (
+            #{id},
+            #{name},
+            #{SKU},
+            #{price},
+            #{userId}
+        )
+    </insert>
+
+    <update id="updateGoods" parameterType="goods" >
+        update goods 
+        set name = #{name},
+            SKU = #{SKU},
+            price = #{price}
+        where id = #{id}
+    </update>
+    <delete id="deleteGoods" parameterType="long">
+        delete from goods 
+        where id = #{id}
+    </delete>
+
+    <sql id="goodsSelectCondition">
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null">
+                and name = #{name}
+            </if>
+        </where>
+    </sql>
+
+    <select id="getGoods" parameterType="map" resultMap="goodsMap">
+        select 
+            <include refid="goods_Column_List" />
+        from goods
+        <include refid="goodsSelectCondition" />
+    </select>
+
+    <select id="getGoodsList" parameterType="map" resultMap="goodsMap">
+        select 
+            <include refid="goods_Column_List" />
+        from goods
+        <include refid="goodsSelectCondition" />
+    </select>
+
+    <select id="getGoodsListCnt" parameterType="map" resultType="int">
+        select count(*) from goods
+        <include refid="goodsSelectCondition" />
+    </select>
+</mapper>

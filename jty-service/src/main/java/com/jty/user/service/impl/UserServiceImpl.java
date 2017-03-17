@@ -9,9 +9,11 @@ import com.jty.user.bean.User;
 import com.jty.user.dao.UserDao;
 import com.jty.user.service.UserSer;
 import com.jty.web.bean.PagerInfo;
+import com.jty.web.util.UidUtil;
 
 public class UserServiceImpl implements UserSer {
 
+    private UidUtil uidUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "user_id_sequence");;
     @Autowired
     private UserDao userDao;
 
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserSer {
     }
 
     public void addUser(User user) throws Exception {
+        user.setId(uidUtil.getUid());
         userDao.addUser(user);
     }
 

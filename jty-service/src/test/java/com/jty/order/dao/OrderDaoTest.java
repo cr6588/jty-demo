@@ -24,7 +24,7 @@ import com.jty.user.bean.User;
 import com.jty.web.bean.PagerInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-db.xml", "classpath:spring-aop.xml" })
+@ContextConfiguration(locations = { "classpath:spring-mybatis.xml", "classpath:spring-aop.xml" })
 @Transactional
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false) //defaultRollback = false,addOrderTest 会报错
 public class OrderDaoTest {

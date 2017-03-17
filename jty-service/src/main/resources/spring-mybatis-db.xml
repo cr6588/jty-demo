@@ -25,40 +25,26 @@
     <context:annotation-config />
     <context:component-scan base-package="com.jty">
     </context:component-scan>
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="shardingDataSource" />
-        <property name="packagesToScan">
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource">
+            <ref bean="shardingDataSource" />
+        </property>
+        <!-- MyBatis 的 XML 配置文件路径 -->
+        <property name="configLocation" value="classpath:sqlMapConfig.xml" />
+        <!-- 扫描自动生成的xml文件 --><!-- Mybatis XML映射文件 -->
+        <property name="mapperLocations">
             <list>
-                <value>com.jty.*.bean</value>
+                <!-- 扫描自己写的xml文件 -->
+                <value>classpath:com/jty/*/dao/sql/*.mybatis.xml</value>
             </list>
         </property>
-        <property name="hibernateProperties">
-            <props>
-                <!-- <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> -->
-                <!-- <prop key="hibernate.dialect">${hibernate.dialect}</prop> -->
-                <!-- <prop key="hibernate.show_sql">${hibernate.show_sql}</prop> -->
-                <!-- 将事务交给spring进行管理 -->
-                <!-- <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop> -->
-                <prop key="hibernate.connection.characterEncoding">UTF-8</prop>
-                <prop key="hibernate.connection.zeroDateTimeBehavior">convertToNull</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate3.SpringSessionContext</prop>
-                <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">false</prop>
-                <prop key="hibernate.generate_statistics">false</prop>
-                <prop key="hibernate.hbm2ddl.auto">none</prop>
-                <!--//每50条语句提交一次    -->
-<!--                 <prop key="hibernate.jdbc.batch_size">50</prop> -->
-                <!--关闭二级缓存    -->
-<!--                 <prop key="hiberante.cache.use_second_level_cache">false</prop> -->
-            </props>
+        <property name="plugins">
+            <bean class="com.jty.web.limit.MybatisLimit"></bean>
         </property>
-        <property name="mappingLocations">
-            <list>
-                <value>classpath:com/jty/*/dao/sql/*.hbm.xml</value> 
-            </list>
-        </property> 
+    </bean>
+    <!-- 扫描mybatisGenerator 自动生成的 所有接口 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.jty.*.dao"/>
     </bean>
     <!-- <bean id="sessionFactoryLog" class="com.sjdf.platform.common.filter.EncryptAnnotationSessionFactoryBean"> -->
     <!-- <property name="configLocation" value="classpath:hibernate-log.cfg.xml"/> -->

@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class MainService {
 
     public static void main(String[] args) {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"classpath:spring-db.xml", "classpath:spring-aop.xml", "classpath:dubbo-server.xml", "classpath:log4j.xml" });
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"classpath:spring-mybatis-db.xml", "classpath:spring-aop.xml", "classpath:dubbo-server.xml", "classpath:log4j.xml" });
         context.start();
         String[] str = context.getBeanDefinitionNames();
         for (int i = 0; i < str.length; i++) {

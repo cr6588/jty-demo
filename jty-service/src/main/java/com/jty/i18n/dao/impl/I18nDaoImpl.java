@@ -13,10 +13,10 @@ import com.jty.i18n.dao.I18nDao;
 import com.jty.web.bean.I18n;
 import com.jty.web.bean.PagerInfo;
 
-@Repository
+//@Repository
 public class I18nDaoImpl implements I18nDao {
 
-    @Autowired
+//    @Autowired
     private SessionFactory sessionFactory;
 
     public List<I18n> getI18nList(Map<String, Object> param, PagerInfo pager) throws Exception {

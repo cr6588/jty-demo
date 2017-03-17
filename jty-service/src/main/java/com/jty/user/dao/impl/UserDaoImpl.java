@@ -18,12 +18,12 @@ import com.jty.web.util.UidUtil;
  * Home object for domain model class User.
  * @author Hibernate Tools
  */
-@Repository
+//@Repository
 public class UserDaoImpl implements UserDao {
 
-    @Autowired
+//    @Autowired
     private SessionFactory sessionFactory;
-    private UidUtil uidUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "user_id_sequence");;
+    private UidUtil uidUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "user_id_sequence");
     /*
      * (non-Javadoc)
      * @see com.cr.i18n.dao.impl.UserDao#getUserList(java.util.Map,

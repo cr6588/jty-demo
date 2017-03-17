@@ -20,14 +20,14 @@ import com.jty.web.util.UidUtil;
  * Home object for domain model class Order.
  * @author Hibernate Tools
  */
-@Repository
+//@Repository
 public class OrderDaoImpl implements OrderDao {
 
-    @Autowired
+//    @Autowired
     private SessionFactory sessionFactory;
 
     private UidUtil orderIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "order_id_sequence");
-    private UidUtil goodsIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "goods_id_sequence");;
+    private UidUtil goodsIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "goods_id_sequence");
 
     /*
      * (non-Javadoc)

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-8-25 11:45:09 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.jty.order.bean.Order" table="t_order">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+        </id>
+        <property name="no" type="java.lang.String">
+            <column name="no" />
+        </property>
+        <many-to-one name="user" class="com.jty.user.bean.User" column="user_id" lazy="false" fetch="select">
+        </many-to-one>
+        <property name="totalMoney" type="java.lang.Double">
+            <column name="total_money" />
+        </property>
+        <list name="orderGoods" inverse="true" lazy="false" fetch="select">
+            <key column="order_id" />
+            <list-index column="id"/>
+            <one-to-many  class="com.jty.order.bean.OrderGoods" />
+        </list>
+    </class>
+    <class name="com.jty.order.bean.OrderGoods" table="order_goods">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="orderId" type="java.lang.Long">
+            <column name="order_id" />
+        </property>
+        <many-to-one name="goods" class="com.jty.order.bean.Goods" column="goods_id" lazy="false" fetch="select">
+        </many-to-one>
+        <property name="num" type="java.lang.Integer">
+            <column name="num" />
+        </property>
+    </class>
+</hibernate-mapping>
