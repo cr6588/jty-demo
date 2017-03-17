@@ -33,9 +33,9 @@ public class OrderServiceImpl implements OrderSer {
     }
 
     public void updateOrder(Order order) throws Exception {
-        orderDao.updateOrder(order);
         orderDao.deleteOrderGoods(order.getId());
         orderDao.addOrderGoodsList(order);
+        orderDao.updateOrder(order);
     }
 
     public void deleteOrder(Long id) throws Exception {

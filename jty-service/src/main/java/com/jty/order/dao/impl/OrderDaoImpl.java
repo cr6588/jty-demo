@@ -151,16 +151,16 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void deleteOrderGoods(Long orderId) throws Exception {
-        Query query = sessionFactory.getCurrentSession().createQuery("delete OrderGoods where order.id = ?");
+        Query query = sessionFactory.getCurrentSession().createQuery("delete OrderGoods where orderId = ?");
         query.setLong(0, orderId);
         query.executeUpdate();
     }
 
     @Override
     public List<OrderGoods> getOrderGoodsByOrderId(Long orderId) throws Exception {
-        String hsql = "from OrderGoods where  order.id =: order.id order by id desc";
+        String hsql = "from OrderGoods where  orderId =: orderId order by id desc";
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
-        query.setLong("order.id", orderId);
+        query.setLong("orderId", orderId);
         List<OrderGoods> orderGoods = query.list();
         return orderGoods;
     }

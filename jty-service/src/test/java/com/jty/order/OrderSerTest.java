@@ -20,7 +20,7 @@ import com.jty.user.bean.User;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-db.xml", "classpath:spring-aop.xml" })
 @Transactional
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) //defaultRollback = false,addOrderTest 会报错
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false) //defaultRollback = false,addOrderTest 会报错
 public class OrderSerTest {
 
     @Autowired
@@ -48,7 +48,7 @@ public class OrderSerTest {
         orderGoodses.add(orderGoods);
         in1.setOrderGoods(orderGoodses);
         try {
-            orderDao.addOrder(in1);
+            orderSer.addOrder(in1);
         } catch (Exception e) {
             e.printStackTrace();
         }
