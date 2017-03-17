@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
+import com.jty.order.bean.OrderGoods;
 import com.jty.order.dao.OrderDao;
 import com.jty.order.service.OrderSer;
 import com.jty.web.bean.PagerInfo;
 
+@Service
 public class OrderServiceImpl implements OrderSer {
 
     @Autowired
@@ -66,4 +69,10 @@ public class OrderServiceImpl implements OrderSer {
     public Integer getGoodsListCnt(Map<String, Object> params) throws Exception {
         return orderDao.getGoodsListCnt(params);
     }
+
+    @Override
+    public void addOrderGoods(OrderGoods orderGoods) throws Exception {
+        orderDao.addOrderGoods(orderGoods);
+    }
+    
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
+import com.jty.order.bean.OrderGoods;
 import com.jty.web.bean.PagerInfo;
 
 public interface OrderSer {
@@ -32,4 +33,6 @@ public interface OrderSer {
     void deleteGoods(Long id) throws Exception;
 
     Integer getGoodsListCnt(Map<String, Object> params) throws Exception;
+
+    void addOrderGoods(OrderGoods orderGoods) throws Exception;
 }

@@ -28,7 +28,36 @@ public final class OrderGoodsShardingAlgorithm implements MultipleKeysTableShard
          */
         Set<List<Integer>> valueResult = Sets.cartesianProduct(userIdValueSet, orderIdValueSet);
         for (List<Integer> value : valueResult) {
-            String suffix = Joiner.on("").join(value.get(0) % 2, value.get(1) % 2);
+//            String suffix = Joiner.on("").join(value.get(0) % 2, value.get(1) % 2);
+            String suffix = null;
+            switch (value.get(0) % 2) {
+                case 0:
+                    switch (value.get(1) % 2) {
+                        case 0:
+                            suffix = "0";
+                            break;
+                        case 1:
+                            suffix = "1";
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 1:
+                    switch (value.get(1) % 2) {
+                        case 0:
+                            suffix = "2";
+                            break;
+                        case 1:
+                            suffix = "3";
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
             for (String tableName : availableTargetNames) {
                 if (tableName.endsWith(suffix)) {
                     result.add(tableName);
