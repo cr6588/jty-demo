@@ -26,7 +26,7 @@
     <context:component-scan base-package="com.jty">
     </context:component-scan>
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="jty_user_0" />
+        <property name="dataSource" ref="shardingDataSource" />
         <property name="packagesToScan">
             <list>
                 <value>com.jty.*.bean</value>
@@ -56,7 +56,7 @@
         </property>
         <property name="mappingLocations">
             <list>
-                <value>classpath:com/jty/i18n/dao/sql/I18n.hbm.xml</value> 
+                <value>classpath:com/jty/*/dao/sql/*.hbm.xml</value> 
             </list>
         </property> 
     </bean>

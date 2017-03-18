@@ -270,6 +270,7 @@
                        var orderGoods = res.body.orderGoods;
                        for(var i = 0; i < orderGoods.length; i++) {
                            var og = orderGoods[i];
+                           if(og == null) continue;
                            var tempOrderGoods = {
                                    id:og.id,
                                    num: og.num,

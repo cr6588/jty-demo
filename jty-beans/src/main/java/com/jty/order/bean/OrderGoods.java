@@ -15,8 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
 
-@Entity
-@Table(name = "order_goods")
+//@Entity
+//@Table(name = "order_goods")
 public class OrderGoods implements Serializable {
 
     /**
@@ -32,9 +32,9 @@ public class OrderGoods implements Serializable {
 
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id", nullable = false)
     public Long getId() {
         return id;
     }
@@ -43,9 +43,7 @@ public class OrderGoods implements Serializable {
         this.id = id;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "order_id")
-    @Column(name = "order_id")
+//    @Column(name = "order_id")
     public Long getOrderId() {
         return orderId;
     }
@@ -54,10 +52,9 @@ public class OrderGoods implements Serializable {
         this.orderId = orderId;
     }
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = Goods.class)
-    @JoinColumn(name = "goods_id")
-    @ForeignKey( name = "none" )
-    
+//    @OneToOne(fetch = FetchType.EAGER, targetEntity = Goods.class)
+//    @JoinColumn(name = "goods_id")
+//    @ForeignKey( name = "none" )
     public Goods getGoods() {
         return goods;
     }
@@ -66,7 +63,7 @@ public class OrderGoods implements Serializable {
         this.goods = goods;
     }
 
-    @Column(name = "num")
+//    @Column(name = "num")
     public Integer getNum() {
         return num;
     }
