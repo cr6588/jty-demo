@@ -32,13 +32,6 @@
 <!--             <tx:method name="*" propagation="SUPPORTS" read-only="true"/> -->
         </tx:attributes>
     </tx:advice>
-    
-<!--    <tx:advice id="txCommandProxy" transaction-manager="transactionManager"> -->
-<!--        <tx:attributes> -->
-<!--            <tx:method name="*" propagation="SUPPORTS" read-only="true" /> -->
-<!--        </tx:attributes> -->
-<!--    </tx:advice> -->
-
     <aop:config proxy-target-class="true">
         <aop:pointcut id="serviceMethods" expression="execution(* com.jty..service..*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />

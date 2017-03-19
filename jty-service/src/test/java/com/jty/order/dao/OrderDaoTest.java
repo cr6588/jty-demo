@@ -24,9 +24,9 @@ import com.jty.user.bean.User;
 import com.jty.web.bean.PagerInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-mybatis.xml", "classpath:spring-aop.xml" })
+@ContextConfiguration(locations = { "classpath:spring-mybatis-db.xml" })
 @Transactional
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false) //defaultRollback = false,addOrderTest 会报错
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) //defaultRollback = false,addOrderTest 会报错
 public class OrderDaoTest {
 
     @Autowired
@@ -232,7 +232,7 @@ public class OrderDaoTest {
         goods.setName("3");
         goods.setSKU("1");
         goods.setPrice(3d);
-        goods.setUserId(4l);
+        goods.setUserId(55l);
         try {
             orderDao.addGoods(goods);
         } catch (Exception e) {
@@ -244,7 +244,7 @@ public class OrderDaoTest {
     @Test
     public void updGoodsTest() {
         Goods goods = new Goods();
-        goods.setId(4l);
+        goods.setId(55l);
         goods.setName("3");
         goods.setSKU("1");
         goods.setPrice(3d);
