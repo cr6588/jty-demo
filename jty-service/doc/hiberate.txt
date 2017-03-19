@@ -1,1 +1,14 @@
-
+order--id
+	 --List<orderGoods> --num
+	 					--Goods--id
+	 						   --name
+session.save(order) --sql:1.select goods
+						 :2.insert into order
+						 :3.insert into order_goods
+						 :4.update order_goods 1 where id = ?
+						 :5.update order_goods 2 where id = ?
+						 ...
+						 在1对多中1方维护时最后会执行多条update语句。而order_goods分库中数据源分片键含有user_id,所以对于每一条update order_goods where id = ?语句经过share-jdbc路由后不能确定数据源，此时就会产生多条update语句
+						 此时会warn:JDBC driver did not return the expected number of row counts。之后会出错。
+						解决方法：去除级联inverse=true
+update(order) -- update order where id = ? 同理，order分库中数据源分片键含有user_id,where条件没有user_id造成多条update语句，改用hql加上update语句

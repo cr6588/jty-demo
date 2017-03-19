@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
+import com.jty.order.bean.OrderGoods;
 import com.jty.order.service.OrderSer;
 import com.jty.user.action.UserController;
 import com.jty.user.bean.User;
@@ -26,6 +27,7 @@ import com.jty.web.bean.PagerInfo;
 import com.jty.web.bean.PagerStruct;
 import com.jty.web.bean.RequestResult;
 import com.jty.web.util.RequestSessionUtil;
+import com.jty.web.util.UidUtil;
 
 @Controller
 @RequestMapping("/order")
@@ -34,6 +36,8 @@ public class OrderController {
 
     @Autowired
     private OrderSer orderSer;
+    private UidUtil orderIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "order_id_sequence");
+    private UidUtil goodsIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "goods_id_sequence");
 
     @RequestMapping(value = "/{pageName}", method = RequestMethod.GET)
     public ModelAndView viewAdminManagePages(HttpServletRequest request, @PathVariable("pageName") String pageName) throws Exception {
@@ -59,6 +63,13 @@ public class OrderController {
         try {
             Order.setUser(getCurUser(request));
             if (Order.getId() == null || Order.getId() == 0) {
+            	Long orderId = orderIdUtil.getUid();
+            	Order.setId(orderId);
+            	if(Order.getOrderGoods() != null) {
+            		for (OrderGoods orderGoods : Order.getOrderGoods()) {
+						orderGoods.setOrderId(orderId);
+					}
+            	}
                 this.orderSer.addOrder(Order);
             } else {
                 this.orderSer.updateOrder(Order);
@@ -125,6 +136,7 @@ public class OrderController {
         try {
             Goods.setUserId(getCurUser(request).getId());
             if (Goods.getId() == null || Goods.getId() == 0) {
+            	Goods.setId(goodsIdUtil.getUid());
                 this.orderSer.addGoods(Goods);
             } else {
                 this.orderSer.updateGoods(Goods);

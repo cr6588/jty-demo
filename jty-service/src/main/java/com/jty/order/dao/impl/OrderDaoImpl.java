@@ -14,7 +14,6 @@ import com.jty.order.bean.Order;
 import com.jty.order.bean.OrderGoods;
 import com.jty.order.dao.OrderDao;
 import com.jty.web.bean.PagerInfo;
-import com.jty.web.util.UidUtil;
 
 /**
  * Home object for domain model class Order.
@@ -25,9 +24,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Autowired
     private SessionFactory sessionFactory;
-
-    private UidUtil orderIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "order_id_sequence");
-    private UidUtil goodsIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "goods_id_sequence");;
 
     /*
      * (non-Javadoc)
@@ -87,8 +83,6 @@ public class OrderDaoImpl implements OrderDao {
      */
     @Override
     public void addOrder(Order order) throws Exception {
-        // TODO 后期改成配置
-        order.setId(orderIdUtil.getUid());
         sessionFactory.getCurrentSession().save(order);
     }
 
@@ -98,7 +92,13 @@ public class OrderDaoImpl implements OrderDao {
      */
     @Override
     public void updateOrder(Order order) throws Exception {
-        sessionFactory.getCurrentSession().update(order);
+        Query query = sessionFactory.getCurrentSession().createQuery("UPDATE Order SET no = ?, total_money = ? WHERE id = ? and user_id = ?");
+        query.setString(0, order.getNo());
+        query.setDouble(1, order.getTotalMoney());
+        query.setLong(2, order.getId());
+        query.setLong(3, order.getUser().getId());
+        query.executeUpdate();
+//        sessionFactory.getCurrentSession().update(order);
     }
 
     /*
@@ -139,7 +139,6 @@ public class OrderDaoImpl implements OrderDao {
             return;
         }
         for (OrderGoods orderGoods : orderGoodsList) {
-            orderGoods.setOrderId(order.getId());
             sessionFactory.getCurrentSession().save(orderGoods);
         }
     }
@@ -175,7 +174,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void addGoods(Goods goods) throws Exception {
-        goods.setId(goodsIdUtil.getUid());
         sessionFactory.getCurrentSession().save(goods);
     }
 

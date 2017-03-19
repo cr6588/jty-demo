@@ -209,6 +209,7 @@
                                     id:record.data["goods.id"]
                                 }
                                 var tempOrderGoods = {
+                               		orderId : o.id,
                                     num : Number(record.data.num),
                                     goods : tempGoods
                                 }

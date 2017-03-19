@@ -11,11 +11,14 @@ import com.jty.order.bean.OrderGoods;
 import com.jty.order.dao.OrderDao;
 import com.jty.order.service.OrderSer;
 import com.jty.web.bean.PagerInfo;
+import com.jty.web.util.UidUtil;
 
 public class OrderServiceImpl implements OrderSer {
 
     @Autowired
     private OrderDao orderDao;
+    private UidUtil orderIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "order_id_sequence");
+    private UidUtil goodsIdUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "goods_id_sequence");
 
     public List<Order> getOrderList(Map<String, Object> param, PagerInfo pager) throws Exception {
         return orderDao.getOrderList(param, pager);
@@ -38,6 +41,7 @@ public class OrderServiceImpl implements OrderSer {
 
     public void deleteOrder(Long id) throws Exception {
         orderDao.deleteOrder(id);
+        orderDao.deleteOrderGoods(id);
     }
 
     public Integer getOrderListCnt(Map<String, Object> params) throws Exception {

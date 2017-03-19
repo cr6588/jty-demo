@@ -26,7 +26,7 @@ import com.jty.web.bean.PagerInfo;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-db.xml", "classpath:spring-aop.xml" })
 @Transactional
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false) //defaultRollback = false,addOrderTest 会报错
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) //defaultRollback = false,addOrderTest 会报错
 public class OrderDaoTest {
 
     @Autowired
@@ -103,11 +103,11 @@ public class OrderDaoTest {
     @Test
     public void addOrderTest() {
         Order in1 = new Order();
-        in1.setId(1l);
+//        in1.setId(1l);
         in1.setNo("test1");
         in1.setTotalMoney(11.2d);
         User u1 = new User();
-        u1.setId(1l);
+        u1.setId(4l);
         u1.setUsername("user1");
         in1.setUser(u1);
         List<OrderGoods> ogs =new ArrayList<>();
@@ -117,7 +117,7 @@ public class OrderDaoTest {
         try {
 //            Goods g = orderDao.getGoods(param);
             Goods g = new Goods();
-            g.setId(1l);
+            g.setId(6l);
             g.setUserId(1l);
 //        og.setId(1l);
 //            defaultRollback = false 会报错
@@ -125,7 +125,7 @@ public class OrderDaoTest {
             ogs.add(og);
             in1.setOrderGoods(ogs);
 //            orderDao.addOrder(in1);
-            orderDao.updateOrder(in1);
+            orderDao.addOrder(in1);
 //            og.setOrderId(in1.getId());
             //orderDao.addOrderGoods(og);
 //            Assert.assertEquals(1 , (long)orderDao.getOrderListCnt(null));
