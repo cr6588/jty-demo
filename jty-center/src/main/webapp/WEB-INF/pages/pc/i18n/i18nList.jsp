@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,11 +18,15 @@
        <div id="data-grid"></div>
        <spring:message code="language"></spring:message>
        <select id="language" onchange="changeLanguage()">
+            <option value="">请选择</option>
             <option value="zh">中文</option>
             <option value="en">English</option>
        </select>
        <script type="text/javascript">
        function changeLanguage() {
+           if($("#language").val() == "") {
+               return;
+           }
            $.post("/i18n/changeLanguage", {locale:$("#language").val()}, function (res) {
                location.reload();
            })

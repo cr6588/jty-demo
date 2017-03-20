@@ -29,6 +29,7 @@ import com.jty.web.messages.DataBaseMessageResource;
 import com.jty.web.messages.MessageUtil;
 import com.jty.web.service.I18nSer;
 import com.jty.web.util.RequestSessionUtil;
+import com.sun.mail.handlers.message_rfc822;
 
 @Controller
 @RequestMapping("/i18n")
@@ -41,6 +42,8 @@ public class I18nController {
     private SessionLocaleResolver localeResolver;
 	@Autowired
 	private I18nSer i18nSer;
+	@Autowired
+	private MessageUtil messageUtil;
 
     @RequestMapping(value = "/{pageName}", method = RequestMethod.GET)
     public ModelAndView viewAdminManagePages(HttpServletRequest request, @PathVariable("pageName") String pageName) throws Exception {
@@ -101,9 +104,12 @@ public class I18nController {
 
 	@RequestMapping(value = "/getI18nList", method = RequestMethod.POST)
 	@ResponseBody
-	public PagerStruct<I18n> getI18nList(@RequestParam(value = "keyWord", required = false) String keyWord,
+	public PagerStruct<I18n> getI18nList(HttpServletRequest request,@RequestParam(value = "keyWord", required = false) String keyWord,
 			@RequestParam(value = "language", required = false) String languageStr, @PagerResolver PagerInfo pagerParam) {
-		PagerStruct<I18n> result = new PagerStruct<I18n>();
+		System.out.println("--------------------------------------" + messageUtil.getMessage(request, "language"));
+//		messageUtil.getMessageSource().getMessage(code, args, locale);
+		System.out.println(messageUtil.getMessageSource().getMessage("languagefds{0},{1}", new Object[]{"language", "home"}, Locale.CHINA));
+	    PagerStruct<I18n> result = new PagerStruct<I18n>();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("keyWord", keyWord);
 		Language language = Language.create(languageStr);

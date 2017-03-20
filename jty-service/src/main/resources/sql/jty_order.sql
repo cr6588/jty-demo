@@ -129,6 +129,7 @@ CREATE TABLE `t_order_3` (
 -- ----------------------------
 -- Procedure structure for truncateOrder
 -- ----------------------------
+/*
 DROP PROCEDURE IF EXISTS `truncateOrder`;
 DELIMITER ;;
 CREATE DEFINER=`dev`@`%` PROCEDURE `truncateOrder`()
@@ -144,7 +145,7 @@ BEGIN
 END
 ;;
 DELIMITER ;
-
+*/
 DROP DATABASE IF EXISTS `jty_order_1`;
 create DATABASE jty_order_1;
 USE jty_order_1;
@@ -261,6 +262,7 @@ CREATE TABLE `t_order_3` (
 -- ----------------------------
 -- Procedure structure for truncateOrder
 -- ----------------------------
+/*
 DROP PROCEDURE IF EXISTS `truncateOrder`;
 DELIMITER ;;
 CREATE DEFINER=`dev`@`%` PROCEDURE `truncateOrder`()
@@ -276,3 +278,4 @@ BEGIN
 END
 ;;
 DELIMITER ;
+*/

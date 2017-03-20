@@ -15,12 +15,6 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.jty</groupId>
             <artifactId>jty-beans</artifactId>
             <version>0.0.1</version>
@@ -66,6 +60,10 @@
                 <includes>
                     <include>*.*</include>
                 </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/sql</directory>
+                <targetPath>${basedir}/target/classes/sql</targetPath>
             </resource>
         </resources>
         <pluginManagement>

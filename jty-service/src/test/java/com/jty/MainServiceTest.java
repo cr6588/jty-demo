@@ -1,21 +1,32 @@
 package com.jty;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.jty.user.service.UserSer;
+import com.jty.order.service.OrderSer;
 
 public class MainServiceTest {
 
-    @Test
-    public void test() {
+    OrderSer orderSer;
+    @Before
+    public void init() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"classpath:dubbo-client.xml"});
         context.start();
  
-        UserSer demoService = (UserSer)context.getBean("userSer"); // 获取远程服务代理
+        orderSer = (OrderSer)context.getBean("orderSer"); // 获取远程服务代理
+    }
+
+    @Test
+    public void test() {
+      
         int hello;
         try {
-            hello = demoService.getUserListCnt(null);
+            Map<String, Object> map = new HashMap<>();
+            hello = orderSer.getGoodsListCnt(map);
             System.out.println("*******************************" +  hello ); // 显示调用结果
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -24,4 +35,15 @@ public class MainServiceTest {
  
     }
 
+    @Test
+    public void orderDaoTest() {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", 7l);
+        try {
+            orderSer.getOrder(param);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }

@@ -256,4 +256,16 @@ public class OrderDaoTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void orderDaoTest() {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", 7);
+        try {
+            orderDao.getOrder(param);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }

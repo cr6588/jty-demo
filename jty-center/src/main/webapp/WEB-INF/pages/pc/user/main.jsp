@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,10 +11,11 @@
 <script src="/resources/js/ext4.2.1/ext-lang-zh_CN.js" type="text/javascript" ></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="/resources/js/jquery/jquery-1.10.2.js"></script>
-<title>首页</title>
+<title><spring:message code="home"></spring:message></title>
 </head>
 <body>
 <div id="main"></div>
+<script type="text/javascript" src="/resources/js/jty-tools.js"></script>
 <script type="text/javascript">
 // $.get("/system/getUser", {id: 1}, function (result) {
 //     console.log("id=" + result.id);
@@ -57,9 +59,10 @@ Ext.onReady(function () { //所有都加上此处代码确保ExtJs加载完成
         root: {
             expanded: true,
             children: [
-            	{ text: '用户列表', leaf: true, dataUrl:"/user/userList"},
+            	{ text: jty.tools.i18n.getMessage('userList'), leaf: true, dataUrl:"/user/userList"},
                 { text: '订单列表', leaf: true, dataUrl:"/order/orderList"},
-                { text: '商品列表', leaf: true, dataUrl:"/order/goodsList"}
+                { text: '商品列表', leaf: true, dataUrl:"/order/goodsList"},
+                { text: '国际化列表', leaf: true, dataUrl:"/i18n/i18nList"}
 //                 { text: 'homework', expanded: true, children: [
 //                     { text: 'book report', leaf: true },
 //                     { text: 'algebra', leaf: true}
