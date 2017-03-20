@@ -23,8 +23,6 @@
             http://cxf.apache.org/schemas/jaxws.xsd">
     <context:property-placeholder location="classpath:jdbc.properties"  ignore-unresolvable="true"/>
     <context:annotation-config />
-    <context:component-scan base-package="com.jty">
-    </context:component-scan>
     <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource">
             <ref bean="shardingDataSource" />
@@ -34,8 +32,8 @@
         <!-- 扫描自动生成的xml文件 --><!-- Mybatis XML映射文件 -->
         <property name="mapperLocations">
             <list>
-                <!-- 扫描自己写的xml文件 -->
-                <value>classpath:com/jty/*/dao/sql/*.mybatis.xml</value>
+                <!-- 扫描自己写的xml文件classpath打上*,否则单元测试不能dao注入  -->
+                <value>classpath*:com/jty/*/dao/sql/*.mybatis.xml</value>
             </list>
         </property>
         <property name="plugins">
@@ -197,7 +195,8 @@
     <rdb:strategy id="orderGoodsTableStrategy" sharding-columns="goods_id" algorithm-expression="order_goods_${goods_id.longValue() % 4}" />
 
 <!-- algorithm-class="com.jty.db.strategy.table.GoodsShardingAlgorithm" -->
-    <rdb:strategy id="goodsDbStrategy" sharding-columns="user_id" algorithm-expression="jty_goods_${user_id.longValue() % 2}" />
+
+     <rdb:strategy id="goodsDbStrategy" sharding-columns="user_id" algorithm-expression="jty_goods_${user_id.longValue() % 2}" />
     <rdb:strategy id="goodsTableStrategy" sharding-columns="id" algorithm-expression="goods_${id.longValue() % 4}" />
     <rdb:data-source id="shardingDataSource">
         <rdb:sharding-rule data-sources="jty_order_0, jty_order_1, jty_goods_0, jty_goods_1, jty_user_1,jty_user_0">

@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jty.web.bean.PagerInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-db.xml", "classpath:spring-aop.xml" })
+@ContextConfiguration(locations = { "classpath:spring-mybatis-db.xml", "classpath:spring-aop.xml", "classpath:log4j.xml" })
 @Transactional
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 public class UserDaoTest {
@@ -76,6 +76,13 @@ public class UserDaoTest {
 
     @Test
     public void userTest() {
-        
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", 1l);
+        try {
+            userDao.getUser(param);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
