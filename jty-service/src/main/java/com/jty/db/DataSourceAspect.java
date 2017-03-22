@@ -4,13 +4,19 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionAttributeSource;
@@ -26,14 +32,24 @@ import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingS
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
 import com.jty.db.strategy.table.ModuloDatabaseShardingAlgorithm;
 import com.jty.db.strategy.table.ModuloTableShardingAlgorithm;
-import com.jty.web.util.FileUtil;
-import com.jty.web.util.JDBC;
+import com.jty.sys.bean.CompanyDb;
+import com.jty.sys.bean.DatabaseInstance;
+import com.jty.sys.bean.DatabaseTable;
+import com.jty.sys.service.SysSer;
 import com.jty.web.util.ReflectUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DataSourceAspect {
 
-    private static final String ORDER_DATASOURCE_KEY = "order";
+    public static final String ORDER_DATASOURCE_KEY = "order";
+    public static final Integer ORDER_MODULE_INDEX = 1;
+    public static final String[] ORDER_MODULE_LOGIC_TABLE = {"t_order", "order_goods", "goods"};
+
+    public static Map<Long, String> companyIdMarkCache = new Hashtable<>();//comId, databaseTable.mark;
+    public static List<String> orderActualTables = new ArrayList<>();
+    public static List<String> orderGoodsActualTables = new ArrayList<>();
+    public static List<String> goodsActualTables = new ArrayList<>();
+    public static Map<String, DataSource> dataSourceCache = new Hashtable<>(); //key, c3p0
 
     private List<String> slaveMethodPattern = new ArrayList<String>();
 
@@ -51,6 +67,9 @@ public class DataSourceAspect {
         this.dataSource = dataSource;
     }
 
+    private static Logger logger = LoggerFactory.getLogger(DataSourceAspect.class);
+    @Autowired
+    SysSer sysSer;
     /**
      * 读取事务管理中的策略
      * @param txAdvice
@@ -109,9 +128,6 @@ public class DataSourceAspect {
     public void before(JoinPoint point) throws Exception {
         // 获取到当前执行的方法名
         String methodName = point.getSignature().getName();
-
-        // boolean isSlave = false;
-
         if (slaveMethodPattern.isEmpty()) {
             // 当前Spring容器中没有配置事务策略，采用方法名匹配方式
             // isSlave = isSlave(methodName);
@@ -119,35 +135,63 @@ public class DataSourceAspect {
             // 使用策略规则匹配
             for (String mappedName : slaveMethodPattern) {
                 if (isMatch(methodName, mappedName)) {
-                    // isSlave = true;
                     Object[] args = point.getArgs();
-//                    Map<String, Object> params = (Map<String, Object>) args[0];
-                    if (true) {
+                    if (methodName.contains("Order") || methodName.contains("Goods")) {
+                        Map<String, Object> params = (Map<String, Object>) args[0];
+                        Long comId = (Long) params.get("userId");
                         String module = null;
                         if(methodName.contains("Order") || methodName.contains("Goods")) {
                             module = ORDER_DATASOURCE_KEY;
                         }
-                        String dataSourceKey = getDataSourceKeyByModuleName(module);
                         Map<Object, Object> targetDataSources = (Map<Object, Object>) ReflectUtil.getFieldValue(dataSource, "targetDataSources");
-                        if (targetDataSources.get(dataSourceKey) == null) {
-                            String databaseName = getModuleDatabaseName(module);
-                            String url = "localhost:3308", dbUsername = "dev", password = "dev";
-                            JDBC jdbc = new JDBC("jdbc:mysql://" + url + "?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8", dbUsername, password);
-                            if(!jdbc.existDb(databaseName)) {   //判读数据库是否存在
-                                String sqlPathPrefix = this.getClass().getResource("/").getPath() + "sql/";
-                                String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_goods.sql");
-                                sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order.sql");
-                                sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_uid_sequence.sql");
-                                boolean createResult = jdbc.createDb(databaseName, sql); //创建数据库，验证数据库是否创建成功
-                                if(!createResult) {
-                                    throw new Exception("create " + databaseName + " fail!");
+                        String dataSourceKey = null;
+                        if(targetDataSources.size() != 1) {
+                            dataSourceKey = "orderSer";
+                        } else {
+                            //查询是否有该公司该模块的连接信息
+                            Map<String, Object> conditionMap = new HashMap<>();
+                            conditionMap.put("comId", comId);
+                            conditionMap.put("module", ORDER_MODULE_INDEX);
+                            CompanyDb comDb = sysSer.getCompanyDb(conditionMap);
+                            if(comDb != null) {
+                                List<DatabaseTable> tabs = comDb.getDatabaseTables();
+                                Set<Long> insIds = new HashSet<>();
+                                if(tabs != null) {
+                                    for (DatabaseTable tab : tabs) {
+                                        insIds.add(tab.getDbInsId());
+                                        orderActualTables.add(ORDER_MODULE_LOGIC_TABLE[0] + "_" + tab.getMark());
+                                        orderGoodsActualTables.add(ORDER_MODULE_LOGIC_TABLE[1] + "_" + tab.getMark());
+                                        goodsActualTables.add(ORDER_MODULE_LOGIC_TABLE[2] + "_" + tab.getMark());
+                                        companyIdMarkCache.put(comId, tab.getMark());
+                                    }
                                 }
+                                conditionMap.clear();
+                                List<DatabaseInstance> insList = new ArrayList<>();
+                                for (Long insId : insIds) {
+                                    conditionMap.put("id", insId);
+                                    DatabaseInstance ins = sysSer.getDatabaseInstance(conditionMap);
+                                    insList.add(ins);
+                                }
+                                dataSourceKey = initDataSource(comId, module, targetDataSources, insList);
+                            } else {
+//                                conditionMap.clear();
+//                                conditionMap.put("module", ORDER_MODULE_INDEX);
+//                                conditionMap.put("dbStatus", 1);
+//                                //查询是否有该模块的数据库实例
+//                                DatabaseInstance databaseInstance = sysSer.getDatabaseInstance(conditionMap);
+//                                if(databaseInstance != null) {
+//                                    
+//                                } else {
+//                                    conditionMap.clear();
+//                                    conditionMap.put("module", ORDER_MODULE_INDEX);
+//                                    conditionMap.put("dbStatus", 1);
+//                                    Database db = sysSer.getDatabase(conditionMap);
+//                                    if(db == null) {
+//                                        throw new Exception(ORDER_MODULE_INDEX + " does not has usable database");
+//                                    }
+//                                    dataSourceKey = initDataSource(comId, module, targetDataSources, db);
+//                                }
                             }
-                            DataSource moduleDataSource = initShardingDataSource(url, dbUsername, password);
-                            if(moduleDataSource != null) {
-                                targetDataSources.put(dataSourceKey, moduleDataSource);
-                            }
-                            dataSource.afterPropertiesSet();            // 通知spring更改了targetDataSources。此方法允许bean实例仅在所有bean属性都已设置时执行初始化，并在配置不正确的情况下抛出异常。
                         }
                         DynamicDataSourceHolder.markDb(dataSourceKey);  // 更改数据库连接
                     } else {
@@ -157,13 +201,89 @@ public class DataSourceAspect {
                 }
             }
         }
-        // if (isSlave) {
-        // // 标记为读库
-        // DynamicDataSourceHolder.markMaster();
-        // } else {
-        // // 标记为写库
-        // DynamicDataSourceHolder.markMaster();
-        // }
+    }
+
+    public String initDataSource(Long comId, String module, Map<Object, Object> targetDataSources, List<DatabaseInstance> insList) throws Exception, PropertyVetoException {
+        String dataSourceKey;
+//        JDBC jdbc = new JDBC("jdbc:mysql://" + db.getIpAddress() + ":" + db.getPort() + "?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8", db.getUsername(), db.getPassword());
+//        String databaseName = db.getdb
+//        String mark = comId + "";
+//        if(!jdbc.existDb(databaseName)) {
+//            String sqlPathPrefix = this.getClass().getResource("/").getPath() + "sql/";
+//            String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order_0.sql").replace("COMPANY_MARK", mark);
+//            boolean createResult = jdbc.createDb(databaseName, sql); //创建数据库，验证数据库是否创建成功
+//            if(!createResult) {
+//                throw new Exception("create " + databaseName + " fail!");
+//            }
+//        }
+//        if(!jdbc.existTable(databaseName)) {
+//            String sqlPathPrefix = this.getClass().getResource("/").getPath() + "sql/";
+//            String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order_0.sql").replace("COMPANY_MARK", mark);
+//            boolean createResult = jdbc.createDb(databaseName, sql); //创建数据库，验证数据库是否创建成功
+//            if(!createResult) {
+//                throw new Exception("create " + databaseName + " fail!");
+//            }
+//        }
+        //创建数据库创建表完成
+//        DatabaseInstance databaseInstance = new DatabaseInstance(db.getId(), databaseName, db.getUsername(), db.getPassword(), 1, 0, ORDER_MODULE_INDEX, "");
+//        sysSer.addDatabaseInstance(databaseInstance);
+//        DatabaseTable dbTable = new DatabaseTable(databaseInstance.getId(), 1, 0, ORDER_MODULE_INDEX, mark, "");
+//        sysSer.addDatabaseTable(dbTable);
+//        CompanyDb comDb = new CompanyDb(comId, dbTable.getId(), ORDER_MODULE_INDEX, "");
+//        sysSer.addCompanyDb(comDb);
+//        DataSource moduleDataSource = initC3p0DataSource(db.getIpAddress() + ":" + db.getPort(), databaseName, db.getUsername(), db.getPassword());
+        DataSource moduleDataSource = initShardingDataSource(insList);
+        dataSourceKey = "orderSer";
+        if(moduleDataSource != null) {
+            targetDataSources.put(dataSourceKey, moduleDataSource);
+            dataSource.afterPropertiesSet();// 通知spring更改了targetDataSources。此方法允许bean实例仅在所有bean属性都已设置时执行初始化，并在配置不正确的情况下抛出异常。
+        } else {
+            throw new Exception("init data source error");
+        }
+        return dataSourceKey;
+    }
+
+    private DataSource initShardingDataSource(List<DatabaseInstance> insList) {
+        DataSource dataSource = null;
+        try {
+            if(insList != null) {
+                for (DatabaseInstance ins : insList) {
+                    String url = ins.getDatabase().getIpAddress() + ":" + ins.getDatabase().getPort();
+                    ComboPooledDataSource ds = initC3p0DataSource(url, ins.getDbName(), ins.getUsername(), ins.getPassword()); //初始化数据库连接池， throws PropertyVetoException
+                    String key = url + "/" + ins.getDbName();
+                    dataSourceCache.put(key, ds);
+                }
+            }
+            DataSourceRule dataSourceRule = new DataSourceRule(dataSourceCache);
+            TableRule orderTableRule = TableRule.builder("t_order")
+                .actualTables(orderActualTables)
+                .dataSourceRule(dataSourceRule)
+                .build();
+            TableRule orderGoodsTableRule = TableRule.builder("order_goods")
+                .actualTables(orderGoodsActualTables)
+                .dataSourceRule(dataSourceRule)
+                .build();
+            
+            TableRule goodsTableRule = TableRule.builder("goods")
+                .actualTables(goodsActualTables)
+                .dataSourceRule(dataSourceRule)
+                .build();
+
+            ShardingRule shardingRule = ShardingRule.builder()
+                .dataSourceRule(dataSourceRule)
+                .tableRules(Arrays.asList(orderTableRule, orderGoodsTableRule, goodsTableRule))
+                .databaseShardingStrategy(new DatabaseShardingStrategy("id", new ModuloDatabaseShardingAlgorithm()))
+                .tableShardingStrategy(new TableShardingStrategy("user_id", new ModuloTableShardingAlgorithm()))
+                .build();
+            dataSource = ShardingDataSourceFactory.createDataSource(shardingRule);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+        return dataSource;
+    }
+
+    public void after() {
+        DynamicDataSourceHolder.markMaster();
     }
 
     public DataSource initShardingDataSourceSingleDb(String url, String dbUsername, String password) {

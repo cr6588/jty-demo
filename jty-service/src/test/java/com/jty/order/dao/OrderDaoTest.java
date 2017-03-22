@@ -261,6 +261,7 @@ public class OrderDaoTest {
     public void orderDaoTest() {
         Map<String, Object> param = new HashMap<>();
         param.put("id", 7);
+        param.put("user_id", 1);
         try {
             orderDao.getOrder(param);
         } catch (Exception e) {

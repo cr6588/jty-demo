@@ -14,6 +14,7 @@
     <dubbo:reference id="userSer" interface="com.jty.user.service.UserSer" />
     <dubbo:reference id="orderSer" interface="com.jty.order.service.OrderSer" />
     <dubbo:reference id="i18nSer" interface="com.jty.web.service.I18nSer" />
+    <dubbo:reference id="sysSer" interface="com.jty.sys.service.SysSer" />
 <!--  <dubbo:registry address="localhost:4548" /> -->
 <!--     <dubbo:registry address="127.0.0.1:3307" /> -->
     <!-- 扫描注解包路径，多个包用逗号分隔，不填pacakge表示扫描当前ApplicationContext中所有的类 -->

@@ -25,6 +25,7 @@
     <dubbo:reference id="userSer" interface="com.jty.user.service.UserSer" />
     <dubbo:reference id="orderSer" interface="com.jty.order.service.OrderSer" />
     <dubbo:reference id="i18nSer" interface="com.jty.web.service.I18nSer" />
+    <dubbo:reference id="sysSer" interface="com.jty.sys.service.SysSer" />
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
             <bean class="com.jty.web.util.PagerArgumentResolver" />

@@ -22,11 +22,18 @@
         <typeAlias alias="map" type="java.util.Map" />
         <typeAlias alias="list" type="java.util.List" />
         <typeAlias alias="linkMap" type="java.util.LinkedHashMap" />
+
         <typeAlias alias="i18n" type="com.jty.web.bean.I18n" />
         <typeAlias alias="order" type="com.jty.order.bean.Order" />
         <typeAlias alias="orderGoods" type="com.jty.order.bean.OrderGoods" />
         <typeAlias alias="goods" type="com.jty.order.bean.Goods" />
         <typeAlias alias="user" type="com.jty.user.bean.User" />
+
+        <!-- sys -->
+        <typeAlias alias="companyDb" type="com.jty.sys.bean.CompanyDb" />
+        <typeAlias alias="database" type="com.jty.sys.bean.Database" />
+        <typeAlias alias="databaseInstance" type="com.jty.sys.bean.DatabaseInstance" />
+        <typeAlias alias="databaseTable" type="com.jty.sys.bean.DatabaseTable" />
 
     </typeAliases>
 </configuration>

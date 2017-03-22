@@ -28,8 +28,10 @@ public class OrderServiceImpl implements OrderSer {
 
     public Order getOrder(Map<String, Object> param) throws Exception {
         Order o = orderDao.getOrder(param);
-        List<OrderGoods> og = orderDao.getOrderGoodsByOrderId(o.getId());
-        o.setOrderGoods(og);
+        if(o != null) {
+            List<OrderGoods> og = orderDao.getOrderGoodsByOrderId(o.getId());
+            o.setOrderGoods(og);
+        }
         return o;
     }
 

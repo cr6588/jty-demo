@@ -21,8 +21,9 @@
     <aop:config>
         <aop:aspect id="switchDataSourceAspect" ref="dataSourceAspect">
 <!--             <aop:pointcut id="logPoint" expression="execution(* com.cheny..service..*.*(..))" /> -->
-            <aop:pointcut id="logPoint" expression="execution(* com.jty.order.service..*.*(..))" />
+            <aop:pointcut id="logPoint" expression="execution(* com.jty..service..*.*(..))" />
             <aop:before pointcut-ref="logPoint" arg-names="point" method="before" />
+<!--             <aop:after pointcut-ref="logPoint" method="after" /> -->
         </aop:aspect>
     </aop:config>
 

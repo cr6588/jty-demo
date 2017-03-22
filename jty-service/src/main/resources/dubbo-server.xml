@@ -26,13 +26,15 @@
 <!--     <dubbo:registry address="zookeeper://192.168.1.171:2181" /> -->
 
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="com.jty.user.service.UserSer" ref="userSer" />
-    <dubbo:service interface="com.jty.order.service.OrderSer" ref="orderSer" />
-    <dubbo:service interface="com.jty.web.service.I18nSer" ref="i18nSer" />
+    <dubbo:service interface="com.jty.user.service.UserSer" retries="0" ref="userSer" />
+    <dubbo:service interface="com.jty.order.service.OrderSer" retries="0" ref="orderSer" />
+    <dubbo:service interface="com.jty.web.service.I18nSer" retries="0" ref="i18nSer" />
+    <dubbo:service interface="com.jty.sys.service.SysSer" retries="0" ref="sysSer" />
     <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
     <bean id="userSer" class="com.jty.user.service.impl.UserServiceImpl" />
     <bean id="orderSer" class="com.jty.order.service.impl.OrderServiceImpl" />
     <bean id="i18nSer" class="com.jty.i18n.service.impl.I18nServiceImpl" />
+    <bean id="sysSer" class="com.jty.sys.service.impl.SysServiceImpl" />
 <!-- 扫描注解包路径，多个包用逗号分隔，不填pacakge表示扫描当前ApplicationContext中所有的类 -->
 <!--     <dubbo:annotation package="com.cr.dubbo.service.dubbo" /> -->
 <!--     <context:component-scan base-package="com.cr.dubbo.service"/> -->

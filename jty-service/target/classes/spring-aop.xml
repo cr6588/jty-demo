@@ -7,13 +7,29 @@
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-    <!-- create by 2011-09-05 -->
-    <!-- author 陈默涵 -->
-    <!-- category 数据库事务配置 -->
     <aop:aspectj-autoproxy />
 
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory" />
+    <bean class="com.jty.db.DataSourceAspect" id="dataSourceAspect">
+        <property name="dataSource" ref="dataSource" />
+        <!-- 指定事务策略 -->  
+        <property name="txAdvice" ref="txAdvice"/>  
+        <!-- 指定使用非基本数据源方法的前缀（非必须） -->  
+        <property name="slaveMethodStart" value="getOrder,find,get"/>
+    </bean>
+
+    <!-- 使用非基本数据源方法拦截 --> 
+    <aop:config>
+        <aop:aspect id="switchDataSourceAspect" ref="dataSourceAspect">
+<!--             <aop:pointcut id="logPoint" expression="execution(* com.cheny..service..*.*(..))" /> -->
+            <aop:pointcut id="logPoint" expression="execution(* com.jty..service..*.*(..))" />
+            <aop:before pointcut-ref="logPoint" arg-names="point" method="before" />
+<!--             <aop:after pointcut-ref="logPoint" method="after" /> -->
+        </aop:aspect>
+    </aop:config>
+
+    <!-- 事务配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
     </bean>
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
@@ -34,13 +50,6 @@
 <!--             <tx:method name="*" propagation="SUPPORTS" read-only="true"/> -->
         </tx:attributes>
     </tx:advice>
-    
-<!--    <tx:advice id="txCommandProxy" transaction-manager="transactionManager"> -->
-<!--        <tx:attributes> -->
-<!--            <tx:method name="*" propagation="SUPPORTS" read-only="true" /> -->
-<!--        </tx:attributes> -->
-<!--    </tx:advice> -->
-
     <aop:config proxy-target-class="true">
         <aop:pointcut id="serviceMethods" expression="execution(* com.jty..service..*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />

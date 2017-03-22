@@ -233,4 +233,9 @@ public class JDBC {
         return false;
     }
 
+    public boolean existTable(String tableName) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }
