@@ -6,9 +6,9 @@
         <artifactId>jty-demo</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>jty-service</artifactId>
+    <artifactId>jty-order-service</artifactId>
     <version>0.0.1</version>
-    <name>service</name>
+    <name>order-service</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

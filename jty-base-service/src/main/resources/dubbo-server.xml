@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd 
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+ 
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <dubbo:application name="jty-base-service"  />
+    <!--     timeout="5000"：设置远程调用服务的超时时间为5000毫秒 -->
+    <!-- threadpool="fixed"：线程模型为固定大小的线程池，启动时建立线程，不关闭，一直持有 -->
+    <!-- threads="500"：线程数为500 -->
+    <!-- accepts="1000"：限制服务器端的接受的连接的最大值为1000 -->
+    <dubbo:provider timeout="5000" threadpool="fixed" threads="10" accepts="10" />
+    <!-- 使用multicast广播注册中心暴露发现服务地址 -->
+    <dubbo:registry address="multicast://224.5.6.7:1234" />
+     <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="20880" />
+<!--     <dubbo:registry address="127.0.0.1:3307" /> -->
+
+<!--     <dubbo:registry address="zookeeper://192.168.1.171:2181" /> -->
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.jty.user.service.UserSer" retries="0" ref="userSer" />
+    <dubbo:service interface="com.jty.web.service.I18nSer" retries="0" ref="i18nSer" />
+    <dubbo:service interface="com.jty.sys.service.SysSer" retries="0" ref="sysSer" />
+    <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+    <bean id="userSer" class="com.jty.user.service.impl.UserServiceImpl" />
+    <bean id="i18nSer" class="com.jty.i18n.service.impl.I18nServiceImpl" />
+    <bean id="sysSer" class="com.jty.sys.service.impl.SysServiceImpl" />
+<!-- 扫描注解包路径，多个包用逗号分隔，不填pacakge表示扫描当前ApplicationContext中所有的类 -->
+<!--     <dubbo:annotation package="com.cr.dubbo.service.dubbo" /> -->
+<!--     <context:component-scan base-package="com.cr.dubbo.service"/> -->
+    <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+</beans>

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
@@ -26,7 +25,7 @@ public class OrderServiceImpl implements OrderSer {
         return orderDao.getOrderList(param, pager);
     }
 
-    public Order getOrder(Map<String, Object> param) throws Exception {
+    public Order getOrder(Map<String, Object> param, Long userId) throws Exception {
         Order o = orderDao.getOrder(param);
         if(o != null) {
             List<OrderGoods> og = orderDao.getOrderGoodsByOrderId(o.getId());

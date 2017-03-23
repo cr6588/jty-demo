@@ -1,2 +1,4 @@
-D:\neon\jty-demo\jty-service\src\test\java\com\jty\user\dao\UserDaoTest.java
-D:\neon\jty-demo\jty-service\src\test\java\com\jty\MainServiceTest.java
+D:\git\jty-demo\jty-service\src\test\java\com\jty\db\share\JdbcTest.java
+D:\git\jty-demo\jty-service\src\test\java\com\jty\MainServiceTest.java
+D:\git\jty-demo\jty-service\src\test\java\com\jty\order\dao\OrderDaoTest.java
+D:\git\jty-demo\jty-service\src\test\java\com\jty\order\OrderSerTest.java

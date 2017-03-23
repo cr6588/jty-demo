@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jty.user.dao.UserDao">
+    <resultMap id="userMap" type="user">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="qq" property="qq" jdbcType="VARCHAR" />
+        <result column="realname" property="realname" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="tel" property="tel" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="user_Column_List"> id, address, age, company, email, `password`, qq, realname, sex, tel, username 
+    </sql>
+
+    <insert id="addUser" parameterType="user" keyProperty="id">
+        insert into `user` (
+            id,
+            address,
+            age,
+            company,
+            email,
+            `password`,
+            qq,
+            realname,
+            sex, 
+            tel,
+            username
+        ) values (
+            #{id},
+            #{address},
+            #{age},
+            #{company},
+            #{email},
+            #{password},
+            #{qq},
+            #{realname},
+            #{sex},
+            #{tel},
+            #{username}
+        ) 
+    </insert>
+
+   <update id="updateUser" parameterType="user">
+        update `user`
+        set address = #{address},
+            age = #{age},
+            company = #{company},
+            email = #{email},
+            `password` = #{password},
+            qq = #{qq},
+            realname = #{realname},
+            sex = #{sex},
+            tel = #{tel},
+            username = #{username}
+        where id = #{id}
+    </update>
+
+   <delete id="deleteUser" parameterType="long">
+        delete from `user` 
+        where id = #{id}
+    </delete>
+    <sql id="userSelectCondition">
+        <where>
+            <if test="id != null"> and id = #{id}
+            </if>
+            <if test="address != null"> and address = #{address}
+            </if>
+            <if test="age != null">and age = #{age}
+            </if>
+            <if test="company != null">and company = #{company}
+            </if>
+            <if test="email != null">and email = #{email}
+            </if>
+            <if test="password != null">and `password` = #{password}
+            </if>
+            <if test="qq != null">and qq = #{qq}
+            </if>
+            <if test="realname != null">and realname = #{realname}
+            </if>
+            <if test="sex != null">and sex = #{sex}
+            </if>
+            
+            <if test="tel != null">and tel = #{tel}
+            </if>
+            <if test="username != null">and username = #{username}
+            </if>
+        </where>
+    </sql>
+
+    <select id="getUser" parameterType="map" resultMap="userMap">
+        select 
+            <include refid="user_Column_List" />
+        from `user`
+        <include refid="userSelectCondition" />
+    </select>
+
+        <select id="getUserList" parameterType="map" resultMap="userMap">
+        select 
+            <include refid="user_Column_List" />
+        from `user`
+        <include refid="userSelectCondition" />
+    </select>
+
+    <select id="getUserListCnt" parameterType="map" resultType="int">
+        select count(*) from `user`
+        <include refid="userSelectCondition" />
+    </select>
+</mapper>

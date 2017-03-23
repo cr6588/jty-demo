@@ -12,7 +12,7 @@ public interface OrderSer {
 
     List<Order> getOrderList(Map<String, Object> param, PagerInfo pager) throws Exception;
 
-    Order getOrder(Map<String, Object> param) throws Exception;
+    Order getOrder(Map<String, Object> param, Long userId) throws Exception;
 
     void addOrder(Order order) throws Exception;
 

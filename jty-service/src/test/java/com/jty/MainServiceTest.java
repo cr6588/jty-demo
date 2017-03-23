@@ -43,9 +43,10 @@ public class MainServiceTest {
     public void orderDaoTest() {
         Map<String, Object> param = new HashMap<>();
         param.put("id", 7l);
-        param.put("userId", 1l);
+        Long userId = 1l;
+        param.put("userId", userId);
         try {
-            orderSer.getOrder(param);
+            orderSer.getOrder(param, userId);
             orderSer.getGoods(param);
         } catch (Exception e) {
             e.printStackTrace();

@@ -282,42 +282,6 @@ public class DataSourceAspect {
         return dataSource;
     }
 
-    public void after() {
-        DynamicDataSourceHolder.markMaster();
-    }
-
-    public DataSource initShardingDataSourceSingleDb(String url, String dbUsername, String password) {
-        DataSource dataSource = null;
-        try {
-            ComboPooledDataSource jty_order_0 = initC3p0DataSource(url, "jty_goods_order_single_db", dbUsername, password); //初始化数据库连接池， throws PropertyVetoException
-
-            Map<String, DataSource> orderDataSourceMap = new HashMap<>();
-            orderDataSourceMap.put("jty_order_0", jty_order_0);
-            DataSourceRule orderDataSourceRule = new DataSourceRule(orderDataSourceMap);
-
-            TableRule orderTableRule = TableRule.builder("t_order")
-                .actualTables(Arrays.asList("t_order"))
-                .dataSourceRule(orderDataSourceRule)
-                .build();
-            TableRule orderGoodsTableRule = TableRule.builder("order_goods")
-                .actualTables(Arrays.asList("order_goods"))
-                .dataSourceRule(orderDataSourceRule)
-                .build();
-            TableRule goodsTableRule = TableRule.builder("goods")
-                .actualTables(Arrays.asList("goods"))
-                .dataSourceRule(orderDataSourceRule)
-                .build();
-
-            ShardingRule shardingRule = ShardingRule.builder().dataSourceRule(orderDataSourceRule)
-                .tableRules(Arrays.asList(orderTableRule, orderGoodsTableRule, goodsTableRule))
-                .build();
-
-            dataSource = ShardingDataSourceFactory.createDataSource(shardingRule);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
-        return dataSource;
-    }
 
     public DataSource initShardingDataSource(String url, String dbUsername, String password) {
         DataSource dataSource = null;
@@ -347,10 +311,6 @@ public class DataSourceAspect {
                 .tableShardingStrategy(new TableShardingStrategy("goods_id", new ModuloTableShardingAlgorithm()))
                 .build();
             
-//            Map<String, DataSource> goodsDataSourceMap = new HashMap<>();
-//            goodsDataSourceMap.put("jty_goods_0", jty_goods_0);
-//            goodsDataSourceMap.put("jty_goods_1", jty_goods_1);
-//            DataSourceRule goodsDataSourceRule = new DataSourceRule(goodsDataSourceMap);
             TableRule goodsTableRule = TableRule.builder("goods")
                 .actualTables(Arrays.asList("jty_goods_0.goods_0", "jty_goods_0.goods_1", "jty_goods_0.goods_2", "jty_goods_0.goods_3", "jty_goods_1.goods_0", "jty_goods_1.goods_1", "jty_goods_1.goods_2", "jty_goods_1.goods_3"))
                 .dataSourceRule(orderDataSourceRule)
@@ -372,17 +332,6 @@ public class DataSourceAspect {
 
     private String getModuleDatabaseName(String moduleName) {
         return "jty_" + moduleName + "_0";
-    }
-
-    /**
-     * 判断是否为读库
-     * @param methodName
-     * @return
-     */
-    private Boolean isSlave(String methodName) {
-        // 方法名以query、find、get开头的方法名走从库
-        // StringUtils引入类与其他不一样
-        return StringUtils.startsWithAny(methodName, getSlaveMethodStart());
     }
 
     /**

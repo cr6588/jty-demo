@@ -92,7 +92,7 @@ public class OrderController {
         RequestResult<Order> result = new RequestResult<Order>();
         Map<String, Object> params = RequestSessionUtil.getRequestParamData(request);
         try {
-            result.setBody(this.orderSer.getOrder(params));
+            result.setBody(this.orderSer.getOrder(params, null));
         } catch (Exception e) {
             logger.error(e.getMessage());
             result.setCode(100);
