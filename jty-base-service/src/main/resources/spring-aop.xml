@@ -33,6 +33,7 @@
         </tx:attributes>
     </tx:advice>
     <aop:config proxy-target-class="true">
+        
         <aop:pointcut id="serviceMethods" expression="execution(* com.jty..service..*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
     </aop:config>

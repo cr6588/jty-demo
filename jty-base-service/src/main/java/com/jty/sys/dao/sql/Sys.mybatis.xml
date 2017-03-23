@@ -110,6 +110,7 @@
         <include refid="database_Column_List" />
         from jty_pub_database
         <include refid="databaseSelectCondition" />
+        <include refid="orderByLevel" />
     </select>
     <select id="getDatabaseListCnt" parameterType="map" resultType="int">
         select count(*) from jty_pub_database
@@ -168,6 +169,9 @@
             <if test="updateUser != null"> and update_user = #{updateUser}</if>
         </where>
     </sql>
+    <sql id="orderByLevel">
+        order by db_level desc
+    </sql>
     <select id="getDatabaseInstance" parameterType="map" resultMap="databaseInstanceMap">
         select
         <include refid="databaseInstance_Column_List" />
@@ -179,6 +183,7 @@
         <include refid="databaseInstance_Column_List" />
         from jty_pub_database_instance
         <include refid="databaseInstanceSelectCondition" />
+        <include refid="orderByLevel" />
     </select>
     <select id="getDatabaseInstanceListCnt" parameterType="map" resultType="int">
         select count(*) from jty_pub_database_instance

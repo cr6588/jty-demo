@@ -37,4 +37,5 @@
 <!--     <dubbo:annotation package="com.cr.dubbo.service.dubbo" /> -->
 <!--     <context:component-scan base-package="com.cr.dubbo.service"/> -->
     <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+    <dubbo:reference id="orderCacheSer" interface="com.jty.db.service.ComDbCacheSer" />
 </beans>

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JDBC {
@@ -200,13 +201,16 @@ public class JDBC {
         return sb.toString();
     }
 
-    public boolean createDb(String dbName, String sql) {
+    public void execute(String sql) throws Exception {
         try {
             getStmt().execute(sql);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return existDb(dbName);
     }
 
     public boolean existDb(String userDbName) {

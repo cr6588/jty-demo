@@ -26,8 +26,10 @@
 
     <!-- 声明需要暴露的服务接口 -->
     <dubbo:service interface="com.jty.order.service.OrderSer" retries="0" ref="orderSer" />
+    <dubbo:service interface="com.jty.db.service.ComDbCacheSer" retries="0" ref="orderCacheSer" />
     <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
     <bean id="orderSer" class="com.jty.order.service.impl.OrderServiceImpl" />
+    <bean id="orderCacheSer" class="com.jty.db.service.impl.OrderCacheServiceImpl" />
 
     <dubbo:reference id="sysSer" interface="com.jty.sys.service.SysSer" check="true"/><!--  url="dubbo://localhost:20880" -->
 </beans>

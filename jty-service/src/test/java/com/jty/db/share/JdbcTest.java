@@ -181,8 +181,12 @@ public class JdbcTest {
             String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_goods.sql");
             sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order.sql");
             sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_uid_sequence.sql");
-            boolean createResult = jdbc.createDb(databaseName, sql); //创建数据库，验证数据库是否创建成功
-            Assert.assertTrue(createResult);
+            try {
+                jdbc.execute(sql);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } //创建数据库，验证数据库是否创建成功
         }
     }
 
@@ -216,14 +220,11 @@ public class JdbcTest {
             sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order.sql");
             sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_uid_sequence.sql");
             System.out.println(sql);
-            boolean createResult = jdbc.createDb(databaseName, sql); //创建数据库，验证数据库是否创建成功
-            if(!createResult) {
-                try {
-                    throw new Exception("create " + databaseName + " fail!");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            try {
+                jdbc.execute(sql);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } //创建数据库，验证数据库是否创建成功
         }
     }
 }

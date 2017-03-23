@@ -22,6 +22,7 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
+import com.jty.db.service.impl.OrderCacheServiceImpl;
 import com.jty.db.strategy.ComDbCache;
 import com.jty.db.strategy.table.ModuloDatabaseShardingAlgorithm;
 import com.jty.db.strategy.table.ModuloTableShardingAlgorithm;
@@ -30,7 +31,6 @@ import com.jty.sys.bean.DatabaseInstance;
 import com.jty.sys.bean.DatabaseTable;
 import com.jty.sys.service.SysSer;
 import com.jty.web.bean.Constant;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DynamicDataSource extends AbstractRoutingDataSource {
 
@@ -78,7 +78,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
                             String url = ins.getDatabase().getIpAddress() + ":" + ins.getDatabase().getPort();
                             String c3p0Key = url + "/" + ins.getDbName();
                             //构建数据源缓存
-                            addDsPool2Cache(ins, url, c3p0Key);
+                            OrderCacheServiceImpl.addDsPool2Cache(ins, url, c3p0Key);
                             //构建企业id，数据源缓存
                             ComDbCache.companyIdInsCache.put(comId, c3p0Key);
                         }
@@ -88,7 +88,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
             }
 
             tar.put(DynamicDataSourceHolder.MASTER, ds);
-//            tar.put(DynamicDataSourceHolder.MASTER, initC3p0DataSource("localhost:3308", "cy", "dev", "dev"));
             setTargetDataSources(tar);
             setDefaultTargetDataSource(ds);
             afterPropertiesSet();
@@ -97,13 +96,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
             logger.error("初始化订单模块数据源失败!!!!!");
             e.printStackTrace();
             throw e;
-        }
-    }
-
-    public void addDsPool2Cache(DatabaseInstance ins, String url, String c3p0Key) throws PropertyVetoException {
-        if(ComDbCache.dataSourceCache.get(c3p0Key) == null) {
-            ComboPooledDataSource c3p0 = initC3p0DataSource(url, ins.getDbName(), ins.getUsername(), ins.getPassword()); //初始化数据库连接池， throws PropertyVetoException
-            ComDbCache.dataSourceCache.put(c3p0Key, c3p0);
         }
     }
 
@@ -132,14 +124,4 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return dataSource;
     }
 
-    public ComboPooledDataSource initC3p0DataSource(String url, String dbName, String username, String password) throws PropertyVetoException {
-        ComboPooledDataSource userDb = new ComboPooledDataSource();
-        userDb.setDriverClass("com.mysql.jdbc.Driver");
-        userDb.setJdbcUrl("jdbc:mysql://" + url + "/" + dbName);
-        userDb.setUser(username);
-        userDb.setPassword(password);
-        userDb.setInitialPoolSize(2);
-        userDb.setMaxPoolSize(5);
-        return userDb;
-    }
 }

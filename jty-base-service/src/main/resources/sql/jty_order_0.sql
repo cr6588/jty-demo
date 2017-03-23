@@ -13,9 +13,7 @@ File Encoding         : 65001
 Date: 2017-03-15 17:05:05
 */
 
-DROP DATABASE IF EXISTS `jty_order_0`;
-create DATABASE jty_order_0;
-USE jty_order_0;
+USE `COMPANY_DATABASE`;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
