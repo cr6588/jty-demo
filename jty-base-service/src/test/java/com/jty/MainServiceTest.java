@@ -1,13 +1,16 @@
 package com.jty;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.jty.sys.bean.CompanyDb;
 import com.jty.sys.service.SysSer;
+import com.jty.web.bean.Constant;
 
 public class MainServiceTest {
 
@@ -27,6 +30,9 @@ public class MainServiceTest {
         param.put("id", 2l);
         try {
             sysSer.getCompanyDb(param);
+            Map<String, Object> conditionMap = new HashMap<>();
+            conditionMap.put("module", Constant.Module.Order.index);
+            List<CompanyDb> comDbs = sysSer.getCompanyDbList(conditionMap, null);
         } catch (Exception e) {
             e.printStackTrace();
         }

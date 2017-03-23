@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.SingleKeyDatabaseShardingAlgorithm;
 import com.google.common.collect.Range;
+import com.jty.db.strategy.ComDbCache;
 import com.jty.web.bean.ShardingParam;
 
 //分片键值与action的入口参数一定要统一，主键参数一定使用Long,Map<String, Object> params = new HashMap<>();params.put("id", 7l);
@@ -13,7 +14,10 @@ public class ModuloDatabaseShardingAlgorithm implements SingleKeyDatabaseShardin
 
     public String doEqualSharding(final Collection<String> dataBaseName, final ShardingValue<Long> shardingValue) {
         for (String each : dataBaseName) {
-            return each;
+            Long value = shardingValue.getValue();
+            if (each.equals(ComDbCache.companyIdInsCache.get(value))) {
+              return each;
+            }
         }
         throw new IllegalArgumentException();
     }

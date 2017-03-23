@@ -13,6 +13,7 @@ import com.dangdang.ddframe.rdb.sharding.api.strategy.table.SingleKeyTableShardi
 import com.google.common.collect.Range;
 import com.jty.db.DataSourceAspect;
 import com.jty.db.DynamicDataSourceHolder;
+import com.jty.db.strategy.ComDbCache;
 import com.jty.sys.bean.CompanyDb;
 import com.jty.sys.bean.DatabaseTable;
 import com.jty.sys.service.SysSer;
@@ -29,7 +30,7 @@ public class ModuloTableShardingAlgorithm implements SingleKeyTableShardingAlgor
         if(shardingValue.getValue() != null) {
             Long value = shardingValue.getValue();
             for (String each : tableNames) {
-                if (each.endsWith(DataSourceAspect.companyIdMarkCache.get(value))) { //comId,module相同，mark不同的数据多条非法。即一个用户在一个库里的订单表只有1张
+                if (each.endsWith(ComDbCache.companyIdMarkCache.get(value))) { //comId,module相同，mark不同的数据多条非法。即一个用户在一个库里的订单表只有1张
                   return each;
                 }
             }

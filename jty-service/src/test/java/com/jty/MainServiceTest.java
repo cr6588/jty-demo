@@ -18,8 +18,10 @@ public class MainServiceTest {
     @Before
     public void init() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"classpath:dubbo-client.xml"});
-        context.start();
- 
+        String[] str = context.getBeanDefinitionNames();
+        for (int i = 0; i < str.length; i++) {
+            System.out.println(str[i]);
+        }
         orderSer = (OrderSer)context.getBean("orderSer"); // 获取远程服务代理
         sysSer = (SysSer)context.getBean("sysSer"); // 获取远程服务代理
     }
@@ -40,7 +42,7 @@ public class MainServiceTest {
     }
 
     @Test
-    public void orderDaoTest() {
+    public void orderSerTest() {
         Map<String, Object> param = new HashMap<>();
         param.put("id", 7l);
         Long userId = 1l;

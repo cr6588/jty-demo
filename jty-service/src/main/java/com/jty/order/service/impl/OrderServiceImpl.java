@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.dangdang.ddframe.rdb.sharding.api.HintManager;
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
 import com.jty.order.bean.OrderGoods;
@@ -37,17 +38,33 @@ public class OrderServiceImpl implements OrderSer {
     public void addOrder(Order order) throws Exception {
         order.setId(orderIdUtil.getUid());
         orderDao.addOrder(order);
-        orderDao.addOrderGoodsList(order);
+        //share-jdbc不支持特殊INSERT 每条INSERT语句只能插入一条数据，不支持VALUES后有多行数据的语句
+        if(order.getOrderGoods() != null) {
+//            当try语句块运行结束时，hintManager 会被自动关闭。这是因为hintManager 实现了java中的java.lang.AutoCloseable接口。所有实现了这个接口的类都可以在try-with-resources结构中使用。
+//            try(HintManager hintManager = HintManager.getInstance()) {
+//                hintManager.addDatabaseShardingValue("order_goods", "user_id", order.getUser().getId());
+                for (OrderGoods orderGoods : order.getOrderGoods()) {
+                    orderGoods.setOrderId(order.getId());
+                    orderDao.addOrderGoods(orderGoods);
+                }
+//            }
+        }
     }
 
     public void updateOrder(Order order) throws Exception {
         orderDao.deleteOrderGoods(order.getId());
-        orderDao.addOrderGoodsList(order);
+        if(order.getOrderGoods() != null) {
+            for (OrderGoods orderGoods : order.getOrderGoods()) {
+                orderGoods.setOrderId(order.getId());
+                orderDao.addOrderGoods(orderGoods);
+            }
+        }
         orderDao.updateOrder(order);
     }
 
     public void deleteOrder(Long id) throws Exception {
         orderDao.deleteOrder(id);
+        orderDao.deleteOrderGoods(id);
     }
 
     public Integer getOrderListCnt(Map<String, Object> params) throws Exception {

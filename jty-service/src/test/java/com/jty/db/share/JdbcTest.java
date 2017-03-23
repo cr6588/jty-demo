@@ -186,24 +186,24 @@ public class JdbcTest {
         }
     }
 
-    @Test
-    public void initShardingDataSourceTest() {
-        DataSourceAspect dataSourceAspect = new DataSourceAspect();
-        String url = "localhost:3308", dbUsername = "dev", password = "dev";
-        DataSource ds = dataSourceAspect.initShardingDataSource(url, dbUsername, password);
-        String sql = "insert into  t_order(id, no , total_money, user_id) values(10,1,1,1)";
-        try  {
-            Connection conn = ds.getConnection();
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-            sql = "update t_order set no=1, total_money=11, user_id=1 where id=1";
-            conn = ds.getConnection();
-            preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Test
+//    public void initShardingDataSourceTest() {
+//        DataSourceAspect dataSourceAspect = new DataSourceAspect();
+//        String url = "localhost:3308", dbUsername = "dev", password = "dev";
+//        DataSource ds = dataSourceAspect.initShardingDataSource(url, dbUsername, password);
+//        String sql = "insert into  t_order(id, no , total_money, user_id) values(10,1,1,1)";
+//        try  {
+//            Connection conn = ds.getConnection();
+//            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+//            preparedStatement.executeUpdate();
+//            sql = "update t_order set no=1, total_money=11, user_id=1 where id=1";
+//            conn = ds.getConnection();
+//            preparedStatement = conn.prepareStatement(sql);
+//            preparedStatement.executeUpdate();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Test
     public void existDbTest() {

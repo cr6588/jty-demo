@@ -77,12 +77,22 @@
         <result column="order_id" property="orderId" />
         <result column="goods_id" property="goods.id" />
         <result column="num" property="num" />
+        <result column="name" property="goods.name" />
+        <result column="SKU" property="goods.SKU" />
+        <result column="price" property="goods.price" />
+        <result column="user_id" property="goods.userId" />
     </resultMap>
+
     <sql id="order_Goods_Column_List">
-        id,
-        order_id,
-        goods_id,
-        num
+        og.id id,
+        og.order_id order_id,
+        og.goods_id goods_id,
+        og.num ,
+        g.id goods_id,
+        g.name ,
+        g.SKU SKU,
+        g.price ,
+        g.user_id user_id
     </sql>
 
     <insert id="addOrderGoods" parameterType="orderGoods" useGeneratedKeys="true" keyProperty="id">
@@ -92,7 +102,7 @@
             num
         ) values (
             #{orderId},
-            #{goodsId},
+            #{goods.id},
             #{num}
         )
     </insert>
@@ -110,22 +120,19 @@
     <update id="updateOrderGoods" parameterType="orderGoods" >
         update order_goods 
         set order_id = #{orderId},
-            goods_id = #{user.Id},
+            goods_id = #{goods.id},
             num = #{num}
-        where id = #{id} and goods_id = #{goods.id}
+        where id = #{id}
     </update>
     <delete id="deleteOrderGoods" parameterType="long">
         delete from order_goods 
-        where id = #{id}
+        where order_id = #{id}
     </delete>
 
     <sql id="orderGoodsSelectCondition">
         <where>
             <if test="id != null">
                 and id = #{id}
-            </if>
-            <if test="userId != null">
-                and order_id = #{orderId}
             </if>
         </where>
     </sql>
@@ -140,12 +147,12 @@
     <select id="getOrderGoodsByOrderId" parameterType="long" resultMap="orderGoodsMap">
         select 
             <include refid="order_Goods_Column_List" />
-        from order_goods where order_id = #{orderId}
+        from order_goods og left join goods g on og.goods_id = g.id where order_id = #{orderId}
 <!--         <include refid="orderGoodsSelectCondition" /> -->
     </select>
 
     <select id="getOrderGoodsCnt" parameterType="map" resultType="int">
-        select count(*) from order_goods
+        select count(*) from order_goods og
         <include refid="orderGoodsSelectCondition" />
     </select>
 

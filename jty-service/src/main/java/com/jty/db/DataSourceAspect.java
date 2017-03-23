@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,26 +28,18 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
+import com.jty.db.strategy.ComDbCache;
 import com.jty.db.strategy.table.ModuloDatabaseShardingAlgorithm;
 import com.jty.db.strategy.table.ModuloTableShardingAlgorithm;
 import com.jty.sys.bean.CompanyDb;
 import com.jty.sys.bean.DatabaseInstance;
 import com.jty.sys.bean.DatabaseTable;
 import com.jty.sys.service.SysSer;
+import com.jty.web.bean.Constant;
 import com.jty.web.util.ReflectUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DataSourceAspect {
-
-    public static final String ORDER_DATASOURCE_KEY = "order";
-    public static final Integer ORDER_MODULE_INDEX = 1;
-    public static final String[] ORDER_MODULE_LOGIC_TABLE = {"t_order", "order_goods", "goods"};
-
-    public static Map<Long, String> companyIdMarkCache = new Hashtable<>();//comId, databaseTable.mark;
-    public static List<String> orderActualTables = new ArrayList<>();
-    public static List<String> orderGoodsActualTables = new ArrayList<>();
-    public static List<String> goodsActualTables = new ArrayList<>();
-    public static Map<String, DataSource> dataSourceCache = new Hashtable<>(); //key, c3p0
 
     private List<String> slaveMethodPattern = new ArrayList<String>();
 
@@ -141,7 +131,7 @@ public class DataSourceAspect {
                         Long comId = (Long) params.get("userId");
                         String module = null;
                         if(methodName.contains("Order") || methodName.contains("Goods")) {
-                            module = ORDER_DATASOURCE_KEY;
+                            module = Constant.Module.Order.name;
                         }
                         Map<Object, Object> targetDataSources = (Map<Object, Object>) ReflectUtil.getFieldValue(dataSource, "targetDataSources");
                         String dataSourceKey = null;
@@ -151,7 +141,7 @@ public class DataSourceAspect {
                             //查询是否有该公司该模块的连接信息
                             Map<String, Object> conditionMap = new HashMap<>();
                             conditionMap.put("comId", comId);
-                            conditionMap.put("module", ORDER_MODULE_INDEX);
+                            conditionMap.put("module", Constant.Module.Order.index);
                             CompanyDb comDb = sysSer.getCompanyDb(conditionMap);
                             if(comDb != null) {
                                 List<DatabaseTable> tabs = comDb.getDatabaseTables();
@@ -159,10 +149,10 @@ public class DataSourceAspect {
                                 if(tabs != null) {
                                     for (DatabaseTable tab : tabs) {
                                         insIds.add(tab.getDbInsId());
-                                        orderActualTables.add(ORDER_MODULE_LOGIC_TABLE[0] + "_" + tab.getMark());
-                                        orderGoodsActualTables.add(ORDER_MODULE_LOGIC_TABLE[1] + "_" + tab.getMark());
-                                        goodsActualTables.add(ORDER_MODULE_LOGIC_TABLE[2] + "_" + tab.getMark());
-                                        companyIdMarkCache.put(comId, tab.getMark());
+                                        ComDbCache.orderActualTables.add(Constant.Module.Order.logicTable[0] + "_" + tab.getMark());
+                                        ComDbCache.orderGoodsActualTables.add(Constant.Module.Order.logicTable[1] + "_" + tab.getMark());
+                                        ComDbCache.goodsActualTables.add(Constant.Module.Order.logicTable[2] + "_" + tab.getMark());
+                                        ComDbCache.companyIdMarkCache.put(comId, tab.getMark());
                                     }
                                 }
                                 conditionMap.clear();
@@ -251,21 +241,21 @@ public class DataSourceAspect {
                     String url = ins.getDatabase().getIpAddress() + ":" + ins.getDatabase().getPort();
                     ComboPooledDataSource ds = initC3p0DataSource(url, ins.getDbName(), ins.getUsername(), ins.getPassword()); //初始化数据库连接池， throws PropertyVetoException
                     String key = url + "/" + ins.getDbName();
-                    dataSourceCache.put(key, ds);
+                    ComDbCache.dataSourceCache.put(key, ds);
                 }
             }
-            DataSourceRule dataSourceRule = new DataSourceRule(dataSourceCache);
+            DataSourceRule dataSourceRule = new DataSourceRule(ComDbCache.dataSourceCache);
             TableRule orderTableRule = TableRule.builder("t_order")
-                .actualTables(orderActualTables)
+                .actualTables(ComDbCache.orderActualTables)
                 .dataSourceRule(dataSourceRule)
                 .build();
             TableRule orderGoodsTableRule = TableRule.builder("order_goods")
-                .actualTables(orderGoodsActualTables)
+                .actualTables(ComDbCache.orderGoodsActualTables)
                 .dataSourceRule(dataSourceRule)
                 .build();
             
             TableRule goodsTableRule = TableRule.builder("goods")
-                .actualTables(goodsActualTables)
+                .actualTables(ComDbCache.goodsActualTables)
                 .dataSourceRule(dataSourceRule)
                 .build();
 
@@ -275,54 +265,6 @@ public class DataSourceAspect {
                 .databaseShardingStrategy(new DatabaseShardingStrategy("id", new ModuloDatabaseShardingAlgorithm()))
                 .tableShardingStrategy(new TableShardingStrategy("user_id", new ModuloTableShardingAlgorithm()))
                 .build();
-            dataSource = ShardingDataSourceFactory.createDataSource(shardingRule);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
-        return dataSource;
-    }
-
-
-    public DataSource initShardingDataSource(String url, String dbUsername, String password) {
-        DataSource dataSource = null;
-        try {
-            ComboPooledDataSource jty_order_0 = initC3p0DataSource(url, "jty_order_0", dbUsername, password); //初始化数据库连接池， throws PropertyVetoException
-            ComboPooledDataSource jty_order_1 = initC3p0DataSource(url, "jty_order_1", dbUsername, password);
-            ComboPooledDataSource jty_goods_0 = initC3p0DataSource(url, "jty_goods_0", dbUsername, password);
-            ComboPooledDataSource jty_goods_1 = initC3p0DataSource(url, "jty_goods_1", dbUsername, password);
-
-            Map<String, DataSource> orderDataSourceMap = new HashMap<>();
-            orderDataSourceMap.put("jty_order_0", jty_order_0);
-            orderDataSourceMap.put("jty_order_1", jty_order_1);
-            orderDataSourceMap.put("jty_goods_0", jty_goods_0);
-            orderDataSourceMap.put("jty_goods_1", jty_goods_1);
-            DataSourceRule orderDataSourceRule = new DataSourceRule(orderDataSourceMap);
-
-            TableRule orderTableRule = TableRule.builder("t_order")
-                .actualTables(Arrays.asList("jty_order_0.t_order_0", "jty_order_0.t_order_1", "jty_order_0.t_order_2", "jty_order_0.t_order_3", "jty_order_1.t_order_0", "jty_order_1.t_order_1", "jty_order_1.t_order_2", "jty_order_1.t_order_3"))
-                .dataSourceRule(orderDataSourceRule)
-                .databaseShardingStrategy(new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
-                .tableShardingStrategy(new TableShardingStrategy("id", new ModuloTableShardingAlgorithm()))
-                .build();
-            TableRule orderGoodsTableRule = TableRule.builder("order_goods")
-                .actualTables(Arrays.asList("jty_order_0.order_goods_0", "jty_order_0.order_goods_1", "jty_order_0.order_goods_2", "jty_order_0.order_goods_3", "jty_order_1.order_goods_0", "jty_order_1.order_goods_1", "jty_order_1.order_goods_2", "jty_order_1.order_goods_3"))
-                .dataSourceRule(orderDataSourceRule)
-                .databaseShardingStrategy(new DatabaseShardingStrategy("order_id", new ModuloDatabaseShardingAlgorithm()))
-                .tableShardingStrategy(new TableShardingStrategy("goods_id", new ModuloTableShardingAlgorithm()))
-                .build();
-            
-            TableRule goodsTableRule = TableRule.builder("goods")
-                .actualTables(Arrays.asList("jty_goods_0.goods_0", "jty_goods_0.goods_1", "jty_goods_0.goods_2", "jty_goods_0.goods_3", "jty_goods_1.goods_0", "jty_goods_1.goods_1", "jty_goods_1.goods_2", "jty_goods_1.goods_3"))
-                .dataSourceRule(orderDataSourceRule)
-                .databaseShardingStrategy(new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
-                .tableShardingStrategy(new TableShardingStrategy("id", new ModuloTableShardingAlgorithm()))
-                .build();
-
-            ShardingRule shardingRule = ShardingRule.builder()
-                .dataSourceRule(orderDataSourceRule)
-                .tableRules(Arrays.asList(orderTableRule, orderGoodsTableRule, goodsTableRule))
-                .build();
-
             dataSource = ShardingDataSourceFactory.createDataSource(shardingRule);
         } catch (PropertyVetoException e) {
             e.printStackTrace();

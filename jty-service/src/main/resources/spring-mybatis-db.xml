@@ -26,15 +26,7 @@
 
     <!-- 定义数据源，使用自己实现的数据源 -->
     <bean id="dataSource" class="com.jty.db.DynamicDataSource">
-        <!-- 设置多个数据源 -->
-        <property name="targetDataSources">
-            <map key-type="java.lang.String">
-                <!-- 这个key需要和程序中的key一致 -->
-<!--                 <entry key="master" value-ref="shardingDataSource" /> -->
-            </map>
-        </property>
-        <!-- 设置默认的数据源，这里默认走写库 -->
-<!--         <property name="defaultTargetDataSource" ref="shardingDataSource" /> -->
+        <property name="sysSer" ref="sysSer"/>
     </bean>
 
     <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
