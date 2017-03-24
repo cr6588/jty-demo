@@ -31,7 +31,7 @@
                location.reload();
            })
        }
-       var store, grid;
+       var store, grid, win, form, selectedStoreIndex;
        Ext.onReady(function() {
            Ext.define('roleModel', {
                extend : 'Ext.data.Model',
@@ -119,7 +119,12 @@
                    'itemclick' : function(view, record, item, index, e) {
                    }
                },
-             
+               tbar :[
+                   {text: '刷新',iconCls:'a_refresh', handler: sp_refresh},
+                   {text: '新增',iconCls:'a_add', handler: sp_add},
+                   {text: '修改',iconCls:'a_edit', handler: sp_update},
+                   {text: '删除',iconCls:'a_delete', handler: sp_delete}
+               ],
                bbar : [ {
                    xtype : 'pagingtoolbar',
                    store : store,
@@ -140,9 +145,170 @@
                };
                Ext.apply(store.proxy.extraParams, searchParams);
            });
+           form = Ext.create('Ext.form.Panel', {
+               frame:true,
+               bodyPadding: 0,
+               layout:'form',
+               style:'border-width:0 0 0 0',
+               items : [{
+                   layout:'column',
+                   frame:true,
+                   style:'border-width:0 0 0 0',
+                   padding: 0,
+                   defaults :{
+                       padding: 0
+                   },
+                   items:[{
+                           defaults :{
+                               labelWidth:60,
+                               labelAlign:'right',
+                           },
+                           columnWidth: 1,
+                           style:'border-width:0 0 0 0',
+                           frame:true,
+                           layout:'form',
+                           defaultType:'textfield',
+                           items:[{
+                                   fieldLabel : "id",
+                                   name : 'id',
+                                   readOnly:true,
+                                   hidden:true
+                               }, {
+                                   fieldLabel :"code",
+                                   name : "code",
+                                   allowBlank : false
+                               }, {
+                                   fieldLabel : "value",
+                                   name : 'value',
+                               }, {
+                                   xtype: "combobox",
+                                   name: "language",
+                                   fieldLabel: "language",
+                                   store: Ext.create("Ext.data.Store", {
+//                                     fields: ["Name", "Value"],
+//                                     data: [
+//                                         { Name: "男", Value: 1 },
+//                                         { Name: "女", Value: 2 }
+//                                     ]
+                                       fields: ['id', 'lang'],
+                                       data: [
+                                           {id:'zh_CN', lang : '中文'},
+                                           {id:'en_US', lang : 'English'}
+                                       ]
+                                   }),
+                                   editable: false,
+                                   displayField: "lang",
+                                   valueField: "id",
+                                   emptyText: "--请选择--",
+                                   queryMode: "local"
+                               }
+                           ]
+                       }]
+               } /*, {
+                   labelWidth: 60,
+                   labelAlign:'right',
+                   fieldLabel : 'remark',
+                   xtype:'textarea',
+                   name : 'remark'
+               }*/],
+               buttons : [ {
+                   text : '取消',
+                   handler : function() {
+                       win.close();
+                   }
+               }, {
+                   text : '保存',
+                   formBind : true, // only enabled once the form is valid
+                   disabled : true,
+                   handler : function () {
+                       if (form.isValid()) {
+//                            if(selectedStoreIndex != null) {
+//                                var o = form.getValues();
+//                                for(var i in o) {
+//                                    store.getAt(selectedStoreIndex).set(i, o[i]);
+//                                }
+//                            } else {
+//                                store.insert(store.getCount(), form.getValues());
+//                            }
+                            var o = form.getValues();
+                            $.ajax({
+                                    url : '/i18n/addOrUpdateI18n',
+                                    type : "post",
+                                    contentType: "application/json",
+                                    data : JSON.stringify(o),
+                                    success : function(result) {
+                                        if (result.code == 0){
+                                            Ext.Msg.alert("提示", "保存成功", function(result){
+                                                if(result){
+                                                    sp_refresh();
+                                                }
+                                            });
+                                        } else {
+                                            Ext.Msg.alert("提示", "保存失败" + result.message);
+                                        }
+                                    }
+                                });
+                            win.close();
+                       }
+                   }
+               } ],
+           });
+           win = new Ext.Window({  
+               width: 500,
+               resizable: false,
+               closeAction: 'close',
+               closable: true,  
+               modal: 'true',
+               buttonAlign: "center",
+               items: [form]
+           });
        });
        function sp_add() {
-     //      window.location.href = siping.systemParams.get("host") + "/admin/system/editI18Ns";
+           form.getForm().reset();
+           win.setTitle("Add I18n");
+           win.show();
+       }
+       function sp_refresh() {
+           //不宜用loadPage(1);
+           store.reload();
+       }
+       function sp_update() {
+           var no = null;
+           var selection = grid.getView().getSelectionModel().getSelection()[0];
+           if(selection){
+               selectedStoreIndex = store.indexOf(selection);
+               form.loadRecord(selection);
+               win.setTitle("Update I18n");
+               win.show();
+           }else{
+               Ext.Msg.alert("提示", "请选择用户");
+           }
+       }
+       function sp_delete(){
+           var id = null;
+           var selection = grid.getView().getSelectionModel().getSelection()[0];
+           if (selection != undefined) {
+               id = selection.data.id;
+               Ext.Msg.confirm("提示", "确认删除吗？", function(res) {
+                   if(res=="yes") {
+                       $.post('/i18n/deleteI18n', [ {
+                           name : 'id',
+                           value : id
+                       } ], function(result) {
+                           if (result.code == 0) {
+                               Ext.Msg.alert("提示", "删除成功", function() {
+                                   sp_refresh();
+                               });
+                           } else {
+                               Ext.Msg.alert("提示", result.message);
+                           }
+                       });
+                   } else {
+                   }
+               });
+           }else{
+               Ext.MessageBox.alert("提示", "请选择行");
+           }
        }
        </script>
 </body>

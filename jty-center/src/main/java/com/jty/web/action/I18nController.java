@@ -74,10 +74,10 @@ public class I18nController {
 
 	@RequestMapping(value = "/deleteI18n", method = RequestMethod.POST)
 	@ResponseBody
-	public RequestResult<String> deleteI18n(@RequestParam("no") Long no) {
+	public RequestResult<String> deleteI18n(@RequestParam("id") Long id) {
 		RequestResult<String> result = new RequestResult<String>();
 		try {
-			this.i18nSer.deleteI18n(no);
+			this.i18nSer.deleteI18n(id);
 			result.setCode(0);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -106,14 +106,13 @@ public class I18nController {
 	@ResponseBody
 	public PagerStruct<I18n> getI18nList(HttpServletRequest request,@RequestParam(value = "keyWord", required = false) String keyWord,
 			@RequestParam(value = "language", required = false) String languageStr, @PagerResolver PagerInfo pagerParam) {
-		System.out.println("--------------------------------------" + messageUtil.getMessage(request, "language"));
-//		messageUtil.getMessageSource().getMessage(code, args, locale);
-		System.out.println(messageUtil.getMessageSource().getMessage("languagefds{0},{1}", new Object[]{"language", "home"}, Locale.CHINA));
 	    PagerStruct<I18n> result = new PagerStruct<I18n>();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("keyWord", keyWord);
-		Language language = Language.create(languageStr);
-		params.put("language", language);
+		if(languageStr != null && !languageStr.isEmpty()) {
+		    Language language = Language.create(languageStr);
+		    params.put("language", language);
+		}
 //		System.out.println(dataBaseMessageResource.);
 		try {
 			result.setRows(this.i18nSer.getI18nList(params, pagerParam));

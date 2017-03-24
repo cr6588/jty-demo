@@ -48,7 +48,7 @@
     </logger>
     <!-- root logger -->
     <root>
-        <level value="debug" />
+        <level value="error" />
         <appender-ref ref="Console" />
     </root>
 </log4j:configuration>

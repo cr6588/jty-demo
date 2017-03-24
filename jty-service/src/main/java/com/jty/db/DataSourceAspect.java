@@ -133,59 +133,6 @@ public class DataSourceAspect {
                         if(methodName.contains("Order") || methodName.contains("Goods")) {
                             module = Constant.Module.Order.name;
                         }
-                        Map<Object, Object> targetDataSources = (Map<Object, Object>) ReflectUtil.getFieldValue(dataSource, "targetDataSources");
-                        String dataSourceKey = null;
-                        if(targetDataSources.size() != 1) {
-                            dataSourceKey = "orderSer";
-                        } else {
-                            //查询是否有该公司该模块的连接信息
-                            Map<String, Object> conditionMap = new HashMap<>();
-                            conditionMap.put("comId", comId);
-                            conditionMap.put("module", Constant.Module.Order.index);
-                            CompanyDb comDb = sysSer.getCompanyDb(conditionMap);
-                            if(comDb != null) {
-                                List<DatabaseTable> tabs = comDb.getDatabaseTables();
-                                Set<Long> insIds = new HashSet<>();
-                                if(tabs != null) {
-                                    for (DatabaseTable tab : tabs) {
-                                        insIds.add(tab.getDbInsId());
-                                        ComDbCache.orderActualTables.add(Constant.Module.Order.logicTable[0] + "_" + tab.getMark());
-                                        ComDbCache.orderGoodsActualTables.add(Constant.Module.Order.logicTable[1] + "_" + tab.getMark());
-                                        ComDbCache.goodsActualTables.add(Constant.Module.Order.logicTable[2] + "_" + tab.getMark());
-                                        ComDbCache.companyIdMarkCache.put(comId, tab.getMark());
-                                    }
-                                }
-                                conditionMap.clear();
-                                List<DatabaseInstance> insList = new ArrayList<>();
-                                for (Long insId : insIds) {
-                                    conditionMap.put("id", insId);
-                                    DatabaseInstance ins = sysSer.getDatabaseInstance(conditionMap);
-                                    insList.add(ins);
-                                }
-                                dataSourceKey = initDataSource(comId, module, targetDataSources, insList);
-                            } else {
-//                                conditionMap.clear();
-//                                conditionMap.put("module", ORDER_MODULE_INDEX);
-//                                conditionMap.put("dbStatus", 1);
-//                                //查询是否有该模块的数据库实例
-//                                DatabaseInstance databaseInstance = sysSer.getDatabaseInstance(conditionMap);
-//                                if(databaseInstance != null) {
-//                                    
-//                                } else {
-//                                    conditionMap.clear();
-//                                    conditionMap.put("module", ORDER_MODULE_INDEX);
-//                                    conditionMap.put("dbStatus", 1);
-//                                    Database db = sysSer.getDatabase(conditionMap);
-//                                    if(db == null) {
-//                                        throw new Exception(ORDER_MODULE_INDEX + " does not has usable database");
-//                                    }
-//                                    dataSourceKey = initDataSource(comId, module, targetDataSources, db);
-//                                }
-                            }
-                        }
-                        DynamicDataSourceHolder.markDb(dataSourceKey);  // 更改数据库连接
-                    } else {
-                        DynamicDataSourceHolder.markMaster();
                     }
                     break;
                 }
