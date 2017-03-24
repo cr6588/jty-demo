@@ -24,6 +24,7 @@ CREATE TABLE `order_goods_COMPANY_MARK` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) DEFAULT NULL,
   `goods_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `num` int(11) DEFAULT NULL COMMENT '数量',
   PRIMARY KEY (`id`),
   KEY `FK74F24F25EC3B6AA8` (`goods_id`),

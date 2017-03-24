@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.HttpRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,10 +74,13 @@ public class OrderController {
 
     @RequestMapping(value = "/deleteOrder", method = RequestMethod.POST)
     @ResponseBody
-    public RequestResult<String> deleteOrder(@RequestParam("id") Long id) {
+    public RequestResult<String> deleteOrder(@RequestParam("id") Long id, HttpServletRequest request) {
         RequestResult<String> result = new RequestResult<String>();
         try {
-            this.orderSer.deleteOrder(id);
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("userId", getCurUser(request).getId());
+            params.put("id", id);
+            this.orderSer.deleteOrder(params);
             result.setCode(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -92,7 +96,9 @@ public class OrderController {
         RequestResult<Order> result = new RequestResult<Order>();
         Map<String, Object> params = RequestSessionUtil.getRequestParamData(request);
         try {
-            result.setBody(this.orderSer.getOrder(params, null));
+            params.put("userId", getCurUser(request).getId());
+//            params.put("id", Long.parseLong(params.get("id").toString())); //分片键是Long
+            result.setBody(this.orderSer.getOrder(params));
         } catch (Exception e) {
             logger.error(e.getMessage());
             result.setCode(100);
@@ -104,11 +110,13 @@ public class OrderController {
     @RequestMapping(value = "/getOrderList", method = RequestMethod.POST)
     @ResponseBody
     public PagerStruct<Order> getOrderList(@RequestParam(value = "keyWord", required = false) String keyWord,
-                                         @PagerResolver PagerInfo pagerParam) {
+                                         @PagerResolver PagerInfo pagerParam, HttpServletRequest request) {
         PagerStruct<Order> result = new PagerStruct<Order>();
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("keyWord", keyWord);
         try {
+            //select count(*) from order没有where条件且因为是动态表所以无法获取筛选后的结果，如果不是动态表会返回所有可能的表
+            params.put("userId", getCurUser(request).getId());
             result.setRows(this.orderSer.getOrderList(params, pagerParam));
             result.setTotal(this.orderSer.getOrderListCnt(params));
         } catch (Exception e) {
@@ -139,10 +147,13 @@ public class OrderController {
 
     @RequestMapping(value = "/deleteGoods", method = RequestMethod.POST)
     @ResponseBody
-    public RequestResult<String> deleteGoods(@RequestParam("id") Long id) {
+    public RequestResult<String> deleteGoods(@RequestParam("id") Long id, HttpServletRequest request) {
         RequestResult<String> result = new RequestResult<String>();
         try {
-            this.orderSer.deleteGoods(id);
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("userId", getCurUser(request).getId());
+            params.put("id", id);
+            orderSer.deleteGoods(params);
             result.setCode(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -158,6 +169,7 @@ public class OrderController {
         RequestResult<Goods> result = new RequestResult<Goods>();
         Map<String, Object> params = RequestSessionUtil.getRequestParamData(request);
         try {
+            params.put("userId", getCurUser(request).getId());
             result.setBody(this.orderSer.getGoods(params));
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -170,11 +182,13 @@ public class OrderController {
     @RequestMapping(value = "/getGoodsList", method = RequestMethod.POST)
     @ResponseBody
     public PagerStruct<Goods> getGoodsList(@RequestParam(value = "keyWord", required = false) String keyWord,
-                                         @PagerResolver PagerInfo pagerParam) {
+                                         @PagerResolver PagerInfo pagerParam, HttpServletRequest request) {
         PagerStruct<Goods> result = new PagerStruct<Goods>();
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("keyWord", keyWord);
         try {
+            //select count(*) from order没有where条件且因为是动态表所以无法获取筛选后的结果，如果不是动态表会返回所有可能的表
+            params.put("userId", getCurUser(request).getId());
             result.setRows(this.orderSer.getGoodsList(params, pagerParam));
             result.setTotal(this.orderSer.getGoodsListCnt(params));
         } catch (Exception e) {

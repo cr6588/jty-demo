@@ -28,8 +28,6 @@ public class UserServiceImpl implements UserSer {
     private UserDao userDao;
     @Autowired
     private SysDao sysDao;
-    @Autowired
-    private ComDbCacheSer orderCacheSer;
 
     public List<User> getUserList(Map<String, Object> param, PagerInfo pager) throws Exception {
         return userDao.getUserList(param, pager);
@@ -53,13 +51,13 @@ public class UserServiceImpl implements UserSer {
 
         Map<String, Object> param = new HashMap<>();
         param.put("dbStatus", Constant.Db.Status.normal);
-        param.put("module", Constant.Module.Order.name);
+        param.put("module", Constant.Module.Order.index);
         PagerInfo pager = new PagerInfo(1,1); //查询第一页第一条ins,sql中by db_level排序 
         Database db = null;
         String dbName = null;
         DatabaseInstance ins = null;
         List<DatabaseInstance> insList = sysDao.getDatabaseInstanceList(param, pager);
-        if(insList != null) {
+        if(insList != null && insList.size() !=0) {
             ins = insList.get(0);
             if(ins != null) {
                 dbName = ins.getDbName();
@@ -90,19 +88,16 @@ public class UserServiceImpl implements UserSer {
         sysDao.addDatabaseTable(dbTable);
         CompanyDb comDb = new CompanyDb(user.getId(), dbTable.getId(), Constant.Module.Order.index, "");
         sysDao.addCompanyDb(comDb);
-        ins.setDatabase(db);
-
-        orderCacheSer.addComDbCache(mark, user.getId(), ins);
     }
 
     public Database getMaxLevelDb() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("dbStatus", Constant.Db.Status.normal);
-        param.put("module", Constant.Module.Order.name);
+        param.put("module", Constant.Module.Order.index);
         param.put("dbType", Constant.Db.Type.mysql);
         PagerInfo pager = new PagerInfo(1,1);
         List<Database> dbs = sysDao.getDatabaseList(param, pager);
-        if(dbs != null) {
+        if(dbs != null && !dbs.isEmpty()) {
             return dbs.get(0);
         }
         return null;

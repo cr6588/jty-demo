@@ -1,3 +1,4 @@
+<%@page import="com.jty.user.bean.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
@@ -95,7 +96,7 @@ Ext.onReady(function () { //所有都加上此处代码确保ExtJs加载完成
             items : [ {
                 region : 'north',
                 height : 100,
-                html : '<h1>Demo</h1>',
+                html : '<h1>Demo</h1>欢迎<%User curUser = (User)session.getAttribute("curUser"); out.print(curUser.getUsername());%><a href="/user/loginOut">退出</a>',
                 title : 'north',
                 collapsible : true,
                 split : true

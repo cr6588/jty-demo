@@ -44,11 +44,11 @@ public class MainServiceTest {
     @Test
     public void orderSerTest() {
         Map<String, Object> param = new HashMap<>();
-        param.put("id", 7l);
+        param.put("id", 23l);
         Long userId = 1l;
         param.put("userId", userId);
         try {
-            orderSer.getOrder(param, userId);
+            orderSer.getOrder(param);
             orderSer.getGoods(param);
         } catch (Exception e) {
             e.printStackTrace();

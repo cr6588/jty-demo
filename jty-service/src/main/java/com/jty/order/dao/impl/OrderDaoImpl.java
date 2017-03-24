@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import com.jty.order.bean.Goods;
 import com.jty.order.bean.Order;
@@ -106,9 +104,9 @@ public class OrderDaoImpl implements OrderDao {
      * @see com.cr.i18n.dao.impl.OrderDao#deleteOrder(java.lang.Long)
      */
     @Override
-    public void deleteOrder(Long id) throws Exception {
+    public void deleteOrder(Map<String, Object> param) throws Exception {
         Query query = sessionFactory.getCurrentSession().createQuery("delete Order where id = ?");
-        query.setLong(0, id);
+        query.setLong(0, (Long)param.get("id"));
         query.executeUpdate();
     }
 
@@ -150,17 +148,17 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void deleteOrderGoods(Long orderId) throws Exception {
+    public void deleteOrderGoods(Map<String, Object> param) throws Exception {
         Query query = sessionFactory.getCurrentSession().createQuery("delete OrderGoods where orderId = ?");
-        query.setLong(0, orderId);
+        query.setLong(0, (Long)param.get("id"));
         query.executeUpdate();
     }
 
     @Override
-    public List<OrderGoods> getOrderGoodsByOrderId(Long orderId) throws Exception {
+    public List<OrderGoods> getOrderGoodsList(Map<String, Object> param, PagerInfo pager) throws Exception {
         String hsql = "from OrderGoods where  orderId =: orderId order by id desc";
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
-        query.setLong("orderId", orderId);
+        query.setLong("orderId", (Long)param.get("id"));
         List<OrderGoods> orderGoods = query.list();
         return orderGoods;
     }
@@ -194,9 +192,9 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void deleteGoods(Long id) throws Exception {
+    public void deleteGoods(Map<String, Object> param) throws Exception {
         Query query = sessionFactory.getCurrentSession().createQuery("delete Goods where id = ?");
-        query.setLong(0, id);
+        query.setLong(0, (Long)param.get("id"));
         query.executeUpdate();
     }
 
