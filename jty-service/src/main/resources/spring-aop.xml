@@ -9,21 +9,21 @@
 
     <aop:aspectj-autoproxy />
 
-<!--     <bean class="com.jty.db.DataSourceAspect" id="dataSourceAspect"> -->
-<!--         <property name="dataSource" ref="dataSource" /> -->
+    <bean class="com.jty.db.DataSourceAspect" id="dataSourceAspect">
+        <property name="dataSource" ref="dataSource" />
 <!--         指定事务策略   -->
-<!--         <property name="txAdvice" ref="txAdvice"/>   -->
+        <property name="txAdvice" ref="txAdvice"/>  
 <!--         指定使用非基本数据源方法的前缀（非必须）   -->
-<!--         <property name="slaveMethodStart" value="getOrder,find,get"/> -->
-<!--     </bean> -->
+        <property name="slaveMethodStart" value="getOrder,find,get"/>
+    </bean>
 
     <!-- 使用非基本数据源方法拦截 --> 
-<!--     <aop:config> -->
-<!--         <aop:aspect id="switchDataSourceAspect" ref="dataSourceAspect"> -->
-<!--             <aop:pointcut id="logPoint" expression="execution(* com.jty..service..*.*(..))" /> -->
-<!--             <aop:before pointcut-ref="logPoint" arg-names="point" method="before" /> -->
-<!--         </aop:aspect> -->
-<!--     </aop:config> -->
+    <aop:config>
+        <aop:aspect id="switchDataSourceAspect" ref="dataSourceAspect">
+            <aop:pointcut id="logPoint" expression="execution(* com.jty.order.service..*.*(..))" />
+            <aop:before pointcut-ref="logPoint" arg-names="point" method="before" />
+        </aop:aspect>
+    </aop:config>
 
     <!-- 事务配置 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

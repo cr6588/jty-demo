@@ -1,13 +1,9 @@
 package com.jty.db;
-import java.beans.PropertyVetoException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -22,22 +18,10 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.util.PatternMatchUtils;
 import org.springframework.util.ReflectionUtils;
 
-import com.dangdang.ddframe.rdb.sharding.api.ShardingDataSourceFactory;
-import com.dangdang.ddframe.rdb.sharding.api.rule.DataSourceRule;
-import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
-import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
-import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
-import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
-import com.jty.db.strategy.ComDbCache;
-import com.jty.db.strategy.table.ModuloDatabaseShardingAlgorithm;
-import com.jty.db.strategy.table.ModuloTableShardingAlgorithm;
 import com.jty.sys.bean.CompanyDb;
-import com.jty.sys.bean.DatabaseInstance;
-import com.jty.sys.bean.DatabaseTable;
 import com.jty.sys.service.SysSer;
 import com.jty.web.bean.Constant;
 import com.jty.web.util.ReflectUtil;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DataSourceAspect {
 
@@ -58,6 +42,7 @@ public class DataSourceAspect {
     }
 
     private static Logger logger = LoggerFactory.getLogger(DataSourceAspect.class);
+
     @Autowired
     SysSer sysSer;
     /**
@@ -92,24 +77,6 @@ public class DataSourceAspect {
         }
     }
 
-    public String getDataSourceKeyByModuleName(String moduleName) {
-        if (moduleName == null || moduleName.equals("")) {
-            return "master";
-        }
-        return moduleName;
-    }
-
-    public ComboPooledDataSource initC3p0DataSource(String url, String dbName, String username, String password) throws PropertyVetoException {
-        ComboPooledDataSource userDb = new ComboPooledDataSource();
-        userDb.setDriverClass("com.mysql.jdbc.Driver");
-        userDb.setJdbcUrl("jdbc:mysql://" + url + "/" + dbName);
-        userDb.setUser(username);
-        userDb.setPassword(password);
-        userDb.setInitialPoolSize(2);
-        userDb.setMaxPoolSize(5);
-        return userDb;
-    }
-
     /**
      * 在进入Service方法之前执行
      * @param point 切面对象
@@ -125,102 +92,34 @@ public class DataSourceAspect {
             // 使用策略规则匹配
             for (String mappedName : slaveMethodPattern) {
                 if (isMatch(methodName, mappedName)) {
-                    Object[] args = point.getArgs();
-                    if (methodName.contains("Order") || methodName.contains("Goods")) {
-                        Map<String, Object> params = (Map<String, Object>) args[0];
-                        Long comId = (Long) params.get("userId");
-                        String module = null;
-                        if(methodName.contains("Order") || methodName.contains("Goods")) {
-                            module = Constant.Module.Order.name;
+                    Map<Object, Object> targetDataSources = (Map<Object, Object>) ReflectUtil.getFieldValue(dataSource, "targetDataSources");
+                    if(targetDataSources.size() == 0) {
+                        DataSource ds = null;
+                        try {
+                            Map<String, Object> conditionMap = new HashMap<>();
+                            conditionMap.put("module", Constant.Module.Order.index);
+                            List<CompanyDb> comDbs = sysSer.getCompanyDbList(conditionMap, null);
+                            if(comDbs != null && !comDbs.isEmpty()) {
+                                for (CompanyDb comDb : comDbs) {
+                                    DynamicDataSource.loadComDb(comDb, sysSer);
+                                }
+                                ds = DynamicDataSource.initShardingDataSource(sysSer);
+                            }
+                            if(ds != null) {
+                                targetDataSources.put(DynamicDataSourceHolder.MASTER, ds);
+                                dataSource.setDefaultTargetDataSource(ds);
+                            }
+                            dataSource.afterPropertiesSet();
+                        } catch (Exception e) {
+                            logger.error("初始化订单模块数据源失败!!!!!");
+                            e.printStackTrace();
+                            throw e;
                         }
                     }
                     break;
                 }
             }
         }
-    }
-
-    public String initDataSource(Long comId, String module, Map<Object, Object> targetDataSources, List<DatabaseInstance> insList) throws Exception, PropertyVetoException {
-        String dataSourceKey;
-//        JDBC jdbc = new JDBC("jdbc:mysql://" + db.getIpAddress() + ":" + db.getPort() + "?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8", db.getUsername(), db.getPassword());
-//        String databaseName = db.getdb
-//        String mark = comId + "";
-//        if(!jdbc.existDb(databaseName)) {
-//            String sqlPathPrefix = this.getClass().getResource("/").getPath() + "sql/";
-//            String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order_0.sql").replace("COMPANY_MARK", mark);
-//            boolean createResult = jdbc.createDb(databaseName, sql); //创建数据库，验证数据库是否创建成功
-//            if(!createResult) {
-//                throw new Exception("create " + databaseName + " fail!");
-//            }
-//        }
-//        if(!jdbc.existTable(databaseName)) {
-//            String sqlPathPrefix = this.getClass().getResource("/").getPath() + "sql/";
-//            String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order_0.sql").replace("COMPANY_MARK", mark);
-//            boolean createResult = jdbc.createDb(databaseName, sql); //创建数据库，验证数据库是否创建成功
-//            if(!createResult) {
-//                throw new Exception("create " + databaseName + " fail!");
-//            }
-//        }
-        //创建数据库创建表完成
-//        DatabaseInstance databaseInstance = new DatabaseInstance(db.getId(), databaseName, db.getUsername(), db.getPassword(), 1, 0, ORDER_MODULE_INDEX, "");
-//        sysSer.addDatabaseInstance(databaseInstance);
-//        DatabaseTable dbTable = new DatabaseTable(databaseInstance.getId(), 1, 0, ORDER_MODULE_INDEX, mark, "");
-//        sysSer.addDatabaseTable(dbTable);
-//        CompanyDb comDb = new CompanyDb(comId, dbTable.getId(), ORDER_MODULE_INDEX, "");
-//        sysSer.addCompanyDb(comDb);
-//        DataSource moduleDataSource = initC3p0DataSource(db.getIpAddress() + ":" + db.getPort(), databaseName, db.getUsername(), db.getPassword());
-        DataSource moduleDataSource = initShardingDataSource(insList);
-        dataSourceKey = "orderSer";
-        if(moduleDataSource != null) {
-            targetDataSources.put(dataSourceKey, moduleDataSource);
-            dataSource.afterPropertiesSet();// 通知spring更改了targetDataSources。此方法允许bean实例仅在所有bean属性都已设置时执行初始化，并在配置不正确的情况下抛出异常。
-        } else {
-            throw new Exception("init data source error");
-        }
-        return dataSourceKey;
-    }
-
-    private DataSource initShardingDataSource(List<DatabaseInstance> insList) {
-        DataSource dataSource = null;
-        try {
-            if(insList != null) {
-                for (DatabaseInstance ins : insList) {
-                    String url = ins.getDatabase().getIpAddress() + ":" + ins.getDatabase().getPort();
-                    ComboPooledDataSource ds = initC3p0DataSource(url, ins.getDbName(), ins.getUsername(), ins.getPassword()); //初始化数据库连接池， throws PropertyVetoException
-                    String key = url + "/" + ins.getDbName();
-                    ComDbCache.dataSourceCache.put(key, ds);
-                }
-            }
-            DataSourceRule dataSourceRule = new DataSourceRule(ComDbCache.dataSourceCache);
-            TableRule orderTableRule = TableRule.builder("t_order")
-                .actualTables(ComDbCache.orderActualTables)
-                .dataSourceRule(dataSourceRule)
-                .build();
-            TableRule orderGoodsTableRule = TableRule.builder("order_goods")
-                .actualTables(ComDbCache.orderGoodsActualTables)
-                .dataSourceRule(dataSourceRule)
-                .build();
-            
-            TableRule goodsTableRule = TableRule.builder("goods")
-                .actualTables(ComDbCache.goodsActualTables)
-                .dataSourceRule(dataSourceRule)
-                .build();
-
-            ShardingRule shardingRule = ShardingRule.builder()
-                .dataSourceRule(dataSourceRule)
-                .tableRules(Arrays.asList(orderTableRule, orderGoodsTableRule, goodsTableRule))
-                .databaseShardingStrategy(new DatabaseShardingStrategy("id", new ModuloDatabaseShardingAlgorithm()))
-                .tableShardingStrategy(new TableShardingStrategy("user_id", new ModuloTableShardingAlgorithm()))
-                .build();
-            dataSource = ShardingDataSourceFactory.createDataSource(shardingRule);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
-        return dataSource;
-    }
-
-    private String getModuleDatabaseName(String moduleName) {
-        return "jty_" + moduleName + "_0";
     }
 
     /**

@@ -11,7 +11,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
         <mysql-connector.version>5.1.17</mysql-connector.version>
-        <struts.version>2.3.28.1</struts.version>
         <spring.version>3.1.0.RELEASE</spring.version>
         <hibernate.version>3.6.9.Final</hibernate.version>
     </properties>
@@ -48,8 +47,8 @@
             <version>1.2.16</version>
         </dependency>
         <!-- 注意jar包组合与log4j,没有它会出现大量无法关闭的hibernate日志 -->
-        <!-- http://stackoverflow.com/questions/311408/turning-off-hibernate-logging-console-output
-        I finally figured out, it's because the Hibernate is using slf4j log facade now, to bridge to log4j, you need to put log4j and slf4j-log4j12 jars to your lib and then the log4j properties will take control Hibernate logs. -->
+        <!-- http://stackoverflow.com/questions/311408/turning-off-hibernate-logging-console-output I finally figured out, it's because the Hibernate is using slf4j log facade now, to bridge to log4j, 
+            you need to put log4j and slf4j-log4j12 jars to your lib and then the log4j properties will take control Hibernate logs. -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -178,26 +177,26 @@
             <version>3.0.1</version>
         </dependency>
         <!-- struts2 -->
-        <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-core</artifactId>
-            <version>${struts.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-spring-plugin</artifactId>
-            <version>${struts.version}</version>
-        </dependency>
+        <!-- <dependency> -->
+        <!-- <groupId>org.apache.struts</groupId> -->
+        <!-- <artifactId>struts2-core</artifactId> -->
+        <!-- <version>${struts.version}</version> -->
+        <!-- </dependency> -->
+        <!-- <dependency> -->
+        <!-- <groupId>org.apache.struts</groupId> -->
+        <!-- <artifactId>struts2-spring-plugin</artifactId> -->
+        <!-- <version>${struts.version}</version> -->
+        <!-- </dependency> -->
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <dependency>  
-            <groupId>org.springframework</groupId>  
-            <artifactId>spring-expression</artifactId>  
-            <version>${spring.version}</version>  
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -304,6 +303,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
             <version>2.5.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
@@ -337,7 +342,8 @@
         <module>jty-service</module>
         <module>jty-center</module>
         <module>jty-base-service</module>
-  </modules>
+        <module>jty-centre</module>
+    </modules>
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>

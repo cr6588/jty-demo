@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jty.db.service.ComDbCacheSer;
@@ -23,6 +25,7 @@ import com.jty.web.util.UidUtil;
 
 public class UserServiceImpl implements UserSer {
 
+    private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private UidUtil uidUtil = new UidUtil("localhost:3306", "dev", "dev", "jty_uid_sequence", "user_id_sequence");;
     @Autowired
     private UserDao userDao;
@@ -81,8 +84,13 @@ public class UserServiceImpl implements UserSer {
             sysDao.addDatabaseInstance(ins);
         }
         String mark = getTableMarkByUser(user);
-        String sqlPathPrefix = this.getClass().getResource("/").getPath() + "sql/";
-        String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order_0.sql").replace("COMPANY_DATABASE", dbName).replace("COMPANY_MARK", mark);
+        String sqlPathPrefix = this.getClass().getResource("/") == null ? null : this.getClass().getResource("/").getPath() + "sql/";
+        String sql = null;
+        if(sqlPathPrefix == null) {
+            sql = FileUtil.readTxtFile2StrByStringBuilder(this.getClass(), "/sql/jty_order_0.sql").replace("COMPANY_DATABASE", dbName).replace("COMPANY_MARK", mark);
+        } else {
+            sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order_0.sql").replace("COMPANY_DATABASE", dbName).replace("COMPANY_MARK", mark);
+        }
         jdbc.execute(sql);
         DatabaseTable dbTable = new DatabaseTable(ins.getId(), 1, 0, Constant.Module.Order.index, mark, "");
         sysDao.addDatabaseTable(dbTable);

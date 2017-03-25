@@ -1,14 +1,15 @@
 package com.jty.web.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -116,6 +117,30 @@ public class FileUtil {
             if (fis != null) {
                 try {
                     fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String readTxtFile2StrByStringBuilder(Class<?> clazz, String path) {
+        StringBuilder sb = new StringBuilder();
+        InputStream is= clazz.getResourceAsStream(path);   
+        BufferedReader br= new BufferedReader(new InputStreamReader(is));  
+        try {
+            char[] chars = new char[1];
+            int len;
+            while ((len = br.read(chars)) != -1) {
+                sb.append(chars, 0, len);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

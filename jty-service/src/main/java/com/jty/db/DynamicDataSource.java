@@ -57,16 +57,18 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
             Map<String, Object> conditionMap = new HashMap<>();
             conditionMap.put("module", Constant.Module.Order.index);
             List<CompanyDb> comDbs = sysSer.getCompanyDbList(conditionMap, null);
-            if(comDbs != null) {
+            if(comDbs != null && !comDbs.isEmpty()) {
                 for (CompanyDb comDb : comDbs) {
                     loadComDb(comDb, sysSer);
                 }
-                ds = initShardingDataSource();
+                ds = initShardingDataSource(sysSer);
             }
 
-            tar.put(DynamicDataSourceHolder.MASTER, ds);
+            if(ds != null) {
+                tar.put(DynamicDataSourceHolder.MASTER, ds);
+                setDefaultTargetDataSource(ds);
+            }
             setTargetDataSources(tar);
-            setDefaultTargetDataSource(ds);
             afterPropertiesSet();
             
         } catch (Exception e) {
@@ -111,7 +113,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         }
     }
 
-    private DataSource initShardingDataSource() throws PropertyVetoException {
+    public static DataSource initShardingDataSource(SysSer sysSer) throws PropertyVetoException {
         DataSource dataSource = null;
         DataSourceRule dataSourceRule = new DataSourceRule(ComDbCache.dataSourceCache);
         TableRule orderTableRule = TableRule.builder(Constant.Module.Order.logicTable[0])
