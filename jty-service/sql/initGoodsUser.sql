@@ -1,5 +1,6 @@
+DROP DATABASE IF EXISTS `jty_goods_0`;
 create DATABASE jty_goods_0;
-use jty_goods_0;
+USE jty_goods_0;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -53,6 +54,8 @@ CREATE TABLE `goods_3` (
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP DATABASE IF EXISTS `jty_goods_1`;
 create DATABASE jty_goods_1;
 use jty_goods_1;
 SET FOREIGN_KEY_CHECKS=0;
@@ -109,6 +112,7 @@ CREATE TABLE `goods_3` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP DATABASE IF EXISTS `jty_user_0`;
 create DATABASE jty_user_0;
 use jty_user_0;
 SET FOREIGN_KEY_CHECKS=0;
@@ -188,6 +192,8 @@ CREATE TABLE `user_6` (
   `email` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP DATABASE IF EXISTS `jty_user_1`;
 create DATABASE jty_user_1;
 use jty_user_1;
 SET FOREIGN_KEY_CHECKS=0;
@@ -268,6 +274,7 @@ CREATE TABLE `user_6` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP DATABASE IF EXISTS `jty_uid_sequence`;
 create DATABASE jty_uid_sequence;
 use jty_uid_sequence;
 SET FOREIGN_KEY_CHECKS=0;

@@ -14,11 +14,11 @@ public interface OrderSer {
 
     Order getOrder(Map<String, Object> param) throws Exception;
 
-    void addOrder(Order order) throws Exception;
+    Long addOrder(Order order) throws Exception;
 
     void updateOrder(Order order) throws Exception;
 
-    void deleteOrder(Long id) throws Exception;
+    void deleteOrder(Map<String, Object> param) throws Exception;
 
     Integer getOrderListCnt(Map<String, Object> params) throws Exception;
 
@@ -30,7 +30,7 @@ public interface OrderSer {
 
     void updateGoods(Goods goods) throws Exception;
 
-    void deleteGoods(Long id) throws Exception;
+    void deleteGoods(Map<String, Object> param) throws Exception;
 
     Integer getGoodsListCnt(Map<String, Object> params) throws Exception;
 

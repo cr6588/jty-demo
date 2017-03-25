@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties>
+        <property name="dialect" value="mysql" />
+    </properties>
+    <settings>
+<!--    使用LOG4J打印日志 -->
+        <setting name="logImpl" value="LOG4J"/>
+<!--     使用logback打印日志 -->
+<!--         <setting name="logImpl" value="STDOUT_LOGGING"/>   -->
+    </settings>
+    <typeAliases>
+
+        <typeAlias alias="int" type="java.lang.Integer" />
+        <typeAlias alias="long" type="java.lang.Long" />
+        <typeAlias alias="float" type="java.lang.Float" />
+        <typeAlias alias="double" type="java.lang.Double" />
+        <typeAlias alias="boolean" type="java.lang.Boolean" />
+        <typeAlias alias="string" type="java.lang.String" />
+        <typeAlias alias="date" type="java.util.Date" />
+        <typeAlias alias="map" type="java.util.Map" />
+        <typeAlias alias="list" type="java.util.List" />
+        <typeAlias alias="linkMap" type="java.util.LinkedHashMap" />
+
+        <typeAlias alias="i18n" type="com.jty.web.bean.I18n" />
+        <typeAlias alias="user" type="com.jty.user.bean.User" />
+
+        <!-- sys -->
+        <typeAlias alias="companyDb" type="com.jty.sys.bean.CompanyDb" />
+        <typeAlias alias="database" type="com.jty.sys.bean.Database" />
+        <typeAlias alias="databaseInstance" type="com.jty.sys.bean.DatabaseInstance" />
+        <typeAlias alias="databaseTable" type="com.jty.sys.bean.DatabaseTable" />
+
+    </typeAliases>
+</configuration>

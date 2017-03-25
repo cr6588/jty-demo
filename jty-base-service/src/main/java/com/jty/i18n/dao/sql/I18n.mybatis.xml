@@ -86,7 +86,7 @@
         <include refid="i18nSelectCondition" />
     </select>
 
-    <select id="getI18nCnt" parameterType="map" resultType="int">
+    <select id="getI18nListCnt" parameterType="map" resultType="int">
         select count(*) from crfw_system_i18n
         <include refid="i18nSelectCondition" />
     </select>

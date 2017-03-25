@@ -149,83 +149,6 @@ public class OrderDaoTest {
     }
 
     @Test
-    public void orderTest() {
-        try {
-            PagerInfo pager = new PagerInfo();
-            Map<String, Object> paramMap = new HashMap<String, Object>();
-            int cnt = orderDao.getOrderListCnt(paramMap);
-
-            Order in1 = new Order();
-            in1.setNo("test1");
-            in1.setTotalMoney(11.2d);
-            User u1 = new User();
-            u1.setId(1l);
-            u1.setUsername("user1");
-            in1.setUser(u1);
-            orderDao.addOrder(in1);
-            Assert.assertNotNull(in1.getId());
-            paramMap.put("id", in1.getId());
-
-            Goods g = new Goods();
-            g.setName("goods");
-            OrderGoods og = new OrderGoods();
-//            og.setOrderId(in1.getId());
-            og.setGoods(g);
-            orderDao.addGoods(g);
-            orderDao.addOrderGoods(og);
-            Assert.assertNotNull(g.getId());
-            Assert.assertNotNull(og.getId());
-
-            Order get1 = orderDao.getOrder(paramMap);
-            Assert.assertNotNull(get1);
-            Assert.assertEquals(in1.getId(), get1.getId());
-            Assert.assertEquals(in1.getNo(), get1.getNo());
-            Assert.assertEquals(in1.getTotalMoney(), get1.getTotalMoney());
-            Assert.assertEquals(in1.getUser().getId(), get1.getUser().getId());
-            Assert.assertNotNull(orderDao.getOrderGoodsByOrderId(get1.getId()));
-
-            in1.setNo("test1——update");
-            in1.setTotalMoney(11.3d);
-            User u2 = new User();
-            u2.setId(2l);
-            in1.setUser(u2);
-            orderDao.updateOrder(in1);
-
-            get1 = orderDao.getOrder(paramMap);
-            Assert.assertNotNull(get1);
-            Assert.assertEquals(in1.getId(), get1.getId());
-            Assert.assertEquals(in1.getNo(), get1.getNo());
-            Assert.assertEquals(in1.getTotalMoney(), get1.getTotalMoney());
-            Assert.assertEquals(in1.getUser().getId(), get1.getUser().getId());
-
-            Order in2 = new Order();
-            in2.setNo("test2");
-            in2.setTotalMoney(11.5d);
-            User u3 = new User();
-            u3.setId(3l);
-            in2.setUser(u3);
-            orderDao.addOrder(in2);
-
-            paramMap.remove("id");
-
-            List<Order> list = orderDao.getOrderList(paramMap, null);
-            Assert.assertEquals(list.size(), cnt + 2);
-
-            orderDao.deleteOrder(in1.getId());
-
-            Assert.assertEquals(cnt, orderDao.getOrderListCnt(paramMap) - 1);
-
-            pager.setPage(1);
-            pager.setSize(10);
-
-            orderDao.getOrderList(paramMap, pager);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     public void addGoodsTest() {
         Goods goods = new Goods();
 //        goods.setId(4l);
@@ -253,6 +176,18 @@ public class OrderDaoTest {
             orderDao.updateGoods(goods);
         } catch (Exception e) {
             // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void orderDaoTest() {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", 7);
+        param.put("user_id", 1);
+        try {
+            orderDao.getOrder(param);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

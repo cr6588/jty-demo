@@ -29,6 +29,7 @@ import com.jty.web.messages.DataBaseMessageResource;
 import com.jty.web.messages.MessageUtil;
 import com.jty.web.service.I18nSer;
 import com.jty.web.util.RequestSessionUtil;
+import com.sun.mail.handlers.message_rfc822;
 
 @Controller
 @RequestMapping("/i18n")
@@ -41,6 +42,8 @@ public class I18nController {
     private SessionLocaleResolver localeResolver;
 	@Autowired
 	private I18nSer i18nSer;
+	@Autowired
+	private MessageUtil messageUtil;
 
     @RequestMapping(value = "/{pageName}", method = RequestMethod.GET)
     public ModelAndView viewAdminManagePages(HttpServletRequest request, @PathVariable("pageName") String pageName) throws Exception {
@@ -58,9 +61,8 @@ public class I18nController {
 			} else {
 				this.i18nSer.updateI18n(I18n);
 			}
-			// DataBaseMessageResource dbMessageSource =
-			// (DataBaseMessageResource) messageUtil.getMessageSource();
-			// dbMessageSource.loadI18NMessages();
+			 DataBaseMessageResource dbMessageSource = (DataBaseMessageResource) messageUtil.getMessageSource();
+			 dbMessageSource.loadI18NMessages();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.setCode(100);
@@ -71,10 +73,10 @@ public class I18nController {
 
 	@RequestMapping(value = "/deleteI18n", method = RequestMethod.POST)
 	@ResponseBody
-	public RequestResult<String> deleteI18n(@RequestParam("no") Long no) {
+	public RequestResult<String> deleteI18n(@RequestParam("id") Long id) {
 		RequestResult<String> result = new RequestResult<String>();
 		try {
-			this.i18nSer.deleteI18n(no);
+			this.i18nSer.deleteI18n(id);
 			result.setCode(0);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -101,13 +103,15 @@ public class I18nController {
 
 	@RequestMapping(value = "/getI18nList", method = RequestMethod.POST)
 	@ResponseBody
-	public PagerStruct<I18n> getI18nList(@RequestParam(value = "keyWord", required = false) String keyWord,
+	public PagerStruct<I18n> getI18nList(HttpServletRequest request,@RequestParam(value = "keyWord", required = false) String keyWord,
 			@RequestParam(value = "language", required = false) String languageStr, @PagerResolver PagerInfo pagerParam) {
-		PagerStruct<I18n> result = new PagerStruct<I18n>();
+	    PagerStruct<I18n> result = new PagerStruct<I18n>();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("keyWord", keyWord);
-		Language language = Language.create(languageStr);
-		params.put("language", language);
+		if(languageStr != null && !languageStr.isEmpty()) {
+		    Language language = Language.create(languageStr);
+		    params.put("language", language);
+		}
 //		System.out.println(dataBaseMessageResource.);
 		try {
 			result.setRows(this.i18nSer.getI18nList(params, pagerParam));

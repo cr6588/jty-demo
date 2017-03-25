@@ -19,7 +19,7 @@ public interface OrderDao {
 
     void updateOrder(Order Order) throws Exception;
 
-    void deleteOrder(Long id) throws Exception;
+    void deleteOrder(Map<String, Object> param) throws Exception;
 
     Integer getOrderListCnt(Map<String, Object> param) throws Exception;
 
@@ -30,9 +30,9 @@ public interface OrderDao {
 
     void updateOrderGoods(OrderGoods orderGoods) throws Exception;
 
-    void deleteOrderGoods(Long orderId) throws Exception;
+    void deleteOrderGoods(Map<String, Object> param) throws Exception;
 
-    List<OrderGoods> getOrderGoodsByOrderId(Long orderId) throws Exception;
+    List<OrderGoods> getOrderGoodsList(Map<String, Object> param, PagerInfo pager) throws Exception;
 
     Integer getOrderGoodsListCnt(Map<String, Object> param) throws Exception;
 
@@ -45,7 +45,7 @@ public interface OrderDao {
 
     void updateGoods(Goods goods) throws Exception;
 
-    void deleteGoods(Long id) throws Exception;
+    void deleteGoods(Map<String, Object> param) throws Exception;
 
     Integer getGoodsListCnt(Map<String, Object> param) throws Exception;
 
