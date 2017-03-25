@@ -61,9 +61,8 @@ public class I18nController {
 			} else {
 				this.i18nSer.updateI18n(I18n);
 			}
-			// DataBaseMessageResource dbMessageSource =
-			// (DataBaseMessageResource) messageUtil.getMessageSource();
-			// dbMessageSource.loadI18NMessages();
+			 DataBaseMessageResource dbMessageSource = (DataBaseMessageResource) messageUtil.getMessageSource();
+			 dbMessageSource.loadI18NMessages();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.setCode(100);
