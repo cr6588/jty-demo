@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Arrays;
@@ -14,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingDataSourceFactory;
@@ -22,6 +22,11 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
+import com.jty.db.DataSourceAspect;
+import com.jty.db.strategy.table.ModuloDatabaseShardingAlgorithm;
+import com.jty.db.strategy.table.ModuloTableShardingAlgorithm;
+import com.jty.web.util.FileUtil;
+import com.jty.web.util.JDBC;
 
 public class JdbcTest {
 
@@ -166,4 +171,60 @@ public class JdbcTest {
         }
     }
 
+    @Test
+    public void createDbTest() {
+        String url = "localhost:3308", dbUsername = "dev", password = "dev";
+        JDBC jdbc = new JDBC("jdbc:mysql://" + url + "?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8", dbUsername, password);
+        String databaseName = "jty_order_0";
+        if(true) {   //判读数据库是否存在
+            String sqlPathPrefix = DataSourceAspect.class.getResource("/").getPath() + "sql/";
+            String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_goods.sql");
+            sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order.sql");
+            sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_uid_sequence.sql");
+            try {
+                jdbc.execute(sql);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } //创建数据库，验证数据库是否创建成功
+        }
+    }
+
+//    @Test
+//    public void initShardingDataSourceTest() {
+//        DataSourceAspect dataSourceAspect = new DataSourceAspect();
+//        String url = "localhost:3308", dbUsername = "dev", password = "dev";
+//        DataSource ds = dataSourceAspect.initShardingDataSource(url, dbUsername, password);
+//        String sql = "insert into  t_order(id, no , total_money, user_id) values(10,1,1,1)";
+//        try  {
+//            Connection conn = ds.getConnection();
+//            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+//            preparedStatement.executeUpdate();
+//            sql = "update t_order set no=1, total_money=11, user_id=1 where id=1";
+//            conn = ds.getConnection();
+//            preparedStatement = conn.prepareStatement(sql);
+//            preparedStatement.executeUpdate();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    @Test
+    public void existDbTest() {
+        String url = "localhost:3308", dbUsername = "dev", password = "dev";
+        String databaseName = "jty_goods_0";
+        JDBC jdbc = new JDBC("jdbc:mysql://" + url + "?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8", dbUsername, password);
+        if(!jdbc.existDb(databaseName)) {   //判读数据库是否存在
+            String sqlPathPrefix = this.getClass().getResource("/").getPath() + "sql/";
+            String sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_goods.sql");
+            sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order.sql");
+            sql += FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_uid_sequence.sql");
+            System.out.println(sql);
+            try {
+                jdbc.execute(sql);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } //创建数据库，验证数据库是否创建成功
+        }
+    }
 }

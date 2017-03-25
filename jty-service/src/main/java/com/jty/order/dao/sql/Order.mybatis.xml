@@ -36,9 +36,9 @@
             total_money = #{totalMoney}
         where id = #{id} and user_id = #{user.id}
     </update>
-    <delete id="deleteOrder" parameterType="long">
+    <delete id="deleteOrder" parameterType="map">
         delete from t_order 
-        where id = #{id}
+        where id = #{id} and user_id = #{userId}
     </delete>
 
     <sql id="orderSelectCondition">
@@ -77,22 +77,36 @@
         <result column="order_id" property="orderId" />
         <result column="goods_id" property="goods.id" />
         <result column="num" property="num" />
+        <result column="name" property="goods.name" />
+        <result column="SKU" property="goods.SKU" />
+        <result column="price" property="goods.price" />
+        <result column="goods_user_id" property="goods.userId" />
+        <result column="user_id" property="userId" />
     </resultMap>
+
     <sql id="order_Goods_Column_List">
-        id,
-        order_id,
-        goods_id,
-        num
+        og.id id,
+        og.order_id order_id,
+        og.goods_id goods_id,
+        og.num num,
+        og.user_id user_id,
+        g.id goods_id,
+        g.name ,
+        g.SKU SKU,
+        g.price ,
+        g.user_id goods_user_id
     </sql>
 
     <insert id="addOrderGoods" parameterType="orderGoods" useGeneratedKeys="true" keyProperty="id">
         insert into order_goods (
             order_id,
             goods_id,
+            user_id,
             num
         ) values (
             #{orderId},
-            #{goodsId},
+            #{goods.id},
+            #{userId},
             #{num}
         )
     </insert>
@@ -110,22 +124,27 @@
     <update id="updateOrderGoods" parameterType="orderGoods" >
         update order_goods 
         set order_id = #{orderId},
-            goods_id = #{user.Id},
+            goods_id = #{goods.id},
             num = #{num}
-        where id = #{id} and goods_id = #{goods.id}
-    </update>
-    <delete id="deleteOrderGoods" parameterType="long">
-        delete from order_goods 
         where id = #{id}
+    </update>
+    <delete id="deleteOrderGoods" parameterType="map">
+        delete from order_goods 
+        where order_id = #{orderId} and user_id = #{userId}
     </delete>
 
     <sql id="orderGoodsSelectCondition">
         <where>
             <if test="id != null">
-                and id = #{id}
+                and og.id = #{id}
+            </if>
+            <if test="orderId != null">
+                and og.order_id = #{orderId}
             </if>
             <if test="userId != null">
-                and order_id = #{orderId}
+                and og.user_id = #{userId}
+                <!-- 连接表时必须将每个表的分片键条件加上 -->
+                and g.user_id = #{userId}
             </if>
         </where>
     </sql>
@@ -137,15 +156,15 @@
 <!--         <include refid="orderGoodsSelectCondition" /> -->
 <!--     </select> -->
 
-    <select id="getOrderGoodsByOrderId" parameterType="long" resultMap="orderGoodsMap">
+    <select id="getOrderGoodsList" parameterType="long" resultMap="orderGoodsMap">
         select 
             <include refid="order_Goods_Column_List" />
-        from order_goods where order_id = #{orderId}
-<!--         <include refid="orderGoodsSelectCondition" /> -->
+        from order_goods og left join goods g on og.goods_id = g.id
+        <include refid="orderGoodsSelectCondition" />
     </select>
 
     <select id="getOrderGoodsCnt" parameterType="map" resultType="int">
-        select count(*) from order_goods
+        select count(*) from order_goods og
         <include refid="orderGoodsSelectCondition" />
     </select>
 
@@ -186,11 +205,11 @@
         set name = #{name},
             SKU = #{SKU},
             price = #{price}
-        where id = #{id}
+        <include refid="goodsSelectCondition" />
     </update>
-    <delete id="deleteGoods" parameterType="long">
+    <delete id="deleteGoods" parameterType="map">
         delete from goods 
-        where id = #{id}
+        <include refid="goodsSelectCondition" />
     </delete>
 
     <sql id="goodsSelectCondition">
@@ -200,6 +219,9 @@
             </if>
             <if test="name != null">
                 and name = #{name}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
             </if>
         </where>
     </sql>

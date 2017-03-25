@@ -9,9 +9,25 @@
 
     <aop:aspectj-autoproxy />
 
+<!--     <bean class="com.jty.db.DataSourceAspect" id="dataSourceAspect"> -->
+<!--         <property name="dataSource" ref="dataSource" /> -->
+<!--         指定事务策略   -->
+<!--         <property name="txAdvice" ref="txAdvice"/>   -->
+<!--         指定使用非基本数据源方法的前缀（非必须）   -->
+<!--         <property name="slaveMethodStart" value="getOrder,find,get"/> -->
+<!--     </bean> -->
+
+    <!-- 使用非基本数据源方法拦截 --> 
+<!--     <aop:config> -->
+<!--         <aop:aspect id="switchDataSourceAspect" ref="dataSourceAspect"> -->
+<!--             <aop:pointcut id="logPoint" expression="execution(* com.jty..service..*.*(..))" /> -->
+<!--             <aop:before pointcut-ref="logPoint" arg-names="point" method="before" /> -->
+<!--         </aop:aspect> -->
+<!--     </aop:config> -->
+
     <!-- 事务配置 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="shardingDataSource" />
+        <property name="dataSource" ref="dataSource" />
     </bean>
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
@@ -33,7 +49,8 @@
         </tx:attributes>
     </tx:advice>
     <aop:config proxy-target-class="true">
-        <aop:pointcut id="serviceMethods" expression="execution(* com.jty..service..*.*(..))" />
+        <!--         必须只拦截本模块的service,因为初始化建立数据源的时候会调用sysService的方法，也会进行拦截操作，但此时数据源是空的会产生错误 -->
+        <aop:pointcut id="serviceMethods" expression="execution(* com.jty.order.service..*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
     </aop:config>
 </beans>

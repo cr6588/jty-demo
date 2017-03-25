@@ -132,9 +132,8 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping(value = "/loginOut", method = RequestMethod.POST)
-    @ResponseBody
-    public RequestResult<Boolean> loginOut(HttpServletRequest request) {
+    @RequestMapping(value = "/loginOut", method = RequestMethod.GET)
+    public String loginOut(HttpServletRequest request) {
         RequestResult<Boolean> result = new RequestResult<Boolean>();
         try {
             request.getSession().invalidate();
@@ -143,6 +142,6 @@ public class UserController {
             result.setCode(100);
             result.setMessage(e.getMessage());
         }
-        return result;
+        return "redirect:/user/login";
     }
 }
