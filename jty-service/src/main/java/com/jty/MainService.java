@@ -1,7 +1,5 @@
 package com.jty;
 
-import java.io.IOException;
-
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MainService {
@@ -13,10 +11,19 @@ public class MainService {
         for (int i = 0; i < str.length; i++) {
             System.out.println(str[i]);
         }
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
+//        try {
+//            System.in.read(); //linux下使用nohup java -jar jty-order-service.jar &命令运行时会报错
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        synchronized (MainService.class) {
+            while (true) {
+                try {
+                    MainService.class.wait();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
