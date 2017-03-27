@@ -18,7 +18,8 @@
     <!-- accepts="1000"：限制服务器端的接受的连接的最大值为1000 -->
     <dubbo:provider timeout="5000" threadpool="fixed" threads="10" accepts="10" />
     <!-- 使用multicast广播注册中心暴露发现服务地址 -->
-    <dubbo:registry address="multicast://224.5.6.7:1234" />
+<!--     <dubbo:registry address="multicast://224.5.6.7:1234" /> -->
+    <dubbo:registry address="zookeeper://localhost:20879" />
      <!-- 用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20880" />
 <!--     <dubbo:registry address="127.0.0.1:3307" /> -->
