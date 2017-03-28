@@ -111,7 +111,7 @@ public class JDBC {
         this.pstmt = pstmt;
     }
 
-    public CallableStatement getCstmt() throws Exception {
+    public CallableStatement getCstmt(String sql) throws Exception {
         if (cstmt == null || cstmt.isClosed()) {
             cstmt = this.getCon().prepareCall(sql);
         }
@@ -204,6 +204,18 @@ public class JDBC {
     public void execute(String sql) throws Exception {
         try {
             getStmt().execute(sql);
+        } finally {
+            try {
+                close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void executeProcedure(String sql) throws Exception {
+        try {
+            getCstmt(null).execute(sql);
         } finally {
             try {
                 close();

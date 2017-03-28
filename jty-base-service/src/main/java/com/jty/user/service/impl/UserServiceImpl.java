@@ -1,5 +1,6 @@
 package com.jty.user.service.impl;
 
+import java.sql.CallableStatement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.jty.db.service.ComDbCacheSer;
 import com.jty.sys.bean.CompanyDb;
 import com.jty.sys.bean.Database;
 import com.jty.sys.bean.DatabaseInstance;
@@ -19,7 +19,6 @@ import com.jty.user.dao.UserDao;
 import com.jty.user.service.UserSer;
 import com.jty.web.bean.Constant;
 import com.jty.web.bean.PagerInfo;
-import com.jty.web.util.FileUtil;
 import com.jty.web.util.JDBC;
 import com.jty.web.util.UidUtil;
 
@@ -84,14 +83,22 @@ public class UserServiceImpl implements UserSer {
             sysDao.addDatabaseInstance(ins);
         }
         String mark = getTableMarkByUser(user);
-        String sqlPathPrefix = this.getClass().getResource("/") == null ? null : this.getClass().getResource("/").getPath() + "sql/";
-        String sql = null;
-        if(sqlPathPrefix == null) {
-            sql = FileUtil.readTxtFile2StrByStringBuilder(this.getClass(), "/sql/jty_order_0.sql").replace("COMPANY_DATABASE", dbName).replace("COMPANY_MARK", mark);
-        } else {
-            sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order_0.sql").replace("COMPANY_DATABASE", dbName).replace("COMPANY_MARK", mark);
-        }
-        jdbc.execute(sql);
+        /**调用jar包或者文件里的sql
+//        String sqlPathPrefix = this.getClass().getResource("/") == null ? null : this.getClass().getResource("/").getPath() + "sql/";
+//        String sql = null;
+//        if(sqlPathPrefix == null) {
+//            sql = FileUtil.readTxtFile2StrByStringBuilder(this.getClass(), "/sql/jty_order_0.sql").replace("COMPANY_DATABASE", dbName).replace("COMPANY_MARK", mark);
+//        } else {
+//            sql = FileUtil.readTxtFile2StrByStringBuilder(sqlPathPrefix + "jty_order_0.sql").replace("COMPANY_DATABASE", dbName).replace("COMPANY_MARK", mark);
+//        } 
+         **/
+
+        String sql ="{call jty_basic.create_order_table (?, ?)}"; //存储过程调用，模块库与存储过程所在的库必须在同一个mysql
+        CallableStatement callableStatement = jdbc.getCstmt(sql);
+        callableStatement.setString(1, dbName);
+        callableStatement.setString(2, mark);
+        callableStatement.execute();
+
         DatabaseTable dbTable = new DatabaseTable(ins.getId(), 1, 0, Constant.Module.Order.index, mark, "");
         sysDao.addDatabaseTable(dbTable);
         CompanyDb comDb = new CompanyDb(user.getId(), dbTable.getId(), Constant.Module.Order.index, "");
