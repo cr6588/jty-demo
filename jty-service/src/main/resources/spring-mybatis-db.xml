@@ -23,12 +23,14 @@
             http://cxf.apache.org/schemas/jaxws.xsd">
     <context:property-placeholder location="classpath:jdbc.properties"  ignore-unresolvable="true"/>
     <context:annotation-config />
-
+    <context:component-scan base-package="com.jty.order.service.impl">
+    </context:component-scan>
     <!-- 定义数据源，使用自己实现的数据源 -->
     <bean id="dataSource" class="com.jty.db.DynamicDataSource">
         <property name="sysSer" ref="sysSer"/>
     </bean>
 
+    <import resource="classpath:dubbo-server.xml"/>
     <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource">
             <ref bean="dataSource" />

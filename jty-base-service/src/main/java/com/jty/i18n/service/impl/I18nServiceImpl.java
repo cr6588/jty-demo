@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jty.i18n.dao.I18nDao;
-import com.jty.user.bean.User;
-import com.jty.user.dao.UserDao;
 import com.jty.web.bean.I18n;
 import com.jty.web.bean.PagerInfo;
 import com.jty.web.service.I18nSer;

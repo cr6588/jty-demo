@@ -54,22 +54,22 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         Map<Object, Object> tar = new Hashtable<>();
         DataSource ds = null;
         try {
-            Map<String, Object> conditionMap = new HashMap<>();
-            conditionMap.put("module", Constant.Module.Order.index);
-            List<CompanyDb> comDbs = sysSer.getCompanyDbList(conditionMap, null);
-            if(comDbs != null && !comDbs.isEmpty()) {
-                for (CompanyDb comDb : comDbs) {
-                    loadComDb(comDb, sysSer);
-                }
-                ds = initShardingDataSource(sysSer);
-            }
-
-            if(ds != null) {
-                tar.put(DynamicDataSourceHolder.MASTER, ds);
-                setDefaultTargetDataSource(ds);
-            }
+//            Map<String, Object> conditionMap = new HashMap<>();
+//            conditionMap.put("module", Constant.Module.Order.index);
+//            List<CompanyDb> comDbs = sysSer.getCompanyDbList(conditionMap, null);
+//            if(comDbs != null && !comDbs.isEmpty()) {
+//                for (CompanyDb comDb : comDbs) {
+//                    loadComDb(comDb, sysSer);
+//                }
+//                ds = initShardingDataSource(sysSer);
+//            }
+//
+//            if(ds != null) {
+//                tar.put(DynamicDataSourceHolder.MASTER, ds);
+//                setDefaultTargetDataSource(ds);
+//            }
             setTargetDataSources(tar);
-            afterPropertiesSet();
+//            afterPropertiesSet();
             
         } catch (Exception e) {
             logger.error("初始化订单模块数据源失败!!!!!");
