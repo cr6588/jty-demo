@@ -125,11 +125,15 @@ public class FileUtil {
         return sb.toString();
     }
 
+    /**
+     * 读取clazz所在jar包文件path路径的文件
+     * @param clazz
+     * @param path
+     * @return
+     */
     public static String readTxtFile2StrByStringBuilder(Class<?> clazz, String path) {
         StringBuilder sb = new StringBuilder();
-        InputStream is= clazz.getResourceAsStream(path);   
-        BufferedReader br= new BufferedReader(new InputStreamReader(is));  
-        try {
+        try (InputStream is = clazz.getResourceAsStream(path); BufferedReader br = new BufferedReader(new InputStreamReader(is));) {
             char[] chars = new char[1];
             int len;
             while ((len = br.read(chars)) != -1) {
@@ -137,14 +141,6 @@ public class FileUtil {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return sb.toString();
     }
